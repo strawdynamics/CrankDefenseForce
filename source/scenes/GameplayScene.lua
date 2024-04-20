@@ -44,6 +44,8 @@ end
 function GameplayScene:start()
 	self:_startInput()
 
+	self.rocketController = RocketController()
+
 	self.rocket = Rocket(300, 50, 50)
 	self.rocket:add()
 	self.enemySpawner:start()
@@ -72,6 +74,8 @@ end
 --- Called when transition away from this scene begins
 function GameplayScene:exit()
 	menu:removeAllMenuItems()
+
+	self.rocketController:exit()
 
 	playdate.inputHandlers.pop()
 end

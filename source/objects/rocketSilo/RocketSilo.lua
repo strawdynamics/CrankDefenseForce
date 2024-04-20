@@ -56,8 +56,8 @@ end
 function RocketSilo:_launch()
 	self.readyForLaunch = false
 
-	RocketSilo._staticEmit('launch', self, self.rocket)
 	self.rocket.thrust = BASE_THRUST
+	RocketSilo._staticEmit('launch', { silo = self, rocket = self.rocket })
 
 	-- self.launchPrepTimer = timer.
 	self:_prepareNextRocket()

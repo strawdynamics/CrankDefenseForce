@@ -20,6 +20,7 @@ import "scenes/TestScene"
 import "objects/enemySpawner/EnemySpawner"
 import "objects/rocket/Rocket"
 import "objects/rocket/RocketExhaust"
+import "objects/rocketController/RocketController"
 import "objects/rocketSilo/RocketSilo"
 import "objects/scenePresenter/ScenePresenter"
 
