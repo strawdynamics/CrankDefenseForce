@@ -80,11 +80,14 @@ function RocketController:_handleRocketRemove(payload)
 
 	for i, rocket in ipairs(self.rockets) do
 		if rocket == payload.rocket then
-			self.rocket = nil
-			self.currentRocketIndex = -1
+			if rocket == self.rocket then
+				self.rocket = nil
+				self.currentRocketIndex = -1
+				removedCurrentRocket = true
+			end
 
 			table.remove(self.rockets, i)
-			removedCurrentRocket = true
+			break
 		end
 	end
 
