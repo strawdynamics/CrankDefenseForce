@@ -18,7 +18,13 @@ Cdf.update = function()
 	Cdf.deltaTime = playdate.getElapsedTime()
 	playdate.resetElapsedTime()
 
+	gfx.clear()
+
+	gfx.sprite.update()
+
 	scenePresenter:update()
+
+	playdate.drawFPS(382, 225)
 end
 
 Cdf.changeScene = function(newSceneClass)

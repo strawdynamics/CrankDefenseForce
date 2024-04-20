@@ -11,14 +11,13 @@ end
 
 --- Called each frame
 function MainMenuScene:update()
-	gfx.clear()
 	gfx.pushContext()
 	gfx.setImageDrawMode(gfx.kDrawModeFillWhite)
 	gfx.drawTextAligned("Main menu", 200, 120, kTextAlignment.center)
 	gfx.popContext()
 
 	if playdate.buttonJustPressed(playdate.kButtonA) then
-		Cdf.changeScene(TestScene)
+		Cdf.changeScene(GameplayScene)
 	end
 end
 

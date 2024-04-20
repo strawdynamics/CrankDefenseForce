@@ -7,11 +7,13 @@ import "util/mixin"
 
 import "mixins/EventEmitter"
 
+import "Cdf"
+
 import "scenes/BaseScene"
 import "scenes/MainMenuScene"
+import "scenes/GameplayScene"
 import "scenes/TestScene"
 
-import "Cdf"
 
 import "objects/scenePresenter/ScenePresenter"
 import "objects/rocket/Rocket"
