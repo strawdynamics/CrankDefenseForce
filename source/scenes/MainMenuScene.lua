@@ -13,7 +13,7 @@ end
 function MainMenuScene:update()
 	gfx.pushContext()
 	gfx.setImageDrawMode(gfx.kDrawModeFillWhite)
-	gfx.drawTextAligned("Main menu", 200, 120, kTextAlignment.center)
+	gfx.drawTextAligned("Main menu (Ⓐ to start)", 200, 120, kTextAlignment.center)
 	gfx.popContext()
 
 	if playdate.buttonJustPressed(playdate.kButtonA) then

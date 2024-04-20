@@ -6,7 +6,7 @@ class('GameplayScene').extends(BaseScene)
 local GameplayScene <const> = GameplayScene
 
 function GameplayScene:init()
-	self.enemySpawner = nil
+	self.enemySpawner = EnemySpawner()
 end
 
 function GameplayScene:update()
@@ -31,27 +31,56 @@ function GameplayScene:enter()
 		end
 	)
 
-	self.enemySpawner = EnemySpawner()
+	self.siloB = RocketSilo('B', 15, 240)
+	self.siloB:add()
+	self.siloA = RocketSilo('A', 400 - 15, 240)
+	self.siloA:add()
+
+	-- self.enemySpawner = EnemySpawner()
 	-- Animate
 end
 
 --- Called when transition to this scene is complete
 function GameplayScene:start()
-	-- Begin handling input
+	self:_startInput()
 
 	self.rocket = Rocket(300, 50, 50)
 	self.rocket:add()
 	self.enemySpawner:start()
 end
 
+function GameplayScene:_startInput()
+	playdate.inputHandlers.push({
+		AButtonDown = function()
+			self:_handleAButtonDown()
+		end,
+
+		BButtonDown = function()
+			self:_handleBButtonDown()
+		end
+	})
+end
+
+function GameplayScene:_handleAButtonDown()
+	self.siloA:attemptLaunch()
+end
+
+function GameplayScene:_handleBButtonDown()
+	self.siloB:attemptLaunch()
+end
+
 --- Called when transition away from this scene begins
 function GameplayScene:exit()
 	menu:removeAllMenuItems()
-	-- Stop handling input
+
+	playdate.inputHandlers.pop()
 end
 
 --- Called when transition away from this scene is complete
 function GameplayScene:finish()
 	self.rocket:remove()
 	self.enemySpawner:finish()
+
+	self.siloB:remove()
+	self.siloA:remove()
 end

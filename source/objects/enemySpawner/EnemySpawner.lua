@@ -7,7 +7,8 @@ local Cdf <const> = Cdf
 class('EnemySpawner').extends()
 local EnemySpawner <const> = EnemySpawner
 
-local SPAWN_PAUSE_BASE_MS <const> = 3000
+local SPAWN_PAUSE_BASE_MS <const> = 5000
+local BASE_ROCKET_THRUST <const> = 15
 
 function EnemySpawner:init()
 	self.uptime = 0
@@ -56,8 +57,9 @@ end
 
 function EnemySpawner:spawn()
 	local x = math.random(-40, 440)
-	local y = -30
+	local y = -20
 	local rocket = Rocket(x, y, 180)
+	rocket.thrust = BASE_ROCKET_THRUST
 	rocket:add()
 
 	table.insert(self.rockets, rocket)

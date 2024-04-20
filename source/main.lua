@@ -8,6 +8,7 @@ import "util/mixin"
 import "util/maths"
 
 import "mixins/EventEmitter"
+import "mixins/StaticEventEmitter"
 
 import "Cdf"
 
@@ -19,6 +20,7 @@ import "scenes/TestScene"
 import "objects/enemySpawner/EnemySpawner"
 import "objects/rocket/Rocket"
 import "objects/rocket/RocketExhaust"
+import "objects/rocketSilo/RocketSilo"
 import "objects/scenePresenter/ScenePresenter"
 
 
