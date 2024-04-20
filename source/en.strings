@@ -1,0 +1,5 @@
+-- https://sdk.play.date/2.0.3/Designing%20for%20Playdate.html#_buttons
+-- Ⓐ Ⓑ 🟨 ⊙ 🔒 🎣 ✛ ⬆️ ➡️ ⬇️ ⬅️
+"gameTitle"="Crank Defense Force"
+
+"systemMenu.titleScreen"="Title screen"
