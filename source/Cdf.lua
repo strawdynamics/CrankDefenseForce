@@ -24,7 +24,7 @@ Cdf.update = function()
 
 	scenePresenter:update()
 
-	playdate.drawFPS(382, 225)
+	playdate.drawFPS(192, 0)
 end
 
 Cdf.changeScene = function(newSceneClass)
