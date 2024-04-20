@@ -6,7 +6,7 @@ class('GameplayScene').extends(BaseScene)
 local GameplayScene <const> = GameplayScene
 
 function GameplayScene:init()
-	self.enemySpawner = EnemySpawner()
+	--
 end
 
 function GameplayScene:update()
@@ -16,11 +16,6 @@ function GameplayScene:update()
 
 	if self.rocketController then
 		self.rocketController:update()
-	end
-
-	if self.rocket then
-		 -- degrees per second
-		self.rocket:changeAngle(Cdf.deltaTime * 45)
 	end
 end
 
@@ -39,8 +34,19 @@ function GameplayScene:enter()
 	self.siloA = RocketSilo('A', 400 - 15, 240)
 	self.siloA:add()
 
-	-- self.enemySpawner = EnemySpawner()
-	-- Animate
+	self.cities = {
+		City(70, 240),
+		City(135, 240),
+		City(200, 240),
+		City(400 - 135, 240),
+		City(400 - 70, 240),
+	}
+
+	for i, city in ipairs(self.cities) do
+		city:add()
+	end
+
+	self.enemySpawner = EnemySpawner(self.cities)
 end
 
 --- Called when transition to this scene is complete
@@ -49,8 +55,6 @@ function GameplayScene:start()
 
 	self.rocketController = RocketController()
 
-	self.rocket = Rocket(300, 50, 50)
-	self.rocket:add()
 	self.enemySpawner:start()
 end
 
@@ -85,7 +89,6 @@ end
 
 --- Called when transition away from this scene is complete
 function GameplayScene:finish()
-	self.rocket:remove()
 	self.enemySpawner:finish()
 
 	self.siloB:remove()

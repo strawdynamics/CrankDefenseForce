@@ -18,6 +18,7 @@ import "scenes/MainMenuScene"
 import "scenes/GameplayScene"
 import "scenes/TestScene"
 
+import "objects/city/City"
 import "objects/enemySpawner/EnemySpawner"
 import "objects/rocket/Rocket"
 import "objects/rocket/RocketExhaust"

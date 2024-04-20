@@ -10,7 +10,8 @@ local EnemySpawner <const> = EnemySpawner
 local SPAWN_PAUSE_BASE_MS <const> = 5000
 local BASE_ROCKET_THRUST <const> = 12
 
-function EnemySpawner:init()
+function EnemySpawner:init(cities)
+	self.cities = cities
 	self.uptime = 0
 	self.started = false
 	self.spawnTimer = nil
@@ -44,7 +45,7 @@ end
 
 function EnemySpawner:spawnAndSchedule()
 	-- Spawn one or more enemies
-	self:spawn()
+	self:_spawn()
 
 	-- Schedule next spawn
 	-- 0.8 - 1.2
@@ -55,10 +56,24 @@ function EnemySpawner:spawnAndSchedule()
 	end)
 end
 
-function EnemySpawner:spawn()
+function EnemySpawner:_spawn()
+	self:_spawnRocket()
+end
+
+function EnemySpawner:_spawnRocket()
 	local x = math.random(-40, 440)
 	local y = -20
-	local rocket = Rocket(x, y, 180)
+
+	local targetCity = self.cities[math.random(1, #self.cities)]
+	local targetX = targetCity.x
+	local targetY = targetCity.y - 5
+
+	local down = playdate.geometry.vector2D.new(0, -1)
+	local vecToTarget = playdate.geometry.vector2D.new(targetX - x, targetY - y)
+	vecToTarget:normalize()
+	local angleToTarget = down:angleBetween(vecToTarget)
+
+	local rocket = Rocket(x, y, angleToTarget)
 	rocket.thrust = BASE_ROCKET_THRUST
 	rocket:add()
 
