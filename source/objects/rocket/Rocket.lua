@@ -59,6 +59,8 @@ function Rocket:_updateCollision()
 
 		if otherSprite:isa(Rocket) then
 			otherSprite:remove()
+		elseif otherSprite:isa(City) then
+			otherSprite:destroy()
 		end
 	end
 end

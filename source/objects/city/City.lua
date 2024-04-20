@@ -9,6 +9,8 @@ local City <const> = City
 function City:init(x, y)
 	City.super.init(self)
 
+	self.isDestroyed = false
+
 	self:setImage(cityImageTable:getImage(1))
 	self:setCenter(0.5, 1)
 	self:moveTo(x, y)
@@ -19,4 +21,9 @@ end
 
 function City:update()
 	--
+end
+
+function City:destroy()
+	self.isDestroyed = true
+	self:setImage(cityImageTable:getImage(2))
 end
