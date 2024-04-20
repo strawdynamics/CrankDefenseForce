@@ -25,6 +25,11 @@ function RocketController:init()
 	self.cursor:add()
 	self.isCursorHidden = true
 
+	self._intermediateHandleRocketRemove = function(payload)
+		self:_handleRocketRemove(payload)
+	end
+	Rocket.staticOn('remove', self._intermediateHandleRocketRemove)
+
 	playdate.inputHandlers.push({
 		cranked = function(change, acceleratedChange)
 			self:_handleCranked(change, acceleratedChange)
@@ -70,22 +75,16 @@ function RocketController:update()
 	end
 end
 
-function RocketController:_updateOobRockets()
+function RocketController:_handleRocketRemove(payload)
 	local removedCurrentRocket = false
 
-	-- Iterate backwards so removal doesn't mess up position
-	for i = #self.rockets, 1, -1 do
-		local rocket = self.rockets[i]
+	for i, rocket in ipairs(self.rockets) do
+		if rocket == payload.rocket then
+			self.rocket = nil
+			self.currentRocketIndex = -1
 
-		if rocket.y > 260 or rocket.y < -20 or rocket.x < -20 or rocket.x > 420 then
-			if rocket == self.rocket then
-				self.rocket = nil
-				self.currentRocketIndex = -1
-				removedCurrentRocket = true
-			end
-
-			rocket:remove()
 			table.remove(self.rockets, i)
+			removedCurrentRocket = true
 		end
 	end
 
@@ -93,6 +92,17 @@ function RocketController:_updateOobRockets()
 		self.currentRocketIndex = #self.rockets
 		self.rocket = self.rockets[self.currentRocketIndex]
 	end
+end
+
+function RocketController:_updateOobRockets()
+	-- Iterate backwards so removal doesn't mess up position
+	for i, rocket in ipairs(self.rockets) do
+		if rocket.y > 260 or rocket.y < -20 or rocket.x < -20 or rocket.x > 420 then
+			rocket:remove()
+		end
+	end
+
+
 end
 
 function RocketController:_updateCursor()
@@ -144,6 +154,7 @@ end
 
 function RocketController:exit()
 	RocketSilo.staticOff('launch', self._intermediateHandleSiloLaunch)
+	Rocket.staticOff('remove', self._intermediateHandleRocketRemove)
 	playdate.inputHandlers.pop()
 
 	self.cursor:remove()

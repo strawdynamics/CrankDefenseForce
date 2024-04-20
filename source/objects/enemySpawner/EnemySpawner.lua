@@ -15,6 +15,11 @@ function EnemySpawner:init(cities)
 	self.uptime = 0
 	self.started = false
 	self.spawnTimer = nil
+
+	self._intermediateHandleRocketRemove = function(payload)
+		self:_handleRocketRemove(payload)
+	end
+	Rocket.staticOn('remove', self._intermediateHandleRocketRemove)
 end
 
 function EnemySpawner:start()
@@ -32,13 +37,9 @@ function EnemySpawner:update()
 
 	self.uptime += Cdf.deltaTime
 
-	-- Iterate backwards so removal doesn't mess up position
-	for i = #self.rockets, 1, -1 do
-		local rocket = self.rockets[i]
-
+	for i, rocket in ipairs(self.rockets) do
 		if rocket.y > 280 then
 			rocket:remove()
-			table.remove(self.rockets, i)
 		end
 	end
 end
@@ -74,10 +75,21 @@ function EnemySpawner:_spawnRocket()
 	local angleToTarget = down:angleBetween(vecToTarget)
 
 	local rocket = Rocket(x, y, angleToTarget)
+	rocket:setGroups({COLL_CPU_ROCKET})
+	rocket:setCollidesWithGroups({COLL_CITY, COLL_PLAYER_ROCKET})
 	rocket.thrust = BASE_ROCKET_THRUST
 	rocket:add()
 
 	table.insert(self.rockets, rocket)
+end
+
+function EnemySpawner:_handleRocketRemove(payload)
+	for i, rocket in ipairs(self.rockets) do
+		if rocket == payload.rocket then
+			table.remove(self.rockets, i)
+			return
+		end
+	end
 end
 
 function EnemySpawner:finish()
@@ -85,6 +97,8 @@ function EnemySpawner:finish()
 		rocket:remove()
 	end
 	self.rockets = {}
+
+	Rocket.staticOff('remove', self._intermediateHandleRocketRemove)
 
 	self.started = false
 	if self.spawnTimer ~= nil then

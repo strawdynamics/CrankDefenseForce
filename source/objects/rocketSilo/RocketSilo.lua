@@ -103,13 +103,18 @@ function RocketSilo:remove()
 end
 
 function RocketSilo:_spawnInitialRocket()
-	self.rocket = Rocket(self.x, self.y + LAUNCHPAD_OFFSET_Y, 0)
-	self.rocket:add()
+	self:_spawnRocket(self.x, self.y + LAUNCHPAD_OFFSET_Y, 0)
 end
 
 function RocketSilo:_prepareNextRocket()
-	self.rocket = Rocket(self.x, self.y, 0)
-	self.rocket:add()
+	self:_spawnRocket(self.x, self.y, 0)
 
 	self.rocketPrepAnimator = gfx.animator.new(BASE_ROCKET_PREP_MS, self.y, self.y + LAUNCHPAD_OFFSET_Y, playdate.easingFunctions.inBack)
+end
+
+function RocketSilo:_spawnRocket(x, y)
+	self.rocket = Rocket(x, y, 0)
+	self.rocket:setGroups({COLL_PLAYER_ROCKET})
+	self.rocket:setCollidesWithGroups({COLL_CITY, COLL_CPU_ROCKET, COLL_PLAYER_ROCKET})
+	self.rocket:add()
 end

@@ -6,6 +6,7 @@ local rocketExhaustImageTable <const> = gfx.imagetable.new("objects/rocket/rocke
 
 class('Rocket').extends(gfx.sprite)
 local Rocket <const> = Rocket
+Rocket:implements(StaticEventEmitter)
 
 function Rocket:init(x, y, angle)
 	Rocket.super.init(self)
@@ -23,6 +24,7 @@ function Rocket:init(x, y, angle)
 
 	self:moveTo(x, y)
 	self:_setImage()
+	self:setCollideRect(0, 0, self:getSize())
 end
 
 function Rocket:update()
@@ -40,9 +42,25 @@ function Rocket:update()
 		local deltaY = self.thrust * Cdf.deltaTime * self.sin
 
 		self:moveBy(deltaX, deltaY)
+
+		self:_updateCollision()
 	end
 
 	self:_setImage()
+end
+
+function Rocket:_updateCollision()
+	for i, otherSprite in ipairs(self:overlappingSprites()) do
+		if not self:alphaCollision(otherSprite) then
+			return
+		end
+
+		self:explode()
+
+		if otherSprite:isa(Rocket) then
+			otherSprite:remove()
+		end
+	end
 end
 
 function Rocket:_setImage()
@@ -56,7 +74,12 @@ function Rocket:changeAngle(delta)
 	self.angle = (self.angle + delta) % 360
 end
 
+function Rocket:explode()
+	self:remove()
+end
+
 function Rocket:remove()
+	Rocket._staticEmit('remove', { rocket = self })
 	Rocket.super.remove(self)
 	self.exhaust:remove()
 end

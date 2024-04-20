@@ -7,6 +7,7 @@ import "CoreLibs/timer"
 
 import "util/mixin"
 import "util/maths"
+import "util/collision"
 
 import "mixins/EventEmitter"
 import "mixins/StaticEventEmitter"
