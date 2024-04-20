@@ -5,6 +5,7 @@ import "CoreLibs/timer"
 import "CoreLibs/animation"
 
 import "util/mixin"
+import "util/maths"
 
 import "mixins/EventEmitter"
 
@@ -15,9 +16,10 @@ import "scenes/MainMenuScene"
 import "scenes/GameplayScene"
 import "scenes/TestScene"
 
-import "objects/scenePresenter/ScenePresenter"
+import "objects/enemySpawner/EnemySpawner"
 import "objects/rocket/Rocket"
 import "objects/rocket/RocketExhaust"
+import "objects/scenePresenter/ScenePresenter"
 
 
 local playdate <const> = playdate

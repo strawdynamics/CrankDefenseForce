@@ -14,8 +14,7 @@ function RocketExhaust:init(rocket)
 	self.animLoop = gfx.animation.loop.new(80, rocketExhaustImageTable)
 	self:setImage(self.animLoop:image())
 
-	-- FIXME: y tho
-	self:setCenter(0.25, 0)
+	self:setCenter(0.5, 0)
 end
 
 function RocketExhaust:update()

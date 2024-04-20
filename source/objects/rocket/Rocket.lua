@@ -13,7 +13,7 @@ function Rocket:init(x, y, angle)
 	self.x = x
 	self.y = y
 	self.angle = angle % 360
-	self.thrust = 20
+	self.thrust = 25
 
 	self.cos = 0
 	self.sin = 0
@@ -41,7 +41,9 @@ function Rocket:update()
 end
 
 function Rocket:_setImage()
-	local newImage = rocketImageTable:getImage(math.ceil(self.angle / 15))
+	local newImage = rocketImageTable:getImage(
+		(roundToNearest(self.angle, 15) % 360) / 15 + 1
+	)
 	self:setImage(newImage)
 end
 

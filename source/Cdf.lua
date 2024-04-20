@@ -1,11 +1,14 @@
 local playdate <const> = playdate
 local gfx <const> = playdate.graphics
+local timer <const> = playdate.timer
 
 Cdf = {}
 
 local scenePresenter = nil
 
 Cdf.init = function()
+	math.randomseed(playdate.getSecondsSinceEpoch())
+
 	Cdf.deltaTime = 0
 	playdate.display.setRefreshRate(50)
 
@@ -15,6 +18,8 @@ Cdf.init = function()
 end
 
 Cdf.update = function()
+	timer.updateTimers()
+
 	Cdf.deltaTime = playdate.getElapsedTime()
 	playdate.resetElapsedTime()
 

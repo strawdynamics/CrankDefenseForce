@@ -5,13 +5,17 @@ class('GameplayScene').extends(BaseScene)
 local GameplayScene <const> = GameplayScene
 
 function GameplayScene:init()
-	--
+	self.enemySpawner = nil
 end
 
 --- Called each frame
 function GameplayScene:update()
 	if playdate.buttonJustPressed(playdate.kButtonA) then
 		Cdf.changeScene(MainMenuScene)
+	end
+
+	if self.enemySpawner then
+		self.enemySpawner:update()
 	end
 
 
@@ -22,14 +26,17 @@ end
 
 --- Called when transition to this scene begins
 function GameplayScene:enter()
+	self.enemySpawner = EnemySpawner()
 	-- Animate
 end
 
 --- Called when transition to this scene is complete
 function GameplayScene:start()
 	-- Begin handling input
+
 	self.rocket = Rocket(300, 50, 50)
 	self.rocket:add()
+	self.enemySpawner:start()
 end
 
 --- Called when transition away from this scene begins
@@ -40,5 +47,5 @@ end
 --- Called when transition away from this scene is complete
 function GameplayScene:finish()
 	self.rocket:remove()
-	--
+	self.enemySpawner:finish()
 end
