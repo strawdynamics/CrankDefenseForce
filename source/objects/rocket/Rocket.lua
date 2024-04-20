@@ -13,7 +13,7 @@ function Rocket:init(x, y, angle)
 	self.x = x
 	self.y = y
 	self.angle = angle % 360
-	self.thrust = 10
+	self.thrust = 20
 
 	self.cos = 0
 	self.sin = 0
@@ -29,6 +29,13 @@ function Rocket:update()
 	local radAngle = math.rad(self.angle - 90)
 	self.cos = math.cos(radAngle)
 	self.sin = math.sin(radAngle)
+
+	local newX = self.x + (self.thrust * Cdf.deltaTime * self.cos)
+	local newY = self.y + (self.thrust * Cdf.deltaTime * self.sin)
+
+	self.x = newX
+	self.y = newY
+	self:moveTo(newX, newY)
 
 	self:_setImage()
 end
