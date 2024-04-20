@@ -1,8 +1,9 @@
-import "CoreLibs/object"
+import "CoreLibs/animation"
 import "CoreLibs/graphics"
+import "CoreLibs/math"
+import "CoreLibs/object"
 import "CoreLibs/sprites"
 import "CoreLibs/timer"
-import "CoreLibs/animation"
 
 import "util/mixin"
 import "util/maths"

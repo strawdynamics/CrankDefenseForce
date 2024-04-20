@@ -14,6 +14,9 @@ function GameplayScene:update()
 		self.enemySpawner:update()
 	end
 
+	if self.rocketController then
+		self.rocketController:update()
+	end
 
 	if self.rocket then
 		 -- degrees per second
