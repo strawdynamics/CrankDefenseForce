@@ -5,8 +5,8 @@ local timer <const> = playdate.timer
 class('Explosion').extends(gfx.sprite)
 local Explosion <const> = Explosion
 
-local EXPLOSION_RADIUS <const> = 30
-local EXPLOSION_DURATION_MS <const> = 1500
+local EXPLOSION_RADIUS <const> = 32
+local EXPLOSION_DURATION_MS <const> = 1600
 
 function Explosion:init(x, y)
 	Explosion.super.init(self)
