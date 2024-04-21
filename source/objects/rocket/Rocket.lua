@@ -50,6 +50,7 @@ function Rocket:_updateCollision()
 
 			if dist <= otherSprite.radius then
 				self:explode()
+				Rocket._staticEmit('explodedByExplosion', { rocket = self })
 				return
 			end
 		end
@@ -61,6 +62,9 @@ function Rocket:_updateCollision()
 		self:explode()
 
 		if otherSprite:isa(Rocket) then
+			--  This only makes sense becaues CPUs don't collide with each other
+			Rocket._staticEmit('cpuDestroyedByPlayer', { rocket = self, otherRocket = otherSprite })
+
 			otherSprite:remove()
 		elseif otherSprite:isa(City) then
 			timer.performAfterDelay(400, function()

@@ -6,7 +6,7 @@ class('GameplayScene').extends(BaseScene)
 local GameplayScene <const> = GameplayScene
 
 function GameplayScene:init()
-	--
+	self.scorekeeper = Scorekeeper()
 end
 
 function GameplayScene:update()
@@ -17,6 +17,8 @@ function GameplayScene:update()
 	if self.rocketController then
 		self.rocketController:update()
 	end
+
+	self.scorekeeper:update()
 end
 
 --- Called when transition to this scene begins
@@ -55,6 +57,8 @@ function GameplayScene:start()
 
 	self.rocketController = RocketController()
 
+	self.scorekeeper:start()
+
 	self.enemySpawner:start()
 end
 
@@ -81,6 +85,9 @@ end
 --- Called when transition away from this scene begins
 function GameplayScene:exit()
 	menu:removeAllMenuItems()
+
+	self.scorekeeper:stop()
+	self.scorekeeper:exit()
 
 	self.rocketController:exit()
 

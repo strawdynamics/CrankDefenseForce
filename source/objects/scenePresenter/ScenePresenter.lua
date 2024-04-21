@@ -6,8 +6,8 @@ local Cdf <const> = Cdf
 class('ScenePresenter').extends()
 local ScenePresenter <const> = ScenePresenter
 
-local EXIT_DURATION <const> = 0.3
-local ENTER_DURATION <const> = 0.3
+local EXIT_DURATION <const> = 0.5
+local ENTER_DURATION <const> = 0.5
 
 function ScenePresenter:init()
 	self.newSceneClass = nil
@@ -47,7 +47,6 @@ function ScenePresenter:_updateExit()
 
 	gfx.pushContext()
 	gfx.setColor(gfx.kColorBlack)
-	-- FIXME: Magic numbers
 	gfx.fillRect(0, 0, 400 * (self.exitingTime / EXIT_DURATION), 240)
 	gfx.popContext()
 

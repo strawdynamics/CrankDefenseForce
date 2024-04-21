@@ -48,7 +48,6 @@ function EnemySpawner:update()
 end
 
 function EnemySpawner:_updateDifficulty()
-	print('difficult', self.difficulty)
 	if self.uptime > 300 then
 		self.difficulty = 6
 		self.spawnPauseCoefficient = 0.3

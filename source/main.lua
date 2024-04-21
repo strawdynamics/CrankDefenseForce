@@ -5,9 +5,10 @@ import "CoreLibs/object"
 import "CoreLibs/sprites"
 import "CoreLibs/timer"
 
-import "util/mixin"
-import "util/maths"
 import "util/collision"
+import "util/maths"
+import "util/mixin"
+import "util/text"
 
 import "mixins/EventEmitter"
 import "mixins/StaticEventEmitter"
@@ -27,7 +28,7 @@ import "objects/rocket/RocketExhaust"
 import "objects/rocketController/RocketController"
 import "objects/rocketSilo/RocketSilo"
 import "objects/scenePresenter/ScenePresenter"
-
+import "objects/scorekeeper/Scorekeeper"
 
 local playdate <const> = playdate
 

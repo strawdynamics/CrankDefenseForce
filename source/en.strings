@@ -2,4 +2,14 @@
 -- Ⓐ Ⓑ 🟨 ⊙ 🔒 🎣 ✛ ⬆️ ➡️ ⬇️ ⬅️
 "gameTitle"="Crank Defense Force"
 
+"mainMenuScene.titleLine1"="CRANK"
+"mainMenuScene.titleLine2"="DEFENSE FORCE"
+
 "systemMenu.titleScreen"="Title screen"
+
+"scorekeeper.scorePrefix"="Score: "
+"scorekeeper.scoreSuffix"=""
+
+"gameResults.defeat"="Defeat!"
+"gameResults.time"="Time:"
+"gameResults.score"="Score:"
