@@ -16,7 +16,7 @@ RocketSilo:implements(StaticEventEmitter)
 local BASE_THRUST <const> = 42
 local LAUNCHPAD_OFFSET_Y <const> = -16
 
-local BASE_ROCKET_PREP_MS <const> = 1000
+local BASE_ROCKET_PREP_MS <const> = 2500
 
 function RocketSilo:init(label, x, y)
 	self.readyForLaunch = true
@@ -100,6 +100,8 @@ function RocketSilo:_launch()
 
 	self.rocket.thrust = BASE_THRUST
 	RocketSilo._staticEmit('launch', { silo = self, rocket = self.rocket })
+
+	self:_prepareNextRocket()
 end
 
 function RocketSilo:remove()
