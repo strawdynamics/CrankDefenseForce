@@ -21,6 +21,7 @@ import "scenes/TestScene"
 
 import "objects/city/City"
 import "objects/enemySpawner/EnemySpawner"
+import "objects/explosion/Explosion"
 import "objects/rocket/Rocket"
 import "objects/rocket/RocketExhaust"
 import "objects/rocketController/RocketController"

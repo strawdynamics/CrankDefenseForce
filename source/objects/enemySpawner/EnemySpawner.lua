@@ -66,7 +66,7 @@ function EnemySpawner:_spawnRocket()
 	local y = -20
 
 	local targetCity = self.cities[math.random(1, #self.cities)]
-	local targetX = targetCity.x
+	local targetX = targetCity.x + math.random(-10, 10)
 	local targetY = targetCity.y - 5
 
 	local down = playdate.geometry.vector2D.new(0, -1)
@@ -76,7 +76,7 @@ function EnemySpawner:_spawnRocket()
 
 	local rocket = Rocket(x, y, angleToTarget)
 	rocket:setGroups({COLL_CPU_ROCKET})
-	rocket:setCollidesWithGroups({COLL_CITY, COLL_PLAYER_ROCKET})
+	rocket:setCollidesWithGroups({COLL_CITY, COLL_PLAYER_ROCKET, COLL_EXPLOSION})
 	rocket.thrust = BASE_ROCKET_THRUST
 	rocket:add()
 

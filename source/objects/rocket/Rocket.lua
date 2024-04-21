@@ -1,5 +1,6 @@
 local playdate <const> = playdate
 local gfx <const> = playdate.graphics
+local timer <const> = playdate.timer
 
 local rocketImageTable <const> = gfx.imagetable.new("objects/rocket/rocket")
 local rocketExhaustImageTable <const> = gfx.imagetable.new("objects/rocket/rocket-exhaust")
@@ -51,6 +52,14 @@ end
 
 function Rocket:_updateCollision()
 	for i, otherSprite in ipairs(self:overlappingSprites()) do
+		if otherSprite:isa(Explosion) then
+			if playdate.geometry.distanceToPoint(self.x, self.y, otherSprite.x, otherSprite.y) <= otherSprite.radius then
+				self:explode()
+			end
+
+			return
+		end
+
 		if not self:alphaCollision(otherSprite) then
 			return
 		end
@@ -60,7 +69,9 @@ function Rocket:_updateCollision()
 		if otherSprite:isa(Rocket) then
 			otherSprite:remove()
 		elseif otherSprite:isa(City) then
-			otherSprite:destroy()
+			timer.performAfterDelay(300, function()
+				otherSprite:destroy()
+			end)
 		end
 	end
 end
@@ -77,6 +88,9 @@ function Rocket:changeAngle(delta)
 end
 
 function Rocket:explode()
+	local explosion = Explosion(self.x, self.y)
+	explosion:add()
+
 	self:remove()
 end
 

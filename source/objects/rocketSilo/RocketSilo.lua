@@ -115,6 +115,6 @@ end
 function RocketSilo:_spawnRocket(x, y)
 	self.rocket = Rocket(x, y, 0)
 	self.rocket:setGroups({COLL_PLAYER_ROCKET})
-	self.rocket:setCollidesWithGroups({COLL_CITY, COLL_CPU_ROCKET, COLL_PLAYER_ROCKET})
+	self.rocket:setCollidesWithGroups({COLL_CITY, COLL_CPU_ROCKET, COLL_PLAYER_ROCKET, COLL_EXPLOSION})
 	self.rocket:add()
 end
