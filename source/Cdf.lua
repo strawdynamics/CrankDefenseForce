@@ -11,7 +11,7 @@ Cdf.init = function()
 
 	Cdf.deltaTime = 0
 
-	playdate.display.setRefreshRate(50)
+	playdate.display.setRefreshRate(40)
 	gfx.sprite.setAlwaysRedraw(true)
 
 	gfx.setBackgroundColor(gfx.kColorBlack)
@@ -26,10 +26,10 @@ Cdf.update = function()
 	playdate.resetElapsedTime()
 
 	gfx.clear()
-	scenePresenter:update()
 	gfx.sprite.update()
+	scenePresenter:update()
 
-	playdate.drawFPS(192, 0)
+	-- playdate.drawFPS(192, 0)
 end
 
 Cdf.changeScene = function(newSceneClass)
