@@ -31,8 +31,6 @@ function RocketSilo:init(label, x, y)
 	self:moveTo(x, y)
 	self:setImage(rocketSiloImage)
 
-	self.launchPrepTimer = nil
-
 	self:_spawnInitialRocket()
 
 	self._intermediateHandleRocketRemove = function(payload)
@@ -42,6 +40,10 @@ function RocketSilo:init(label, x, y)
 end
 
 function RocketSilo:_handleRocketRemove(payload)
+	if self.removed then
+		return
+	end
+
 	if self.rocket == payload.rocket then
 		self:_prepareNextRocket()
 	end
@@ -106,6 +108,7 @@ end
 
 function RocketSilo:remove()
 	RocketSilo.super.remove(self)
+	self.removed = true
 
 	self.letterSprite:remove()
 
