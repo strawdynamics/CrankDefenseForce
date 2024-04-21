@@ -9,13 +9,13 @@ local EnemySpawner <const> = EnemySpawner
 
 local SPAWN_PAUSE_BASE_MS <const> = 5000
 local BASE_ROCKET_THRUST <const> = 12
-local MAX_ROCKET_THRUST <const> = 38
 
 function EnemySpawner:init(cities)
 	self.cities = cities
 	self.uptime = 0
 	self.started = false
 	self.spawnTimer = nil
+	self.spawnPauseCoefficient = 1
 
 	self._intermediateHandleRocketRemove = function(payload)
 		self:_handleRocketRemove(payload)
@@ -26,6 +26,7 @@ end
 function EnemySpawner:start()
 	self.uptime = 0
 	self.started = true
+	self.difficulty = 1
 	self.rockets = {}
 
 	self:spawnAndSchedule()
@@ -37,11 +38,32 @@ function EnemySpawner:update()
 	end
 
 	self.uptime += Cdf.deltaTime
+	self:_updateDifficulty()
 
 	for i, rocket in ipairs(self.rockets) do
 		if rocket.y > 280 then
 			rocket:remove()
 		end
+	end
+end
+
+function EnemySpawner:_updateDifficulty()
+	print('difficult', self.difficulty)
+	if self.uptime > 300 then
+		self.difficulty = 6
+		self.spawnPauseCoefficient = 0.3
+	elseif self.uptime > 240 then
+		self.difficulty = 5
+		self.spawnPauseCoefficient = 0.5
+	elseif self.uptime > 150 then
+		self.difficulty = 4
+		self.spawnPauseCoefficient = 0.65
+	elseif self.uptime > 90 then
+		self.difficulty = 3
+		self.spawnPauseCoefficient = 0.8
+	elseif self.uptime > 45 then
+		self.difficulty = 2
+		self.spawnPauseCoefficient = 0.9
 	end
 end
 
@@ -52,14 +74,29 @@ function EnemySpawner:spawnAndSchedule()
 	-- Schedule next spawn
 	-- 0.8 - 1.2
 	local rndAdjustPct = 0.8 + math.random() * 0.4
-	local duration = SPAWN_PAUSE_BASE_MS * rndAdjustPct
+	local duration = SPAWN_PAUSE_BASE_MS * rndAdjustPct * self.spawnPauseCoefficient
 	self.spawnTimer = playdate.timer.new(duration, function()
 		self:spawnAndSchedule()
 	end)
 end
 
 function EnemySpawner:_spawn()
-	self:_spawnRocket()
+	if self.difficulty > 5 then
+		-- 6
+		-- Lower UFOs
+		self:_spawnRocket()
+	elseif self.difficulty > 3 then
+		-- 4, 5
+		-- More UFOs
+		self:_spawnRocket()
+	elseif self.difficulty > 2 then
+		-- 3
+		-- Add UFOs
+		self:_spawnRocket()
+	else
+		-- 1, 2
+		self:_spawnRocket()
+	end
 end
 
 function EnemySpawner:_spawnRocket()

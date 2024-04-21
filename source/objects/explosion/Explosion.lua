@@ -6,7 +6,7 @@ class('Explosion').extends(gfx.sprite)
 local Explosion <const> = Explosion
 
 local EXPLOSION_RADIUS <const> = 32
-local EXPLOSION_DURATION_MS <const> = 1600
+local EXPLOSION_DURATION_MS <const> = 2000
 
 function Explosion:init(x, y)
 	Explosion.super.init(self)
