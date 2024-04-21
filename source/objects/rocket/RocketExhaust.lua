@@ -23,5 +23,10 @@ function RocketExhaust:update()
 
 	self:moveTo(x, y)
 	self:setRotation(self.rocket.angle)
-	self:setImage(self.animLoop:image())
+
+	local newImage = self.animLoop:image()
+	if newImage ~= self.oldImage then
+		self:setImage(newImage)
+		self.oldImage = newImage
+	end
 end

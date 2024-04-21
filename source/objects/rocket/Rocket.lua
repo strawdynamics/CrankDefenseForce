@@ -14,11 +14,8 @@ function Rocket:init(x, y, angle)
 
 	self.x = x
 	self.y = y
-	self.angle = angle % 360
+	self:setAngle(angle)
 	self.thrust = 0
-
-	self.cos = 0
-	self.sin = 0
 
 	self.exhaust = RocketExhaust(self)
 	self.exhaust:add()
@@ -29,10 +26,6 @@ function Rocket:init(x, y, angle)
 end
 
 function Rocket:update()
-	local radAngle = math.rad(self.angle - 90)
-	self.cos = math.cos(radAngle)
-	self.sin = math.sin(radAngle)
-
 	if self.thrust == 0 then
 		self.exhaust:setVisible(false)
 	else
@@ -70,7 +63,7 @@ function Rocket:_updateCollision()
 		if otherSprite:isa(Rocket) then
 			otherSprite:remove()
 		elseif otherSprite:isa(City) then
-			timer.performAfterDelay(300, function()
+			timer.performAfterDelay(400, function()
 				otherSprite:destroy()
 			end)
 		end
@@ -83,11 +76,23 @@ function Rocket:_setImage()
 	local newImage = rocketImageTable:getImage(
 		(roundToNearest(self.angle, 15) % 360) / 15 + 1
 	)
-	self:setImage(newImage)
+
+	if newImage ~= self.oldImage then
+		self:setImage(newImage)
+		self.oldImage = newImage
+	end
 end
 
 function Rocket:changeAngle(delta)
-	self.angle = (self.angle + delta) % 360
+	self:setAngle((self.angle + delta) % 360)
+end
+
+function Rocket:setAngle(newAngle)
+	self.angle = newAngle % 360
+
+	local radAngle = math.rad(self.angle - 90)
+	self.cos = math.cos(radAngle)
+	self.sin = math.sin(radAngle)
 end
 
 function Rocket:explode()

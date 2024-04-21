@@ -10,7 +10,9 @@ Cdf.init = function()
 	math.randomseed(playdate.getSecondsSinceEpoch())
 
 	Cdf.deltaTime = 0
+
 	playdate.display.setRefreshRate(50)
+	gfx.sprite.setAlwaysRedraw(true)
 
 	gfx.setBackgroundColor(gfx.kColorBlack)
 
@@ -24,10 +26,8 @@ Cdf.update = function()
 	playdate.resetElapsedTime()
 
 	gfx.clear()
-
-	gfx.sprite.update()
-
 	scenePresenter:update()
+	gfx.sprite.update()
 
 	playdate.drawFPS(192, 0)
 end

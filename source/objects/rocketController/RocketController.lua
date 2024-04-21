@@ -176,7 +176,7 @@ function RocketController:_handleCranked(change, _acceleratedChange)
 		return
 	end
 
-	self.rocket.angle += change * CRANK_COEFFICIENT
+	self.rocket:changeAngle(change * CRANK_COEFFICIENT)
 end
 
 function RocketController:_handleLeftButtonDown()
