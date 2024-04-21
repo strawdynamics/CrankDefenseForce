@@ -53,15 +53,16 @@ end
 function Rocket:_updateCollision()
 	for i, otherSprite in ipairs(self:overlappingSprites()) do
 		if otherSprite:isa(Explosion) then
-			if playdate.geometry.distanceToPoint(self.x, self.y, otherSprite.x, otherSprite.y) <= otherSprite.radius then
-				self:explode()
-			end
+			local dist = playdate.geometry.distanceToPoint(self.x, self.y, otherSprite.x, otherSprite.y)
 
-			return
+			if dist <= otherSprite.radius then
+				self:explode()
+				return
+			end
 		end
 
 		if not self:alphaCollision(otherSprite) then
-			return
+			goto continue
 		end
 
 		self:explode()
@@ -73,6 +74,8 @@ function Rocket:_updateCollision()
 				otherSprite:destroy()
 			end)
 		end
+
+		::continue::
 	end
 end
 

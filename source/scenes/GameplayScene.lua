@@ -71,11 +71,15 @@ function GameplayScene:_startInput()
 end
 
 function GameplayScene:_handleAButtonDown()
-	self.siloA:attemptLaunch()
+	if not self.siloA:attemptLaunch() then
+		self.rocketController:selectPreviousRocket()
+	end
 end
 
 function GameplayScene:_handleBButtonDown()
-	self.siloB:attemptLaunch()
+	if not self.siloB:attemptLaunch() then
+		self.rocketController:selectPreviousRocket()
+	end
 end
 
 --- Called when transition away from this scene begins

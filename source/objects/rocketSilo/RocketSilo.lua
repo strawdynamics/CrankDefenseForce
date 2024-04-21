@@ -13,10 +13,10 @@ class('RocketSilo').extends(gfx.sprite)
 local RocketSilo <const> = RocketSilo
 RocketSilo:implements(StaticEventEmitter)
 
-local BASE_THRUST <const> = 40
+local BASE_THRUST <const> = 42
 local LAUNCHPAD_OFFSET_Y <const> = -16
 
-local BASE_ROCKET_PREP_MS <const> = 2000
+local BASE_ROCKET_PREP_MS <const> = 1000
 
 function RocketSilo:init(label, x, y)
 	self.readyForLaunch = true
@@ -34,6 +34,17 @@ function RocketSilo:init(label, x, y)
 	self.launchPrepTimer = nil
 
 	self:_spawnInitialRocket()
+
+	self._intermediateHandleRocketRemove = function(payload)
+		self:_handleRocketRemove(payload)
+	end
+	Rocket.staticOn('remove', self._intermediateHandleRocketRemove)
+end
+
+function RocketSilo:_handleRocketRemove(payload)
+	if self.rocket == payload.rocket then
+		self:_prepareNextRocket()
+	end
 end
 
 function RocketSilo:_initLetterSprite()
@@ -71,8 +82,10 @@ end
 function RocketSilo:attemptLaunch()
 	if self.readyForLaunch then
 		self:_launch()
+		return true
 	else
-		self:_abortLaunch()
+		-- self:_abortLaunch()
+		return false
 	end
 end
 
@@ -87,9 +100,6 @@ function RocketSilo:_launch()
 
 	self.rocket.thrust = BASE_THRUST
 	RocketSilo._staticEmit('launch', { silo = self, rocket = self.rocket })
-
-	-- self.launchPrepTimer = timer.
-	self:_prepareNextRocket()
 end
 
 function RocketSilo:remove()

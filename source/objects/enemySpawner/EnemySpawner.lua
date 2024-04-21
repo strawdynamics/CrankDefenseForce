@@ -9,6 +9,7 @@ local EnemySpawner <const> = EnemySpawner
 
 local SPAWN_PAUSE_BASE_MS <const> = 5000
 local BASE_ROCKET_THRUST <const> = 12
+local MAX_ROCKET_THRUST <const> = 38
 
 function EnemySpawner:init(cities)
 	self.cities = cities

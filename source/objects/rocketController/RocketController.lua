@@ -139,7 +139,7 @@ function RocketController:_handleSiloLaunch(payload)
 	self.currentRocketIndex = #self.rockets
 end
 
-function RocketController:_selectPreviousRocket()
+function RocketController:selectPreviousRocket()
 	if self.currentRocketIndex == -1 then
 		return
 	end
@@ -196,5 +196,5 @@ function RocketController:_handleRightButtonUp()
 end
 
 function RocketController:_handleDownButtonDown()
-	self:_selectPreviousRocket()
+	self:selectPreviousRocket()
 end
