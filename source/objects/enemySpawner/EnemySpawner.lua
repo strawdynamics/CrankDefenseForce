@@ -93,10 +93,11 @@ function EnemySpawner:_handleRocketRemove(payload)
 end
 
 function EnemySpawner:finish()
-	for i, rocket in ipairs(self.rockets) do
+	-- Iterate backwards to properly remove during iteration
+	for i = #self.rockets, 1, -1 do
+		local rocket = self.rockets[i]
 		rocket:remove()
 	end
-	self.rockets = {}
 
 	Rocket.staticOff('remove', self._intermediateHandleRocketRemove)
 

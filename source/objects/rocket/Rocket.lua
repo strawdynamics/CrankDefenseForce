@@ -95,7 +95,7 @@ function Rocket:explode()
 end
 
 function Rocket:remove()
-	Rocket._staticEmit('remove', { rocket = self })
 	Rocket.super.remove(self)
+	Rocket._staticEmit('remove', { rocket = self })
 	self.exhaust:remove()
 end

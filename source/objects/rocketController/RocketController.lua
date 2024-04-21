@@ -104,8 +104,6 @@ function RocketController:_updateOobRockets()
 			rocket:remove()
 		end
 	end
-
-
 end
 
 function RocketController:_updateCursor()
@@ -159,6 +157,12 @@ function RocketController:exit()
 	RocketSilo.staticOff('launch', self._intermediateHandleSiloLaunch)
 	Rocket.staticOff('remove', self._intermediateHandleRocketRemove)
 	playdate.inputHandlers.pop()
+
+	-- Iterate backwards to properly remove during iteration
+	for i = #self.rockets, 1, -1 do
+		local rocket = self.rockets[i]
+		rocket:remove()
+	end
 
 	self.cursor:remove()
 end

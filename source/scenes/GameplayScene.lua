@@ -89,6 +89,10 @@ end
 
 --- Called when transition away from this scene is complete
 function GameplayScene:finish()
+	for i, city in ipairs(self.cities) do
+		city:remove()
+	end
+
 	self.enemySpawner:finish()
 
 	self.siloB:remove()
