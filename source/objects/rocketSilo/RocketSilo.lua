@@ -84,7 +84,7 @@ function RocketSilo:attemptLaunch()
 		self:_launch()
 		return true
 	else
-		-- self:_abortLaunch()
+		self:_abortLaunch()
 		return false
 	end
 end
