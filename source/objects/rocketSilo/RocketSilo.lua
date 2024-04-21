@@ -16,7 +16,7 @@ RocketSilo:implements(StaticEventEmitter)
 local BASE_THRUST <const> = 40
 local LAUNCHPAD_OFFSET_Y <const> = -16
 
-local BASE_ROCKET_PREP_MS <const> = 1500
+local BASE_ROCKET_PREP_MS <const> = 2000
 
 function RocketSilo:init(label, x, y)
 	self.readyForLaunch = true
