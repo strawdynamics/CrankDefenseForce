@@ -61,7 +61,7 @@ function Scorekeeper:_handleRocketExplodedByExplosion(_payload)
 end
 
 function Scorekeeper:_handleRocketCpuDestroyedByPlayer(_payload)
-	self.score += 15
+	self.score += 35
 	self:_redrawScore()
 end
 
@@ -80,7 +80,7 @@ function Scorekeeper:_handleCityHit(payload)
 		end
 	else
 		-- Small penalty for already destroyed cities
-		self.score = math.max(0, self.score - 5)
+		self.score = math.max(0, self.score - 15)
 	end
 end
 

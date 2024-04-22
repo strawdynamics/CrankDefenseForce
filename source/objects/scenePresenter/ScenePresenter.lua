@@ -6,8 +6,8 @@ local Cdf <const> = Cdf
 class('ScenePresenter').extends()
 local ScenePresenter <const> = ScenePresenter
 
-local EXIT_DURATION <const> = 0.5
-local ENTER_DURATION <const> = 0.5
+local EXIT_DURATION <const> = 0.4
+local ENTER_DURATION <const> = 0.4
 
 function ScenePresenter:init()
 	self.newSceneClass = nil

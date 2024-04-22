@@ -51,9 +51,13 @@ function RocketController:init()
 			self:_handleRightButtonUp()
 		end,
 
+		upButtonDown = function()
+			self:_handleUpButtonDown()
+		end,
+
 		downButtonDown = function()
 			self:_handleDownButtonDown()
-		end
+		end,
 	})
 
 	self._intermediateHandleSiloLaunch = function(payload)
@@ -153,6 +157,20 @@ function RocketController:selectPreviousRocket()
 	self.rocket = self.rockets[self.currentRocketIndex]
 end
 
+function RocketController:selectNextRocket()
+	if self.currentRocketIndex == -1 then
+		return
+	end
+
+	self.currentRocketIndex += 1
+
+	if self.currentRocketIndex > #self.rockets then
+		self.currentRocketIndex = 1
+	end
+
+	self.rocket = self.rockets[self.currentRocketIndex]
+end
+
 function RocketController:exit()
 	RocketSilo.staticOff('launch', self._intermediateHandleSiloLaunch)
 	Rocket.staticOff('remove', self._intermediateHandleRocketRemove)
@@ -197,4 +215,8 @@ end
 
 function RocketController:_handleDownButtonDown()
 	self:selectPreviousRocket()
+end
+
+function RocketController:_handleUpButtonDown()
+	self:selectNextRocket()
 end

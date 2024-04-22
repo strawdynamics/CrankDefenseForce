@@ -4,6 +4,16 @@
 
 "mainMenuScene.titleLine1"="CRANK"
 "mainMenuScene.titleLine2"="DEFENSE FORCE"
+"mainMenuScene.play"="Play"
+"mainMenuScene.howToPlay"="How to play"
+"mainMenuScene.about"="About"
+
+"howToPlayScene.launch"="Ⓐ / Ⓑ: Launch rocket from silo"
+"howToPlayScene.steer"="⬅️ ➡️ / 🎣: Steer current rocket"
+"howToPlayScene.switch"="⬆️ ⬇️: Switch between rockets"
+"howToPlayScene.story"="An alien invasion threatens to destroy all life on Playtopia! Crank Defense Force remote missile pilots are the planet's last hope. Defend your cities as long as you can!"
+
+"aboutScene.about"="Created 2024/04/19-21 by Paul Straw for PlayJam 5.\nThanks for playing!\n\nNico fonts: Copyright 2021, Emily Huo (mlyhuo@gmail.com, emuhuo.itch.io, emhuo.com), OFL\n\nLexend Deca font: Copyright 2018 The Lexend Project Authors (https://github.com/googlefonts/lexend), OFL"
 
 "systemMenu.titleScreen"="Title screen"
 
