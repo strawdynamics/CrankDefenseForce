@@ -64,7 +64,6 @@ function imageWithTextStroked(
 	)
 
 	gfx.pushContext()
-	print('setstrok', strokeColor)
 	gfx.setImageDrawMode(strokeColor)
 	local strokeImage = gfx.imageWithText(
 		text,
