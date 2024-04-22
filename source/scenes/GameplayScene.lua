@@ -20,6 +20,10 @@ function GameplayScene:update()
 	end
 
 	self.scorekeeper:update()
+
+	if self.gameResults then
+		self.gameResults:update()
+	end
 end
 
 --- Called when transition to this scene begins
@@ -126,6 +130,5 @@ function GameplayScene:_handleGameOver(payload)
 	self.gameOver = true
 	self.rocketController:handleGameOver()
 
-
-	print('TODO: SHOW GameResults')
+	self.gameResults = GameResults(payload)
 end

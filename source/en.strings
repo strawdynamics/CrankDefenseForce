@@ -20,6 +20,7 @@
 "scorekeeper.scorePrefix"="Score: "
 "scorekeeper.scoreSuffix"=""
 
-"gameResults.defeat"="Defeat!"
-"gameResults.time"="Time:"
-"gameResults.score"="Score:"
+"gameResults.defeat"="DEFEAT"
+"gameResults.time"="Time"
+"gameResults.score"="Score"
+"gameResults.return"="Ⓐ / Ⓑ: Return to title screen"

@@ -29,8 +29,10 @@ function Explosion:update()
 end
 
 function Explosion:draw()
+	gfx.pushContext()
 	gfx.setColor(gfx.kColorWhite)
 	gfx.setDitherPattern(math.max(0.7 - self.sizeAnimator:progress(), 0.2), gfx.image.kDitherTypeBayer8x8)
 	self.radius = self.sizeAnimator:currentValue()
 	gfx.fillCircleAtPoint(EXPLOSION_RADIUS, EXPLOSION_RADIUS, self.radius)
+	gfx.popContext()
 end
