@@ -7,6 +7,7 @@ local GameplayScene <const> = GameplayScene
 
 function GameplayScene:init()
 	self.scorekeeper = Scorekeeper()
+	self.gameOver = false
 end
 
 function GameplayScene:update()
@@ -58,8 +59,12 @@ function GameplayScene:start()
 	self.rocketController = RocketController()
 
 	self.scorekeeper:start()
-
 	self.enemySpawner:start()
+
+	self._intermediateHandleGameOver = function(payload)
+		self:_handleGameOver(payload)
+	end
+	Scorekeeper.staticOn('gameOver', self._intermediateHandleGameOver)
 end
 
 function GameplayScene:_startInput()
@@ -75,16 +80,26 @@ function GameplayScene:_startInput()
 end
 
 function GameplayScene:_handleAButtonDown()
+	if self.gameOver then
+		return
+	end
+
 	self.siloA:attemptLaunch()
 end
 
 function GameplayScene:_handleBButtonDown()
+	if self.gameOver then
+		return
+	end
+
 	self.siloB:attemptLaunch()
 end
 
 --- Called when transition away from this scene begins
 function GameplayScene:exit()
 	menu:removeAllMenuItems()
+
+	Scorekeeper.staticOff('gameOver', self._intermediateHandleGameOver)
 
 	self.scorekeeper:stop()
 	self.scorekeeper:exit()
@@ -104,4 +119,13 @@ function GameplayScene:finish()
 
 	self.siloB:remove()
 	self.siloA:remove()
+end
+
+-- Raised by Scorekeeper
+function GameplayScene:_handleGameOver(payload)
+	self.gameOver = true
+	self.rocketController:handleGameOver()
+
+
+	print('TODO: SHOW GameResults')
 end

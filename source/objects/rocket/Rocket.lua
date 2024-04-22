@@ -67,7 +67,7 @@ function Rocket:_updateCollision()
 
 			otherSprite:remove()
 		elseif otherSprite:isa(City) then
-			timer.performAfterDelay(400, function()
+			timer.performAfterDelay(250, function()
 				otherSprite:destroy()
 			end)
 		end

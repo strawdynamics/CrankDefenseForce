@@ -73,7 +73,7 @@ function Scorekeeper:_handleCityHit(payload)
 
 		if self.destroyedCityCount == 5 then
 			self:stop()
-			self:_staticEmit(
+			self._staticEmit(
 				'gameOver',
 				{score = self.score, duration = self.duration}
 			)
@@ -96,7 +96,5 @@ function Scorekeeper:_redrawScore()
 		0,
 		0
 	)
-	-- gfx.setColor(gfx.kColorWhite)
-	-- gfx.fillRect(0, 0, 90, 20)
 	gfx.popContext()
 end

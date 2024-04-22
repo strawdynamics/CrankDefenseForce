@@ -16,6 +16,8 @@ function RocketController:init()
 	self.currentRocketIndex = -1
 	self.rockets = {}
 
+	self.gameOver = false
+
 	self.isLeftDown = false
 	self.isRightDown = false
 
@@ -186,6 +188,10 @@ function RocketController:exit()
 end
 
 function RocketController:_handleCranked(change, _acceleratedChange)
+	if self.gameOver then
+		return
+	end
+
 	if not self.rocket then
 		return
 	end
@@ -198,25 +204,59 @@ function RocketController:_handleCranked(change, _acceleratedChange)
 end
 
 function RocketController:_handleLeftButtonDown()
+	if self.gameOver then
+		return
+	end
+
 	self.isLeftDown = true
 end
 
 function RocketController:_handleLeftButtonUp()
+	if self.gameOver then
+		return
+	end
+
 	self.isLeftDown = false
 end
 
 function RocketController:_handleRightButtonDown()
+	if self.gameOver then
+		return
+	end
+
 	self.isRightDown = true
 end
 
 function RocketController:_handleRightButtonUp()
+	if self.gameOver then
+		return
+	end
+
 	self.isRightDown = false
 end
 
 function RocketController:_handleDownButtonDown()
+	if self.gameOver then
+		return
+	end
+
 	self:selectPreviousRocket()
 end
 
 function RocketController:_handleUpButtonDown()
+	if self.gameOver then
+		return
+	end
+
 	self:selectNextRocket()
+end
+
+function RocketController:handleGameOver()
+	self.gameOver = true
+
+	self.isLeftDown = false
+	self.isRightDown = false
+
+	self.rocket = nil
+	self.currentRocketIndex = -1
 end
