@@ -71,7 +71,7 @@ function Scorekeeper:_handleCityHit(payload)
 	if payload.isNewlyDestroyed then
 		self.destroyedCityCount += 1
 
-		if self.destroyedCityCount == 1 then
+		if self.destroyedCityCount == 5 then
 			self:stop()
 			self._staticEmit(
 				'gameOver',
