@@ -27,6 +27,7 @@ function EnemySpawner:start()
 	self.uptime = 0
 	self.started = true
 	self.difficulty = 1
+	self.rocketThrustModifier = 0
 	self.rockets = {}
 
 	self:spawnAndSchedule()
@@ -50,15 +51,19 @@ end
 function EnemySpawner:_updateDifficulty()
 	if self.uptime > 300 then
 		self.difficulty = 6
-		self.spawnPauseCoefficient = 0.3
+		self.rocketThrustModifier = 6
+		self.spawnPauseCoefficient = 0.25
 	elseif self.uptime > 240 then
 		self.difficulty = 5
+		self.rocketThrustModifier = 4
 		self.spawnPauseCoefficient = 0.5
 	elseif self.uptime > 150 then
 		self.difficulty = 4
+		self.rocketThrustModifier = 2
 		self.spawnPauseCoefficient = 0.65
 	elseif self.uptime > 90 then
 		self.difficulty = 3
+		self.rocketThrustModifier = 1
 		self.spawnPauseCoefficient = 0.8
 	elseif self.uptime > 45 then
 		self.difficulty = 2
@@ -114,7 +119,7 @@ function EnemySpawner:_spawnRocket()
 	local rocket = Rocket(x, y, angleToTarget)
 	rocket:setGroups({COLL_CPU_ROCKET})
 	rocket:setCollidesWithGroups({COLL_CITY, COLL_PLAYER_ROCKET, COLL_EXPLOSION})
-	rocket.thrust = BASE_ROCKET_THRUST
+	rocket.thrust = BASE_ROCKET_THRUST + self.rocketThrustModifier
 	rocket:add()
 
 	table.insert(self.rockets, rocket)
