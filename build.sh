@@ -1,3 +1,6 @@
 #!/bin/bash
-pdc source crank-defense-force-playjam-5.pdx
-open crank-defense-force-playjam-5.pdx
+PDXINFO="source/pdxinfo"
+awk -F "=" '/buildNumber=/ {$2+=1} {print $1 "=" $2}' "$PDXINFO" > tmpfile && mv tmpfile "$PDXINFO"
+
+pdc source crank-defense-force.pdx
+open crank-defense-force.pdx
