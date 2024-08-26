@@ -9,14 +9,21 @@ import PlaydateKit
 
 nonisolated(unsafe) let rocketBitmapTable = try! Graphics.BitmapTable(path: "rocket.png")
 
-public struct RocketConfig {
-	public var position: Point
-	public var angle: Float
-	public var thrust: Float
-	public var entityStore: EntityStore
-}
-
 class Rocket: BaseEntity {
+	public struct Config {
+		public var position: Point
+		public var angle: Float
+		public var thrust: Float = 0.0
+		public var entityStore: EntityStore
+		public var tag: Tag = .none
+	}
+
+	public enum Tag: UInt8 {
+		case none = 0
+		case player = 1
+		case cpu = 2
+	}
+	
 	var sprite: Sprite.Sprite
 	
 	var thrust: Float = 0.0
@@ -29,7 +36,7 @@ class Rocket: BaseEntity {
 	
 	var lastImageIndex: Int = 0
 	
-	init(_ config: RocketConfig) {
+	init(_ config: Config) {
 		let sprite = Sprite.Sprite()
 		let bitmap = rocketBitmapTable[0]!
 		let (bitmapWidth, bitmapHeight, _) = bitmap.getData(mask: nil, data: nil)
@@ -43,6 +50,7 @@ class Rocket: BaseEntity {
 			height: bitmapHeight
 		)
 		sprite.addToDisplayList()
+		sprite.tag = config.tag.rawValue
 		
 		self.sprite = sprite
 		

@@ -25,7 +25,7 @@ class GameplayScene: BaseScene {
 		}
 		
 		if pushed.contains(.a) {
-			let rocket = Rocket(RocketConfig(
+			let rocket = Rocket(Rocket.Config(
 				position: Point(
 					x: Float.random(in: 0.0..<400.0),
 					y: Float.random(in: 0.0..<240.0)
