@@ -1,5 +1,5 @@
 //
-//  BasicBackground.swift
+//  ImageBackground.swift
 //
 //
 //  Created by Paul Straw on 8/25/24.
@@ -7,13 +7,22 @@
 
 import PlaydateKit
 
-class BasicBackground: BaseEntity {
+nonisolated(unsafe) let cityBackgroundBitmap = try! Graphics.Bitmap(path: "cityBackground.png")
+
+enum ImageBackgroundType {
+	case city
+}
+
+class ImageBackground: BaseEntity {
 	let sprite: Sprite.Sprite
 	
-	init(entityStore: EntityStore, color: Graphics.Color) {
+	init(entityStore: EntityStore, backgroundType: ImageBackgroundType) {
 		let sprite = Sprite.Sprite()
 		sprite.setDrawMode(.copy)
-		sprite.image = Graphics.Bitmap.init(width: 400, height: 240, bgColor: color)
+		switch backgroundType {
+		case .city:
+			sprite.image = cityBackgroundBitmap
+		}
 		sprite.center = Point.zero
 		sprite.moveTo(Point.zero)
 		sprite.zIndex = -32768

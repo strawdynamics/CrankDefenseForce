@@ -6,13 +6,13 @@
 //
 
 enum SceneTransitionExitResult {
-	case Exiting
-	case Complete
+	case exiting
+	case complete
 }
 
 enum SceneTransitionEnterResult {
-	case Entering
-	case Complete
+	case entering
+	case complete
 }
 
 class BaseSceneTransition {

@@ -1,5 +1,5 @@
 //
-//  MainMenuScene.swift
+//  GameplayScene.swift
 //
 //
 //  Created by Paul Straw on 8/25/24.
@@ -7,30 +7,26 @@
 
 import PlaydateKit
 
-class MainMenuScene: BaseScene {
+class GameplayScene: BaseScene {
 	let entityStore = EntityStore()
 	
 	override func update() {
-		Graphics.pushContext(nil)
-		Graphics.drawMode = .fillWhite
-		Graphics.drawText("CDF SWIFT *salute*", at: Point(x: 50.0, y: 50.0))
-		Graphics.drawText("oi buddy \(game.time.deltaTime.description)", at: Point(x: 50.0, y: 68.0))
-		Graphics.popContext()
+		self.entityStore.update()
 		
 		let pushed = System.buttonState.pushed
 		
 		if pushed.contains(.a) {
 			game.scenePresenter.changeScene(
-				newScene: GameplayScene(),
-				transition: FirstInLineSceneTransition()
+				newScene: MainMenuScene(),
+				transition: FirstInLineSceneTransition(),
 			)
 		}
 	}
 	
 	override func enter() {
-		let bgEntity = BasicBackground(
+		let bgEntity = ImageBackground(
 			entityStore: self.entityStore,
-			color: .black
+			backgroundType: .city
 		)
 		
 		self.entityStore.add(bgEntity)

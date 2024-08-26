@@ -38,11 +38,11 @@ class FirstInLineSceneTransition: BaseSceneTransition {
 			self.currentFrameTime -= FRAME_DURATION
 			
 			if self.frame == 12 {
-				return .Complete
+				return .complete
 			}
 		}
 		
-		return .Exiting
+		return .exiting
 	}
 	
 	override func updateEnter() -> SceneTransitionEnterResult {
@@ -58,10 +58,10 @@ class FirstInLineSceneTransition: BaseSceneTransition {
 			self.currentFrameTime -= FRAME_DURATION
 			
 			if self.frame >= MAX_FRAME_INDEX {
-				return .Complete
+				return .complete
 			}
 		}
 		
-		return .Entering
+		return .entering
 	}
 }

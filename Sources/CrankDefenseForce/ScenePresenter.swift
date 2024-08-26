@@ -52,7 +52,7 @@ class ScenePresenter {
 		
 		let res = transition.updateExit()
 		
-		if res == .Complete {
+		if res == .complete {
 			self.completeExit()
 		}
 	}
@@ -76,7 +76,7 @@ class ScenePresenter {
 		
 		let res = transition.updateEnter()
 		
-		if res == .Complete {
+		if res == .complete {
 			self.completeEnter()
 		}
 	}
