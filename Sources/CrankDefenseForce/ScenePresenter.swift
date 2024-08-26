@@ -10,7 +10,7 @@ class ScenePresenter {
 	
 	var nextScene: BaseScene?
 	
-	var transition: SceneTransition?
+	var transition: BaseSceneTransition?
 	
 	var isExiting = false
 	
@@ -26,5 +26,64 @@ class ScenePresenter {
 	
 	public func update() {
 		self.currentScene.update()
+		
+		if self.isExiting {
+			self.updateExit()
+		} else if self.isEntering {
+			self.updateEnter()
+		}
+	}
+	
+	public func changeScene(newScene: BaseScene, transition: BaseSceneTransition) {
+		self.nextScene = newScene
+		
+		self.currentScene.exit()
+		
+		transition.begin()
+		self.transition = transition
+		
+		self.isExiting = true
+	}
+	
+	func updateExit() {
+		guard let transition = self.transition else {
+			return
+		}
+		
+		let res = transition.updateExit()
+		
+		if res == .Complete {
+			self.completeExit()
+		}
+	}
+	
+	func completeExit() {
+		self.isExiting = false
+		self.isEntering = true
+		
+		self.currentScene.finish()
+		
+		
+		self.currentScene = self.nextScene!
+		self.nextScene = nil
+		self.currentScene.enter()
+	}
+	
+	func updateEnter() {
+		guard let transition = self.transition else {
+			return
+		}
+		
+		let res = transition.updateEnter()
+		
+		if res == .Complete {
+			self.completeEnter()
+		}
+	}
+	
+	func completeEnter() {
+		self.isEntering = false
+		self.currentScene.start()
+		self.transition = nil
 	}
 }

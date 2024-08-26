@@ -1,15 +1,17 @@
 import PlaydateKit
 
 final class Game: PlaydateGame {
-	private var scenePresenter: ScenePresenter
+	public var scenePresenter: ScenePresenter
+	
+	public var time: Time
 	
 	init() {
 		self.scenePresenter = ScenePresenter(firstScene: MainMenuScene())
+		self.time = Time()
 	}
 	
 	func update() -> Bool {
-		Time.deltaTime = System.elapsedTime
-		System.resetElapsedTime()
+		self.time.updateDeltaTime()
 		
 		Graphics.clear()
 		Sprite.updateAndDrawDisplayListSprites()
