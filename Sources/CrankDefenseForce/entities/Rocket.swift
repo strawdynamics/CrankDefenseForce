@@ -50,8 +50,8 @@ class Rocket: BaseEntity {
 		self.thrust = config.thrust
 		
 		super.init(config.entityStore)
-		self.setImage()
 		self.setAngle(newAngle: config.angle)
+		self.setImage()
 	}
 	
 	override func update() {
