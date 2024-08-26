@@ -13,13 +13,28 @@ class GameplayScene: BaseScene {
 	override func update() {
 		self.entityStore.update()
 		
+		Graphics.drawText("somanyents \(self.entityStore.entities.count)", at: Point.zero)
+		
 		let pushed = System.buttonState.pushed
 		
-		if pushed.contains(.a) {
+		if pushed.contains(.down) {
 			game.scenePresenter.changeScene(
 				newScene: MainMenuScene(),
 				transition: FirstInLineSceneTransition(),
 			)
+		}
+		
+		if pushed.contains(.a) {
+			let rocket = Rocket(RocketConfig(
+				position: Point(
+					x: Float.random(in: 0.0..<400.0),
+					y: Float.random(in: 0.0..<240.0)
+				),
+				angle: Float.random(in: 0.0..<360.0),
+				thrust: 2.0,
+				entityStore: self.entityStore
+			))
+			self.entityStore.add(rocket)
 		}
 	}
 	

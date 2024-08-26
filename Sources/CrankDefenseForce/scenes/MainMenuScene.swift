@@ -15,7 +15,7 @@ class MainMenuScene: BaseScene {
 		Graphics.drawMode = .fillWhite
 		Graphics.drawText("CDF SWIFT *salute*", at: Point(x: 50.0, y: 50.0))
 		// FIXME: crashes on device?
-//		Graphics.drawText("oi buddy \(game.time.deltaTime.description)", at: Point(x: 50.0, y: 68.0))
+//		Graphics.drawText("oi buddy \(Time.deltaTime.description)", at: Point(x: 50.0, y: 68.0))
 		Graphics.popContext()
 		
 		let pushed = System.buttonState.pushed

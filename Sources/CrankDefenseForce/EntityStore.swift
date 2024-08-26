@@ -5,7 +5,7 @@
 //  Created by Paul Straw on 8/25/24.
 //
 
-class EntityStore {
+public class EntityStore {
 	var entities: [BaseEntity] = []
 	
 	func update() {

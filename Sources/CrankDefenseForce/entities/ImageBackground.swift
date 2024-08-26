@@ -31,7 +31,7 @@ class ImageBackground: BaseEntity {
 		sprite.addToDisplayList()
 		self.sprite = sprite
 		
-		super.init(entityStore: entityStore)
+		super.init(entityStore)
 	}
 	
 	override func update() {

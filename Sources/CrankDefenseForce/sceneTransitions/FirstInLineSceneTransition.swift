@@ -25,7 +25,7 @@ class FirstInLineSceneTransition: BaseSceneTransition {
 	}
 	
 	override func updateExit() -> SceneTransitionExitResult {
-		self.currentFrameTime += game.time.deltaTime
+		self.currentFrameTime += Time.deltaTime
 		
 		Graphics.pushContext(nil)
 		Graphics.drawMode = .copy
@@ -46,7 +46,7 @@ class FirstInLineSceneTransition: BaseSceneTransition {
 	}
 	
 	override func updateEnter() -> SceneTransitionEnterResult {
-		self.currentFrameTime += game.time.deltaTime
+		self.currentFrameTime += Time.deltaTime
 		
 		Graphics.pushContext(nil)
 		Graphics.drawMode = .copy

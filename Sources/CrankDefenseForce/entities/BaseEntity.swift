@@ -12,7 +12,7 @@ class BaseEntity {
 	
 	var entityStore: EntityStore?
 	
-	init(entityStore: EntityStore) {
+	init(_ entityStore: EntityStore) {
 		self.entityStore = entityStore
 		self.id = nextEntityId
 		nextEntityId += 1
