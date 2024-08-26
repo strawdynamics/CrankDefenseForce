@@ -16,7 +16,10 @@ class PdkTestScene: BaseScene {
 		let pushed = System.buttonState.pushed
 		
 		if pushed.contains(.a) {
-			game.scenePresenter.changeScene(newScene: MainMenuScene(), transition: FirstInLineSceneTransition())
+			game.scenePresenter.changeScene(
+				newScene: MainMenuScene(),
+				transition: FirstInLineSceneTransition()
+			)
 		}
 	}
 	
