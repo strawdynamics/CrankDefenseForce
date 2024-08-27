@@ -56,7 +56,7 @@ class PlayerController: BaseEntity {
 		updateCursor()
 	}
 	
-	func updateInputs() {
+	private func updateInputs() {
 		inputs.removeAll()
 		// TODO: Base this on user settings
 		
@@ -83,11 +83,15 @@ class PlayerController: BaseEntity {
 		}
 	}
 	
-	func updateCursor() {
+	private func updateCursor() {
 		if let rocket = self.currentRocket {
 			self.cursor.moveToward(dest: rocket.position)
 		} else {
 			self.cursor.moveToward(dest: SCREEN_CENTER)
 		}
+	}
+	
+	func turn(degrees: Float) {
+		currentRocket?.changeAngle(delta: degrees)
 	}
 }

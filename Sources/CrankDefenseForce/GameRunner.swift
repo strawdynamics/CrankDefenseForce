@@ -70,7 +70,7 @@ struct GameRunner {
 			case .selectPreviousRocket:
 				print("TODO: selectPreviousRocket")
 			case .turnRocket(let degrees):
-				print("TODO: turnRocket(degrees)")
+				playerController.turn(degrees: degrees)
 			}
 		}
 	}

@@ -108,7 +108,7 @@ class Rocket: BaseEntity {
 	
 	func setImage() {
 		let roundedAngle = Int(self.angle.roundToNearest(15.0))
-		let newImageIndex = roundedAngle % 360 / 15 % 24
+		let newImageIndex = ((roundedAngle % 360) / 15 + 24) % 24
 		
 		if newImageIndex != self.lastImageIndex {
 			let bitmap = rocketBitmapTable[newImageIndex]!
@@ -165,7 +165,7 @@ class Rocket: BaseEntity {
 	}
 	
 	func setAngle(newAngle: Float) {
-		self.angle = newAngle.truncatingRemainder(dividingBy: 360.0)
+		self.angle = fmodf(newAngle, 360.0)
 		
 		let radAngle = (self.angle - 90.0).toRadians()
 		self.cos = cosf(radAngle)
