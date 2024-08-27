@@ -1,7 +1,7 @@
 import PlaydateKit
 
 final class Game: PlaydateGame {
-	public var scenePresenter: ScenePresenter
+	var scenePresenter: ScenePresenter
 	
 	init() {
 		self.scenePresenter = ScenePresenter(firstScene: MainMenuScene())

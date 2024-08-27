@@ -6,11 +6,11 @@
 //
 
 extension Float {
-	public func roundToNearest(_ toNearest: Float) -> Self {
+	func roundToNearest(_ toNearest: Float) -> Self {
 		return (self.rounded() / toNearest) * toNearest
 	}
 	
-	public func toRadians() -> Self {
+	func toRadians() -> Self {
 		return self * Float.pi / 180.0
 	}
 }

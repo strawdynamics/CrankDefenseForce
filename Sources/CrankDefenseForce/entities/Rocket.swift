@@ -11,8 +11,8 @@ nonisolated(unsafe) let rocketBitmapTable = try! Graphics.BitmapTable(path: "roc
 
 
 struct TestoEventPayload {
-	public var bob: Float
-	public var bobString: String
+	var bob: Float
+	var bobString: String
 }
 
 struct TestoEvent: EventProtocol {
@@ -20,17 +20,17 @@ struct TestoEvent: EventProtocol {
 }
 
 class Rocket: BaseEntity {
-	nonisolated(unsafe) public static var testoEmitter = EventEmitter<TestoEvent>()
+	nonisolated(unsafe) static var testoEmitter = EventEmitter<TestoEvent>()
 	
-	public struct Config {
-		public var position: Point
-		public var angle: Float
-		public var thrust: Float = 0.0
-		public var entityStore: EntityStore
-		public var tag: Tag = .none
+	struct Config {
+		var position: Point
+		var angle: Float
+		var thrust: Float = 0.0
+		var entityStore: EntityStore
+		var tag: Tag = .none
 	}
 
-	public enum Tag: UInt8 {
+	enum Tag: UInt8 {
 		case none = 0
 		case player = 1
 		case cpu = 2
@@ -48,7 +48,7 @@ class Rocket: BaseEntity {
 	
 	var lastImageIndex: Int = 0
 	
-	public var position: Point {
+	var position: Point {
 		return self.sprite.position
 	}
 	
@@ -120,7 +120,7 @@ class Rocket: BaseEntity {
 		}
 	}
 	
-	public func remove() {
+	func remove() {
 		self.sprite.removeFromDisplayList()
 		
 //		Self.staticEmit(RocketEvent.Remove, )
@@ -128,15 +128,15 @@ class Rocket: BaseEntity {
 		// TODO: Remove exhaust
 	}
 	
-	public func setThrust(newThrust: Float) {
+	func setThrust(newThrust: Float) {
 		self.thrust = newThrust
 	}
 	
-	public func changeAngle(delta: Float) {
+	func changeAngle(delta: Float) {
 		self.setAngle(newAngle: self.angle + delta)
 	}
 	
-	public func setAngle(newAngle: Float) {
+	func setAngle(newAngle: Float) {
 		self.angle = newAngle.truncatingRemainder(dividingBy: 360.0)
 		
 		let radAngle = (self.angle - 90.0).toRadians()

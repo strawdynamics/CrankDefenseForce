@@ -8,7 +8,7 @@
 nonisolated(unsafe) var nextEntityId: Int = 1
 
 class BaseEntity {
-	public let id: Int
+	let id: Int
 	
 	var entityStore: EntityStore?
 	

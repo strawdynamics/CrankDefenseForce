@@ -24,7 +24,7 @@ class ScenePresenter {
 		self.currentScene = firstScene
 	}
 	
-	public func update() {
+	func update() {
 		self.currentScene.update()
 		
 		if self.isExiting {
@@ -34,7 +34,7 @@ class ScenePresenter {
 		}
 	}
 	
-	public func changeScene(newScene: BaseScene, transition: BaseSceneTransition) {
+	func changeScene(newScene: BaseScene, transition: BaseSceneTransition) {
 		self.nextScene = newScene
 		
 		self.currentScene.exit()
