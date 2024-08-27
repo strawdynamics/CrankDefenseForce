@@ -9,7 +9,19 @@ import PlaydateKit
 
 nonisolated(unsafe) let rocketBitmapTable = try! Graphics.BitmapTable(path: "rocket.png")
 
+
+struct TestoEventPayload {
+	public var bob: Float
+	public var bobString: String
+}
+
+struct TestoEvent: EventProtocol {
+	typealias Payload = TestoEventPayload
+}
+
 class Rocket: BaseEntity {
+	nonisolated(unsafe) public static var testoEmitter = EventEmitter<TestoEvent>()
+	
 	public struct Config {
 		public var position: Point
 		public var angle: Float
@@ -36,6 +48,10 @@ class Rocket: BaseEntity {
 	
 	var lastImageIndex: Int = 0
 	
+	public var position: Point {
+		return self.sprite.position
+	}
+	
 	init(_ config: Config) {
 		let sprite = Sprite.Sprite()
 		let bitmap = rocketBitmapTable[0]!
@@ -58,6 +74,9 @@ class Rocket: BaseEntity {
 		self.thrust = config.thrust
 		
 		super.init(config.entityStore)
+		
+		Self.testoEmitter.emit(TestoEventPayload(bob: 42.32, bobString: "Hey bob!"))
+		
 		self.setAngle(newAngle: config.angle)
 		self.setImage()
 	}
@@ -79,6 +98,8 @@ class Rocket: BaseEntity {
 		}
 		
 		self.setImage()
+		
+		self.updateOob()
 	}
 	
 	func setImage() {
@@ -92,8 +113,19 @@ class Rocket: BaseEntity {
 		}
 	}
 	
-	public func getPosition() -> Point {
-		return self.sprite.position
+	func updateOob() {
+		let pos = self.position
+		if pos.x < -20 || pos.x > 420 || pos.y < -20 || pos.y > 220 {
+			self.remove()
+		}
+	}
+	
+	public func remove() {
+		self.sprite.removeFromDisplayList()
+		
+//		Self.staticEmit(RocketEvent.Remove, )
+		
+		// TODO: Remove exhaust
 	}
 	
 	public func setThrust(newThrust: Float) {

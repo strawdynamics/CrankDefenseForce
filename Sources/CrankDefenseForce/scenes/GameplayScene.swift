@@ -39,6 +39,10 @@ class GameplayScene: BaseScene {
 	}
 	
 	override func enter() {
+		Rocket.testoEmitter.on { payload in
+			print("HEY GOT THE EVENT!!!")
+		}
+		
 		let bgEntity = ImageBackground(
 			entityStore: self.entityStore,
 			backgroundType: .city
@@ -52,7 +56,7 @@ class GameplayScene: BaseScene {
 	}
 	
 	override func exit() {
-		//
+		Rocket.testoEmitter.reset()
 	}
 	
 	override func finish() {
