@@ -10,19 +10,19 @@ import PlaydateKit
 class GameplayScene: BaseScene {
 	let entityStore = EntityStore()
 	
+	let playerController: PlayerController
+	
+	override init() {
+		self.playerController = PlayerController(entityStore)
+		entityStore.add(playerController)
+	}
+	
 	override func update() {
 		self.entityStore.update()
 		
 		Graphics.drawText("somanyents \(self.entityStore.entityCount)", at: Point.zero)
 		
 		let pushed = System.buttonState.pushed
-		
-		if pushed.contains(.down) {
-			game.scenePresenter.changeScene(
-				newScene: MainMenuScene(),
-				transition: FirstInLineSceneTransition(),
-			)
-		}
 		
 		if pushed.contains(.a) {
 			let rocket = Rocket(Rocket.Config(
@@ -52,7 +52,14 @@ class GameplayScene: BaseScene {
 	}
 	
 	override func start() {
-		//
+		System.addMenuItem(title: "Main menu") {
+			game.scenePresenter.changeScene(
+				newScene: MainMenuScene(),
+				transition: FirstInLineSceneTransition(),
+			)
+			
+			System.removeAllMenuItems()
+		}
 	}
 	
 	override func exit() {
