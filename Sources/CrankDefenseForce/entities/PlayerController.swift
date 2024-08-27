@@ -75,7 +75,7 @@ class PlayerController: BaseEntity {
 		if currentRocketIndex >= self.rockets.count - 1 {
 			currentRocketIndex = 0
 		} else {
-			currentRocketIndex = currentRocketIndex + 1
+			currentRocketIndex += 1
 		}
 
 		currentRocket = rockets[currentRocketIndex]
@@ -90,7 +90,7 @@ class PlayerController: BaseEntity {
 		if currentRocketIndex <= 0 {
 			currentRocketIndex = rockets.count - 1
 		} else {
-			currentRocketIndex = currentRocketIndex - 1
+			currentRocketIndex -= 1
 		}
 
 		currentRocket = rockets[currentRocketIndex]

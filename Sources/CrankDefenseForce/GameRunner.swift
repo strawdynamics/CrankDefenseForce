@@ -16,6 +16,9 @@ struct GameRunner {
 	
 	let siloA: RocketSilo
 	
+	let testEaseDuration: Float = 5.0
+	var testEaseTime: Float = 0.0
+	
 	init() {
 		playerController = PlayerController(entityStore)
 		
@@ -39,7 +42,13 @@ struct GameRunner {
 		entityStore.remove(payload.rocket)
 	}
 	
-	func update() {
+	mutating func update() {
+		testEaseTime += Time.deltaTime
+		testEaseTime = fmodf(testEaseTime, testEaseDuration)
+		
+		let eased = EasingFn.basic(outQuad).ease(testEaseTime, 50.0, 300.0, testEaseDuration)
+		Graphics.fillEllipse(in: Rect(x: eased, y: 120.0, width: 12.0, height: 12.0))
+		
 		entityStore.update()
 		
 		updateInputs()
