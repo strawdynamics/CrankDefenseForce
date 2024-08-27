@@ -18,6 +18,12 @@ class EntityStore {
 		}
 	}
 	
+	func lateUpdate() {
+		for entity in self.entities {
+			entity.lateUpdate()
+		}
+	}
+	
 	func add(_ entity: BaseEntity) {
 		self.entities.append(entity)
 	}

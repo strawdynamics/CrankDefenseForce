@@ -53,6 +53,9 @@ class PlayerController: BaseEntity {
 	
 	override func update() {
 		updateInputs()
+	}
+	
+	override func lateUpdate() {
 		updateCursor()
 	}
 	

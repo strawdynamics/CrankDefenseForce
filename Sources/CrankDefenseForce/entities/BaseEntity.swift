@@ -23,6 +23,10 @@ class BaseEntity {
 		
 	}
 	
+	func lateUpdate() {
+		
+	}
+	
 	func destroy() {
 		self.entityStore = nil
 	}
