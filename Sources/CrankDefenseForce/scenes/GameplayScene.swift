@@ -13,7 +13,7 @@ class GameplayScene: BaseScene {
 	override func update() {
 		self.entityStore.update()
 		
-		Graphics.drawText("somanyents \(self.entityStore.entities.count)", at: Point.zero)
+		Graphics.drawText("somanyents \(self.entityStore.entityCount)", at: Point.zero)
 		
 		let pushed = System.buttonState.pushed
 		

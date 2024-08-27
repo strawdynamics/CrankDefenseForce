@@ -98,7 +98,7 @@ class Rocket: BaseEntity {
 			
 			self.sprite.moveBy(dx: deltaX, dy: deltaY)
 			
-			// TODO: Update collision
+			self.updateCollision()
 		}
 		
 		self.setImage()
@@ -122,6 +122,28 @@ class Rocket: BaseEntity {
 		if pos.x < -20 || pos.x > 420 || pos.y < -20 || pos.y > 260 {
 			self.remove()
 		}
+	}
+	
+	func updateCollision() {
+		let rawOverlappingSprites = self.sprite.overlappingSprites
+		var overlappingSprites: [Sprite.Sprite] = []
+		
+		for case let spritePointer? in rawOverlappingSprites {
+			let spritePointer = unsafeBitCast(spritePointer, to: UnsafeMutablePointer<Sprite.Sprite>.self)
+
+			overlappingSprites.append(spritePointer.pointee)
+		}
+		
+		
+		for overlappingSprite in overlappingSprites {
+			// TODO: https://github.com/finnvoor/PlaydateKit/issues/89
+		}
+		
+		rawOverlappingSprites.deallocate()
+	}
+	
+	func handleCollisionWith(otherRocket: Rocket) {
+//
 	}
 	
 	func remove() {

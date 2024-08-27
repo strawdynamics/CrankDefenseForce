@@ -6,7 +6,11 @@
 //
 
 class EntityStore {
-	var entities: [BaseEntity] = []
+	private var entities: ContiguousArray<BaseEntity> = []
+	
+	var entityCount: Int {
+		return entities.count
+	}
 	
 	func update() {
 		for entity in self.entities {
