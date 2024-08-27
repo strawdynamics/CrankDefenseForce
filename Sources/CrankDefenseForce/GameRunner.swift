@@ -68,9 +68,9 @@ struct GameRunner {
 			case .launchSiloA:
 				let _ = siloA.attemptLaunch()
 			case .selectNextRocket:
-				print("TODO: selectNextRocket")
+				playerController.selectNextRocket()
 			case .selectPreviousRocket:
-				print("TODO: selectPreviousRocket")
+				playerController.selectPreviousRocket()
 			case .turnRocket(let degrees):
 				playerController.turn(degrees: degrees)
 			}

@@ -9,6 +9,8 @@ import PlaydateKit
 
 nonisolated(unsafe) private let SCREEN_CENTER = Point(x: 200.0, y: 120.0)
 
+private let CRANK_COEFFICIENT: Float = 0.3;
+
 class PlayerController: BaseEntity {
 	enum PlayerInput {
 		case launchSiloB
@@ -26,6 +28,8 @@ class PlayerController: BaseEntity {
 	
 	private(set) var inputs: [PlayerInput] = []
 	
+	private var currentRocketIndex: Int = -1
+	
 	override init(_ entityStore: EntityStore) {
 		self.cursor = PlayerCursor(entityStore)
 		super.init(entityStore)
@@ -36,11 +40,13 @@ class PlayerController: BaseEntity {
 	
 	func handleRocketLaunch(payload: RocketSilo.LaunchEventPayload) {
 		currentRocket = payload.rocket
+		currentRocketIndex = rockets.count
 		rockets.append(payload.rocket)
 	}
 	
 	func handleRocketRemove(payload: Rocket.RemoveEventPayload) {
-		if payload.rocket.id == self.currentRocket?.id {
+		var removedCurrentRocket = payload.rocket.id == self.currentRocket?.id
+		if removedCurrentRocket {
 			self.currentRocket = nil
 		}
 		
@@ -49,6 +55,45 @@ class PlayerController: BaseEntity {
 			
 			return shouldRemove
 		}
+		
+		if removedCurrentRocket && rockets.count > 0 {
+			currentRocketIndex = rockets.count - 1
+			currentRocket = rockets[currentRocketIndex]
+		}
+	}
+	
+	func turn(degrees: Float) {
+		currentRocket?.changeAngle(delta: degrees)
+	}
+	
+	func selectNextRocket() {
+		if rockets.count == 0 {
+			currentRocketIndex = -1
+			return
+		}
+		
+		if currentRocketIndex >= self.rockets.count - 1 {
+			currentRocketIndex = 0
+		} else {
+			currentRocketIndex = currentRocketIndex + 1
+		}
+
+		currentRocket = rockets[currentRocketIndex]
+	}
+	
+	func selectPreviousRocket() {
+		if rockets.count == 0 {
+			currentRocketIndex = -1
+			return
+		}
+		
+		if currentRocketIndex <= 0 {
+			currentRocketIndex = rockets.count - 1
+		} else {
+			currentRocketIndex = currentRocketIndex - 1
+		}
+
+		currentRocket = rockets[currentRocketIndex]
 	}
 	
 	override func update() {
@@ -82,7 +127,7 @@ class PlayerController: BaseEntity {
 		let crankChange = System.crankChange
 		
 		if crankChange != 0.0 {
-			inputs.append(.turnRocket(crankChange))
+			inputs.append(.turnRocket(crankChange * CRANK_COEFFICIENT))
 		}
 	}
 	
@@ -92,9 +137,5 @@ class PlayerController: BaseEntity {
 		} else {
 			self.cursor.moveToward(dest: SCREEN_CENTER)
 		}
-	}
-	
-	func turn(degrees: Float) {
-		currentRocket?.changeAngle(delta: degrees)
 	}
 }
