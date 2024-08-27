@@ -5,7 +5,7 @@
 //  Created by Paul Straw on 8/25/24.
 //
 
-class BaseScene {
+class BaseScene {	
 	// Called each frame
 	func update() {
 		

@@ -29,12 +29,10 @@ class MainMenuScene: BaseScene {
 	}
 	
 	override func enter() {
-		let bgEntity = BasicBackground(
+		let _ = BasicBackground(
 			entityStore: self.entityStore,
 			color: .black
 		)
-		
-		self.entityStore.add(bgEntity)
 	}
 	
 	override func start() {

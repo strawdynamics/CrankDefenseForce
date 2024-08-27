@@ -16,6 +16,7 @@ class BaseEntity {
 		self.entityStore = entityStore
 		self.id = nextEntityId
 		nextEntityId += 1
+		entityStore.add(self)
 	}
 	
 	func update() {

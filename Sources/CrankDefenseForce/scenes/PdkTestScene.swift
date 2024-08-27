@@ -24,12 +24,10 @@ class PdkTestScene: BaseScene {
 	}
 	
 	override func enter() {
-		let bgEntity = BasicBackground(
+		let _ = BasicBackground(
 			entityStore: self.entityStore,
 			color: Graphics.Color.pattern((0xE7, 0xDB, 0xDB, 0xDB, 0xDB, 0xBD, 0x7E, 0xFF))
 		)
-		
-		self.entityStore.add(bgEntity)
 	}
 	
 	override func start() {

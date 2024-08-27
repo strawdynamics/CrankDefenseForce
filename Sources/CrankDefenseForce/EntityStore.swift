@@ -6,7 +6,7 @@
 //
 
 class EntityStore {
-	private var entities: ContiguousArray<BaseEntity> = []
+	private var entities: [BaseEntity] = []
 	
 	var entityCount: Int {
 		return entities.count

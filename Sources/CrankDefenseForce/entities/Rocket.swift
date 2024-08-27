@@ -44,7 +44,7 @@ class Rocket: BaseEntity {
 	
 	var sprite: Sprite.Sprite
 	
-	var thrust: Float = 0.0
+	private(set) var thrust: Float = 0.0
 	
 	var angle: Float
 	
