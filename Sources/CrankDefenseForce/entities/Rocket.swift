@@ -20,7 +20,13 @@ struct TestoEvent: EventProtocol {
 }
 
 class Rocket: BaseEntity {
-	nonisolated(unsafe) static var testoEmitter = EventEmitter<TestoEvent>()
+	struct RemoveEventPayload {
+		var rocket: Rocket
+	}
+	struct RemoveEvent: EventProtocol {
+		typealias Payload = RemoveEventPayload
+	}
+	nonisolated(unsafe) static var removeEmitter = EventEmitter<RemoveEvent>()
 	
 	struct Config {
 		var position: Point
@@ -75,8 +81,6 @@ class Rocket: BaseEntity {
 		
 		super.init(config.entityStore)
 		
-		Self.testoEmitter.emit(TestoEventPayload(bob: 42.32, bobString: "Hey bob!"))
-		
 		self.setAngle(newAngle: config.angle)
 		self.setImage()
 	}
@@ -115,16 +119,18 @@ class Rocket: BaseEntity {
 	
 	func updateOob() {
 		let pos = self.position
-		if pos.x < -20 || pos.x > 420 || pos.y < -20 || pos.y > 220 {
+		if pos.x < -20 || pos.x > 420 || pos.y < -20 || pos.y > 260 {
 			self.remove()
 		}
 	}
 	
 	func remove() {
 		self.sprite.removeFromDisplayList()
-		
-//		Self.staticEmit(RocketEvent.Remove, )
-		
+
+		Self.removeEmitter.emit(RemoveEventPayload(
+			rocket: self,
+		))
+
 		// TODO: Remove exhaust
 	}
 	

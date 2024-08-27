@@ -31,7 +31,7 @@ class GameplayScene: BaseScene {
 					y: Float.random(in: 0.0..<240.0)
 				),
 				angle: Float.random(in: 0.0..<360.0),
-				thrust: 2.0,
+				thrust: 20.0,
 				entityStore: self.entityStore
 			))
 			self.entityStore.add(rocket)
@@ -39,8 +39,8 @@ class GameplayScene: BaseScene {
 	}
 	
 	override func enter() {
-		Rocket.testoEmitter.on { payload in
-			print("HEY GOT THE EVENT!!!")
+		let _ = Rocket.removeEmitter.on { payload in
+			self.entityStore.remove(payload.rocket)
 		}
 		
 		let bgEntity = ImageBackground(
@@ -56,7 +56,7 @@ class GameplayScene: BaseScene {
 	}
 	
 	override func exit() {
-		Rocket.testoEmitter.reset()
+		Rocket.removeEmitter.reset()
 	}
 	
 	override func finish() {
