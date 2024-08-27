@@ -78,6 +78,7 @@ class RocketSilo: BaseEntity {
 	private func launch() {
 		if let rocket = self.rocket {
 			readyForLaunch = false
+			rocket.sprite.collisionsEnabled = true
 			rocket.setThrust(newThrust: DEFAULT_THRUST)
 			
 			Self.launchEmitter.emit(LaunchEventPayload(rocket: rocket))
@@ -118,5 +119,6 @@ class RocketSilo: BaseEntity {
 			angle: 0.0,
 			entityStore: self.entityStore!
 		))
+		self.rocket?.sprite.collisionsEnabled = false
 	}
 }

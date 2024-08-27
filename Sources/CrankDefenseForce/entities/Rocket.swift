@@ -28,6 +28,12 @@ class Rocket: BaseEntity {
 	}
 	nonisolated(unsafe) static var removeEmitter = EventEmitter<RemoveEvent>()
 	
+	class RocketSprite: Sprite.Sprite {
+		var rocketId: Int = -1
+		
+		func collisionResponse(other _: Sprite) -> SpriteCollisionResponseType { .overlap }
+	}
+	
 	struct Config {
 		var position: Point
 		var angle: Float
@@ -42,7 +48,7 @@ class Rocket: BaseEntity {
 		case cpu = 2
 	}
 	
-	var sprite: Sprite.Sprite
+	var sprite: RocketSprite
 	
 	private(set) var thrust: Float = 0.0
 	
@@ -59,7 +65,7 @@ class Rocket: BaseEntity {
 	}
 	
 	init(_ config: Config) {
-		let sprite = Sprite.Sprite()
+		let sprite = RocketSprite()
 		let bitmap = rocketBitmapTable[0]!
 		let (bitmapWidth, bitmapHeight, _) = bitmap.getData(mask: nil, data: nil)
 		
@@ -80,6 +86,8 @@ class Rocket: BaseEntity {
 		self.thrust = config.thrust
 		
 		super.init(config.entityStore)
+		
+		self.sprite.rocketId = id
 		
 		self.setAngle(newAngle: config.angle)
 		self.setImage()
@@ -125,25 +133,24 @@ class Rocket: BaseEntity {
 	}
 	
 	func updateCollision() {
-		let rawOverlappingSprites = self.sprite.overlappingSprites
-		var overlappingSprites: [Sprite.Sprite] = []
+		let pos = self.position
+		let colls = sprite.checkCollisions(goalX: pos.x, goalY: pos.y).collisions
 		
-		for case let spritePointer? in rawOverlappingSprites {
-			let spritePointer = unsafeBitCast(spritePointer, to: UnsafeMutablePointer<Sprite.Sprite>.self)
-
-			overlappingSprites.append(spritePointer.pointee)
+		for coll in colls {
+			let overlappingSprite = coll.other
+			
+			if let overlappingRocketSprite = overlappingSprite as? RocketSprite {
+				handleCollisionWith(rocketSprite: overlappingRocketSprite)
+			} else {
+				print("Collided with unknown object \(overlappingSprite.collisionsEnabled)")
+			}
 		}
-		
-		
-		for overlappingSprite in overlappingSprites {
-			// TODO: https://github.com/finnvoor/PlaydateKit/issues/89
-		}
-		
-		rawOverlappingSprites.deallocate()
 	}
 	
-	func handleCollisionWith(otherRocket: Rocket) {
-//
+	func handleCollisionWith(rocketSprite: RocketSprite) {
+		guard let otherRocket = entityStore?.get(rocketSprite.rocketId) else { return }
+		
+		print("HIT ANOTHER ROCKET!!!!! \(id), \(otherRocket.id)")
 	}
 	
 	func remove() {
