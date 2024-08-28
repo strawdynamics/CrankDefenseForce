@@ -9,16 +9,6 @@ import PlaydateKit
 
 nonisolated(unsafe) let rocketBitmapTable = try! Graphics.BitmapTable(path: "rocket.png")
 
-
-struct TestoEventPayload {
-	var bob: Float
-	var bobString: String
-}
-
-struct TestoEvent: EventProtocol {
-	typealias Payload = TestoEventPayload
-}
-
 class Rocket: BaseEntity {
 	struct RemoveEventPayload {
 		var rocket: Rocket
@@ -138,6 +128,28 @@ class Rocket: BaseEntity {
 		
 		for coll in colls {
 			let overlappingSprite = coll.other
+			
+			// TODO: Explosion check
+			
+			let alphaCollided = Graphics.checkMaskCollision(
+				bitmap1: sprite.image!,
+				point1: self.sprite.bounds.origin,
+				flip1: sprite.imageFlip,
+				bitmap2: overlappingSprite.image!,
+				point2: overlappingSprite.bounds.origin,
+				flip2: overlappingSprite.imageFlip,
+				rect: Rect.init(origin: Point.zero, width: 400.0, height: 240.0)
+			)
+			
+			if (!alphaCollided) {
+				print("NOALPHASKIP")
+				continue
+			}
+			
+			print("ALPHAHIT!!")
+			
+			// TODO: Explode instead of remove
+			self.remove()
 			
 			if let overlappingRocketSprite = overlappingSprite as? RocketSprite {
 				handleCollisionWith(rocketSprite: overlappingRocketSprite)

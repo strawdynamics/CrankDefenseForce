@@ -7,6 +7,8 @@
 
 import PlaydateKit
 
+nonisolated(unsafe) let groundBitmap = try! Graphics.Bitmap(path: "ground.png")
+
 struct GameRunner {
 	let entityStore = EntityStore()
 	
@@ -36,6 +38,14 @@ struct GameRunner {
 			entityStore: entityStore,
 			backgroundType: .city
 		)
+		
+		let ground = StaticCollider(StaticCollider.Config(
+			bitmap: groundBitmap,
+			entityStore: entityStore,
+		))
+		
+		ground.sprite.center = Point(x: 0.0, y: 1.0)
+		ground.sprite.moveTo(Point(x: 0.0, y: 240.0))
 	}
 	
 	func handleRocketRemove(payload: Rocket.RemoveEventPayload) {
