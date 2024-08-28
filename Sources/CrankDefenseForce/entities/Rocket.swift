@@ -20,8 +20,6 @@ class Rocket: BaseEntity {
 	
 	class RocketSprite: Sprite.Sprite {
 		var rocketId: Int = -1
-		
-		func collisionResponse(other _: Sprite) -> SpriteCollisionResponseType { .overlap }
 	}
 	
 	struct Config {
@@ -153,6 +151,8 @@ class Rocket: BaseEntity {
 			
 			if let overlappingRocketSprite = overlappingSprite as? RocketSprite {
 				handleCollisionWith(rocketSprite: overlappingRocketSprite)
+			} else if let overlappingBuildingSprite = overlappingSprite as? Building.BuildingSprite {
+				handleCollisionWith(buildingSprite: overlappingBuildingSprite)
 			} else {
 				print("Collided with unknown object \(overlappingSprite.collisionsEnabled)")
 			}
@@ -163,6 +163,12 @@ class Rocket: BaseEntity {
 		guard let otherRocket = entityStore?.get(rocketSprite.rocketId) else { return }
 		
 		print("HIT ANOTHER ROCKET!!!!! \(id), \(otherRocket.id)")
+	}
+	
+	func handleCollisionWith(buildingSprite: Building.BuildingSprite) {
+		guard let building = entityStore?.get(buildingSprite.buildingId) else { return }
+		
+		print("HIT A BUILDING! \(id) -> \(building.id)")
 	}
 	
 	func remove() {

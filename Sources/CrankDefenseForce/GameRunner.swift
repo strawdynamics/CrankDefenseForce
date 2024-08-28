@@ -18,11 +18,17 @@ struct GameRunner {
 	
 	let siloA: RocketSilo
 	
+	let city: City
+	
 	let testEaseDuration: Float = 5.0
 	var testEaseTime: Float = 0.0
 	
 	init() {
 		playerController = PlayerController(entityStore)
+		
+		city = City(City.Config(
+			groundHeight: 12.0, entityStore: entityStore
+		))
 		
 		siloB = RocketSilo(RocketSilo.Config(
 			siloType: .b, entityStore: entityStore
