@@ -20,6 +20,10 @@ class Rocket: BaseEntity {
 	
 	class RocketSprite: Sprite.Sprite {
 		var rocketId: Int = -1
+		
+		override func collisionResponse(other _: Sprite.Sprite) -> Sprite.CollisionResponseType {
+			.overlap
+		}
 	}
 	
 	struct Config {
@@ -65,6 +69,7 @@ class Rocket: BaseEntity {
 			width: bitmapWidth,
 			height: bitmapHeight
 		)
+		
 		sprite.addToDisplayList()
 		sprite.tag = config.tag.rawValue
 		
@@ -123,6 +128,7 @@ class Rocket: BaseEntity {
 	func updateCollision() {
 		let pos = self.position
 		let colls = sprite.checkCollisions(goalX: pos.x, goalY: pos.y).collisions
+		print("collcount \(colls.count)")
 		
 		for coll in colls {
 			let overlappingSprite = coll.other
