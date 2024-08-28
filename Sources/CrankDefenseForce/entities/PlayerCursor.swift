@@ -19,6 +19,7 @@ class PlayerCursor: BaseEntity {
 		sprite.image = playerCursorBitmapTable[0]
 		sprite.moveTo(Point(x: 200.0, y: 120.0))
 		sprite.addToDisplayList()
+		sprite.zIndex = 80
 		self.sprite = sprite
 		
 		super.init(entityStore)

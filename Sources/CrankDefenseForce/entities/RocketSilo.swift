@@ -60,6 +60,8 @@ class RocketSilo: BaseEntity {
 			sprite.moveTo(Point(x: 400.0, y: 240.0))
 		}
 		
+		sprite.zIndex = 50
+		
 		sprite.addToDisplayList()
 		
 		self.spawnInitialRocket()
