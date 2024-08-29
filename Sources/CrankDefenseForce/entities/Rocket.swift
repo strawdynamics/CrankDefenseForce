@@ -31,16 +31,9 @@ class Rocket: BaseEntity {
 		var angle: Float
 		var thrust: Float = 0.0
 		var entityStore: EntityStore
-		var tag: Tag = .none
-	}
-
-	enum Tag: UInt8 {
-		case none = 0
-		case player = 1
-		case cpu = 2
 	}
 	
-	var sprite: RocketSprite
+	var sprite = RocketSprite()
 	
 	private(set) var thrust: Float = 0.0
 	
@@ -53,11 +46,10 @@ class Rocket: BaseEntity {
 	var lastImageIndex: Int = 0
 	
 	var position: Point {
-		return self.sprite.position
+		return sprite.position
 	}
 	
 	init(_ config: Config) {
-		let sprite = RocketSprite()
 		let bitmap = rocketBitmapTable[0]!
 		let (bitmapWidth, bitmapHeight, _) = bitmap.getData(mask: nil, data: nil)
 		
@@ -71,62 +63,59 @@ class Rocket: BaseEntity {
 		)
 		
 		sprite.addToDisplayList()
-		sprite.tag = config.tag.rawValue
 		
-		self.sprite = sprite
-		
-		self.angle = config.angle
-		self.thrust = config.thrust
+		angle = config.angle
+		thrust = config.thrust
 		
 		super.init(config.entityStore)
 		
-		self.sprite.rocketId = id
+		sprite.rocketId = id
 		
-		self.setAngle(newAngle: config.angle)
-		self.setImage()
+		setAngle(newAngle: config.angle)
+		setImage()
 	}
 	
 	override func update() {
 		super.update()
 		
-		if self.thrust == 0.0 {
+		if thrust == 0.0 {
 			// TODO: Hide exhaust
 		} else {
 			// TODO: Show exhaust
 			
-			let deltaX = self.thrust * Time.deltaTime * self.cos
-			let deltaY = self.thrust * Time.deltaTime * self.sin
+			let deltaX = thrust * Time.deltaTime * cos
+			let deltaY = thrust * Time.deltaTime * sin
 			
-			self.sprite.moveBy(dx: deltaX, dy: deltaY)
+			sprite.moveBy(dx: deltaX, dy: deltaY)
 			
-			self.updateCollision()
+			updateCollision()
 		}
 		
-		self.setImage()
+		setImage()
 		
-		self.updateOob()
+		updateOob()
 	}
 	
 	func setImage() {
-		let roundedAngle = Int(self.angle.roundToNearest(15.0))
+		let roundedAngle = Int(angle.roundToNearest(15.0))
 		let newImageIndex = ((roundedAngle % 360) / 15 + 24) % 24
 		
-		if newImageIndex != self.lastImageIndex {
+		if newImageIndex != lastImageIndex {
 			let bitmap = rocketBitmapTable[newImageIndex]!
-			self.sprite.image = bitmap
-			self.lastImageIndex = newImageIndex
+			sprite.image = bitmap
+			lastImageIndex = newImageIndex
 		}
 	}
 	
 	func updateOob() {
-		let pos = self.position
+		let pos = position
 		if pos.x < -20 || pos.x > 420 || pos.y < -20 || pos.y > 260 {
-			self.remove()
+			remove()
 		}
 	}
 	
 	func updateCollision() {
-		let pos = self.position
+		let pos = position
 		let colls = sprite.checkCollisions(goalX: pos.x, goalY: pos.y).collisions
 		print("collcount \(colls.count)")
 		
@@ -137,7 +126,7 @@ class Rocket: BaseEntity {
 			
 			let alphaCollided = Graphics.checkMaskCollision(
 				bitmap1: sprite.image!,
-				point1: self.sprite.bounds.origin,
+				point1: sprite.bounds.origin,
 				flip1: sprite.imageFlip,
 				bitmap2: overlappingSprite.image!,
 				point2: overlappingSprite.bounds.origin,
@@ -153,7 +142,7 @@ class Rocket: BaseEntity {
 			print("ALPHAHIT!!")
 			
 			// TODO: Explode instead of remove
-			self.remove()
+			remove()
 			
 			if let overlappingRocketSprite = overlappingSprite as? RocketSprite {
 				handleCollisionWith(rocketSprite: overlappingRocketSprite)
@@ -178,7 +167,7 @@ class Rocket: BaseEntity {
 	}
 	
 	func remove() {
-		self.sprite.removeFromDisplayList()
+		sprite.removeFromDisplayList()
 
 		Self.removeEmitter.emit(RemoveEventPayload(
 			rocket: self,
@@ -188,18 +177,18 @@ class Rocket: BaseEntity {
 	}
 	
 	func setThrust(newThrust: Float) {
-		self.thrust = newThrust
+		thrust = newThrust
 	}
 	
 	func changeAngle(delta: Float) {
-		self.setAngle(newAngle: self.angle + delta)
+		setAngle(newAngle: angle + delta)
 	}
 	
 	func setAngle(newAngle: Float) {
-		self.angle = fmodf(newAngle, 360.0)
+		angle = fmodf(newAngle, 360.0)
 		
-		let radAngle = (self.angle - 90.0).toRadians()
-		self.cos = cosf(radAngle)
-		self.sin = sinf(radAngle)
+		let radAngle = (angle - 90.0).toRadians()
+		cos = cosf(radAngle)
+		sin = sinf(radAngle)
 	}
 }
