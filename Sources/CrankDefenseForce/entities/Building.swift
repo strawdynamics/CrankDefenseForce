@@ -17,10 +17,6 @@ nonisolated(unsafe) let building4BitmapTable = try! Graphics.BitmapTable(path: "
 
 nonisolated(unsafe) let building5BitmapTable = try! Graphics.BitmapTable(path: "building5.png")
 
-nonisolated(unsafe) let BUILDING_WIDTH: Float = 80.0
-
-nonisolated(unsafe) let BUILDING_HEIGHT: Float = 66.0
-
 class Building: BaseEntity {
 	enum BuildingType {
 		case one
@@ -61,11 +57,13 @@ class Building: BaseEntity {
 		}
 		sprite.center = Point(x: 0.5, y: 1.0)
 		sprite.moveTo(config.position)
+		
+		let (bitmapWidth, bitmapHeight, _) = sprite.image!.getData(mask: nil, data: nil)
 		sprite.collideRect = Rect.init(
 			x: 0,
 			y: 0,
-			width: BUILDING_WIDTH,
-			height: BUILDING_HEIGHT
+			width: bitmapWidth,
+			height: bitmapHeight,
 		)
 		sprite.addToDisplayList()
 		

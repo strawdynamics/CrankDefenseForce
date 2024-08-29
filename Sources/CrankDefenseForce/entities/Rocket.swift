@@ -117,7 +117,6 @@ class Rocket: BaseEntity {
 	func updateCollision() {
 		let pos = position
 		let colls = sprite.checkCollisions(goalX: pos.x, goalY: pos.y).collisions
-		print("collcount \(colls.count)")
 		
 		for coll in colls {
 			let overlappingSprite = coll.other
