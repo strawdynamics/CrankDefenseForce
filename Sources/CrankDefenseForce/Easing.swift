@@ -58,15 +58,15 @@ enum EasingFn {
 		}
 	}
 	
-	func ease(_ t: Float, _ b: Float, _ c: Float, _ d: Float, _ a_or_s: Float? = nil, p: Float? = nil) -> Float {
+	func ease(_ t: Float, _ b: Float, _ c: Float, _ d: Float, _ a_or_s: Float? = nil, _ p: Float? = nil) -> Float {
 		switch self {
 		case .basic(let fn):
 			return fn(t, b, c, d)
 		case .elastic(let fn):
 			let amplitude = a_or_s ?? 0.0
 			let period = p ?? d * 0.3
-			
-			return fn(t, b, c, d, period, amplitude)
+
+			return fn(t, b, c, d, amplitude, period)
 		case .overshoot(let fn):
 			let overshoot = a_or_s ?? 1.70158
 			

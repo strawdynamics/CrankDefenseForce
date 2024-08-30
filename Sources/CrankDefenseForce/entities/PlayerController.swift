@@ -45,7 +45,7 @@ class PlayerController: BaseEntity {
 	}
 	
 	func handleRocketRemove(payload: Rocket.RemoveEventPayload) {
-		var removedCurrentRocket = payload.rocket.id == self.currentRocket?.id
+		let removedCurrentRocket = payload.rocket.id == self.currentRocket?.id
 		if removedCurrentRocket {
 			self.currentRocket = nil
 		}
@@ -132,10 +132,11 @@ class PlayerController: BaseEntity {
 	}
 	
 	private func updateCursor() {
-		if let rocket = self.currentRocket {
-			self.cursor.moveToward(dest: rocket.position)
+		if let rocket = currentRocket {
+			cursor.moveToward(dest: rocket.position)
+			cursor.show()
 		} else {
-			self.cursor.moveToward(dest: SCREEN_CENTER)
+			cursor.hide()
 		}
 	}
 }

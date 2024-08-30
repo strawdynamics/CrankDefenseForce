@@ -15,15 +15,6 @@ class FirstInLineSceneTransition: BaseSceneTransition {
 	private var frame = 0
 	private var currentFrameTime: Float = 0.0
 	
-	override init() {
-		
-	}
-
-	
-	override func begin() {
-		//
-	}
-	
 	override func updateExit() -> SceneTransitionExitResult {
 		self.currentFrameTime += Time.deltaTime
 		

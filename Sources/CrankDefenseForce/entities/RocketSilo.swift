@@ -81,6 +81,7 @@ class RocketSilo: BaseEntity {
 		if let rocket = self.rocket {
 			readyForLaunch = false
 			rocket.sprite.collisionsEnabled = true
+			rocket.sprite.zIndex = 30
 			rocket.setThrust(newThrust: DEFAULT_THRUST)
 			
 			Self.launchEmitter.emit(LaunchEventPayload(rocket: rocket))
