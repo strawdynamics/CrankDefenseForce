@@ -40,21 +40,29 @@ class Building: BaseEntity {
 	
 	let sprite = BuildingSprite()
 	
+	let destroyAnimation: SpriteAnimation
+	
+	var destroyed = false
+	var destructionComplete = false
+	
 	init(_ config: Config) {
 		buildingType = config.buildingType
 		
+		let bitmapTable: Graphics.BitmapTable
 		switch buildingType {
 		case .one:
-			sprite.image = building1BitmapTable[0]
+			bitmapTable = building1BitmapTable
 		case .two:
-			sprite.image = building2BitmapTable[0]
+			bitmapTable = building2BitmapTable
 		case .three:
-			sprite.image = building3BitmapTable[0]
+			bitmapTable = building3BitmapTable
 		case .four:
-			sprite.image = building4BitmapTable[0]
+			bitmapTable = building4BitmapTable
 		case .five:
-			sprite.image = building5BitmapTable[0]
+			bitmapTable = building5BitmapTable
 		}
+		
+		sprite.image = bitmapTable[0]
 		sprite.center = Point(x: 0.5, y: 1.0)
 		sprite.moveTo(config.position)
 		
@@ -67,7 +75,48 @@ class Building: BaseEntity {
 		)
 		sprite.addToDisplayList()
 		
+		let destroyAnimIndices: Array<Int>
+		switch buildingType {
+		case .one:
+			destroyAnimIndices = Array(1...11)
+		case .two:
+			destroyAnimIndices = Array(1...18)
+		case .three:
+			destroyAnimIndices = Array(1...18)
+		case .four:
+			destroyAnimIndices = Array(1...17)
+		case .five:
+			destroyAnimIndices = Array(1...23)
+		}
+		destroyAnimation = SpriteAnimation(SpriteAnimation.Config(
+			sprite: sprite,
+			bitmapTable: bitmapTable,
+			bitmapTableIndices: destroyAnimIndices,
+			frameDuration: 0.1,
+			loopType: .stop,
+		))
+		
 		super.init(config.entityStore)
 		sprite.buildingId = id
+	}
+	
+	func attemptDestroy() {
+		if destroyed {
+			return
+		}
+		
+		destroyed = true
+		destroyAnimation.play()
+	}
+	
+	override func update() {
+		if destroyed && !destructionComplete {
+			destroyAnimation.update()
+			
+			if destroyAnimation.isComplete {
+				destructionComplete = true
+				sprite.collisionsEnabled = false
+			}
+		}
 	}
 }

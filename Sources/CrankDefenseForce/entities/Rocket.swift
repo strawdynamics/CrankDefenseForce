@@ -160,9 +160,11 @@ class Rocket: BaseEntity {
 	}
 	
 	func handleCollisionWith(buildingSprite: Building.BuildingSprite) {
-		guard let building = entityStore?.get(buildingSprite.buildingId) else { return }
+		guard let buildingEnt = entityStore?.get(buildingSprite.buildingId) else { return }
 		
-		print("HIT A BUILDING! \(id) -> \(building.id)")
+		if let building = buildingEnt as? Building {
+			building.attemptDestroy()
+		}
 	}
 	
 	func remove() {
