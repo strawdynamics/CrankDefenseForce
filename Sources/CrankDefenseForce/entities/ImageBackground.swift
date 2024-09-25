@@ -33,12 +33,4 @@ class ImageBackground: BaseEntity {
 		
 		super.init(entityStore)
 	}
-	
-	override func update() {
-
-	}
-	
-	override func destroy() {
-		super.destroy()
-	}
 }

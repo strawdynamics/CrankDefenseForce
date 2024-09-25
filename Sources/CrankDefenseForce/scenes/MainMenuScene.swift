@@ -58,6 +58,6 @@ class MainMenuScene: BaseScene {
 	}
 	
 	override func finish() {
-		self.entityStore.destroy()
+	
 	}
 }

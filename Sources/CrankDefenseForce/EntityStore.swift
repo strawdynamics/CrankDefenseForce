@@ -39,10 +39,4 @@ class EntityStore {
 			$0.id == entityId
 		}
 	}
-	
-	func destroy() {
-		for entity in self.entities {
-			entity.destroy()
-		}
-	}
 }

@@ -9,8 +9,10 @@ import PlaydateKit
 
 nonisolated(unsafe) let groundBitmap = try! Graphics.Bitmap(path: "ground.png")
 
-struct GameRunner {
+class GameRunner {
 	let entityStore = EntityStore()
+	
+	let rocketEngineSfx = RocketEngineSfx()
 	
 	let playerController: PlayerController
 	
@@ -55,7 +57,7 @@ struct GameRunner {
 		entityStore.remove(payload.rocket)
 	}
 	
-	mutating func update() {
+	func update() {
 		entityStore.update()
 		
 		updateInputs()
@@ -71,7 +73,7 @@ struct GameRunner {
 	}
 
 	func finish() {
-		entityStore.destroy()
+
 	}
 	
 	private func updateInputs() {

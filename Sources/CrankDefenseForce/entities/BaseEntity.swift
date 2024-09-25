@@ -10,10 +10,14 @@ nonisolated(unsafe) var nextEntityId: Int = 1
 class BaseEntity {
 	let id: Int
 	
-	var entityStore: EntityStore?
+	var entityStorePtr: Int
+	
+	var entityStore: EntityStore {
+		return unsafeBitCast(entityStorePtr, to: EntityStore.self)
+	}
 	
 	init(_ entityStore: EntityStore) {
-		self.entityStore = entityStore
+		self.entityStorePtr = unsafeBitCast(entityStore, to: Int.self)
 		self.id = nextEntityId
 		nextEntityId += 1
 		entityStore.add(self)
@@ -25,9 +29,5 @@ class BaseEntity {
 	
 	func lateUpdate() {
 		
-	}
-	
-	func destroy() {
-		self.entityStore = nil
 	}
 }

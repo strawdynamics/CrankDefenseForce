@@ -28,8 +28,4 @@ class BasicBackground: BaseEntity {
 	override func update() {
 
 	}
-	
-	override func destroy() {
-		super.destroy()
-	}
 }

@@ -39,7 +39,7 @@ class PdkTestScene: BaseScene {
 	}
 	
 	override func finish() {
-		self.entityStore.destroy()
+	
 	}
 }
 

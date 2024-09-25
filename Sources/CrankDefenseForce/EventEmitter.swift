@@ -9,27 +9,27 @@ protocol EventProtocol {
 	associatedtype Payload
 }
 
-struct EventEmitter<Event: EventProtocol> {
+class EventEmitter<Event: EventProtocol> {
 	private var handlers: [Int: (Event.Payload) -> Void] = [:]
 	private var lastId: Int = 0
 	
-	mutating func emit(_ payload: Event.Payload) {
+	func emit(_ payload: Event.Payload) {
 		handlers.forEach { _, handler in
 			handler(payload)
 		}
 	}
 	
-	mutating func on(_ handler: @escaping (Event.Payload) -> Void) -> Int {
+	func on(_ handler: @escaping (Event.Payload) -> Void) -> Int {
 		lastId += 1
 		handlers[lastId] = handler
 		return lastId
 	}
 	
-	mutating func off(_ handlerId: Int) {
+	func off(_ handlerId: Int) {
 		handlers.removeValue(forKey: handlerId)
 	}
 	
-	mutating func reset() {
+	func reset() {
 		self.handlers = [:]
 	}
 }

@@ -134,7 +134,7 @@ class Rocket: BaseEntity {
 			)
 			
 			if (!alphaCollided) {
-				print("NOALPHASKIP")
+//				print("NOALPHASKIP")
 				continue
 			}
 			
@@ -154,13 +154,13 @@ class Rocket: BaseEntity {
 	}
 	
 	func handleCollisionWith(rocketSprite: RocketSprite) {
-		guard let otherRocket = entityStore?.get(rocketSprite.rocketId) else { return }
+		guard let otherRocket = entityStore.get(rocketSprite.rocketId) else { return }
 		
 		print("HIT ANOTHER ROCKET!!!!! \(id), \(otherRocket.id)")
 	}
 	
 	func handleCollisionWith(buildingSprite: Building.BuildingSprite) {
-		guard let buildingEnt = entityStore?.get(buildingSprite.buildingId) else { return }
+		guard let buildingEnt = entityStore.get(buildingSprite.buildingId) else { return }
 		
 		if let building = buildingEnt as? Building {
 			building.attemptDestroy()
