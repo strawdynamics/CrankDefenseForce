@@ -4,6 +4,8 @@ class CrtInSceneTransition: BaseSceneTransition {
 	private var frame = 0
 	private var currentFrameTime: Float = 0.0
 	
+	private var fadeTime: Float = 0.0
+	
 	override func updateExit() -> SceneTransitionExitResult {
 		self.currentFrameTime += Time.deltaTime
 		
@@ -25,7 +27,23 @@ class CrtInSceneTransition: BaseSceneTransition {
 		return .exiting
 	}
 	
+	// Fade from black
 	override func updateEnter() -> SceneTransitionEnterResult {
-		return .complete
+		fadeTime += Time.deltaTime
+		let fadePct = 1 - fadeTime / CrtTransitionDetails.FADE_DURATION
+	
+		Graphics.pushContext(nil)
+		
+		Graphics.fillRect(
+			Rect(x: 0, y: 0, width: 400, height: 240),
+			color: Graphics.Color.getBayer4x4FadePattern(foreground: 0, alpha: fadePct)
+		)
+		Graphics.popContext()
+		
+		if self.fadeTime >= CrtTransitionDetails.FADE_DURATION {
+			return .complete
+		} else {
+			return .entering
+		}
 	}
 }
