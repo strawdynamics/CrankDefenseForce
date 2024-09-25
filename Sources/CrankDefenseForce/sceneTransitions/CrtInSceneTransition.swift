@@ -1,13 +1,6 @@
-//
-//  FirstInLineSceneTransition.swift
-//  
-//
-//  Created by Paul Straw on 8/25/24.
-//
-
 import PlaydateKit
 
-class FirstInLineSceneTransition: BaseSceneTransition {
+class CrtInSceneTransition: BaseSceneTransition {
 	let FRAME_DURATION: Float = 0.07
 	let MAX_FRAME_INDEX = 22
 	nonisolated(unsafe) let CURTAINS_BITMAP_TABLE: Graphics.BitmapTable = try! Graphics.BitmapTable.init(path: "firstInLineCurtains.gif")
