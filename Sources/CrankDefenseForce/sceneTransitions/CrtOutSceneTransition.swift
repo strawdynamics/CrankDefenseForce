@@ -1,7 +1,7 @@
 import PlaydateKit
 
-class CrtInSceneTransition: BaseSceneTransition {
-	private var frame = 0
+class CrtOutSceneTransition: BaseSceneTransition {
+	private var frame = CrtTransitionDetails.MAX_FRAME_INDEX
 	private var currentFrameTime: Float = 0.0
 	
 	override func updateExit() -> SceneTransitionExitResult {
@@ -14,10 +14,10 @@ class CrtInSceneTransition: BaseSceneTransition {
 		Graphics.popContext()
 		
 		if self.currentFrameTime >= CrtTransitionDetails.FRAME_DURATION {
-			self.frame += 1
+			self.frame -= 1
 			self.currentFrameTime -= CrtTransitionDetails.FRAME_DURATION
 			
-			if self.frame >= CrtTransitionDetails.MAX_FRAME_INDEX {
+			if self.frame <= 0 {
 				return .complete
 			}
 		}
@@ -29,3 +29,4 @@ class CrtInSceneTransition: BaseSceneTransition {
 		return .complete
 	}
 }
+

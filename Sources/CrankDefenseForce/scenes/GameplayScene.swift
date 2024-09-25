@@ -22,7 +22,7 @@ class GameplayScene: BaseScene {
 		System.addMenuItem(title: "Main menu") {
 			game.scenePresenter.changeScene(
 				newScene: MainMenuScene(),
-				transition: FirstInLineSceneTransition(),
+				transition: CrtOutSceneTransition(),
 			)
 			
 			System.removeAllMenuItems()

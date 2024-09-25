@@ -15,10 +15,10 @@ class PdkTestScene: BaseScene {
 		
 		let pushed = System.buttonState.pushed
 		
-		if pushed.contains(.a) {
+		if pushed.contains(.b) {
 			game.scenePresenter.changeScene(
 				newScene: MainMenuScene(),
-				transition: FirstInLineSceneTransition()
+				transition: CrtOutSceneTransition()
 			)
 		}
 	}
@@ -26,7 +26,8 @@ class PdkTestScene: BaseScene {
 	override func enter() {
 		let _ = BasicBackground(
 			entityStore: self.entityStore,
-			color: Graphics.Color.pattern((0xE7, 0xDB, 0xDB, 0xDB, 0xDB, 0xBD, 0x7E, 0xFF))
+//			color: Graphics.Color.pattern((0xE7, 0xDB, 0xDB, 0xDB, 0xDB, 0xBD, 0x7E, 0xFF))
+			color: Graphics.Color.black
 		)
 	}
 	
