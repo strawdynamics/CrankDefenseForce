@@ -152,8 +152,7 @@ class Rocket: BaseEntity {
 			
 			print("ALPHAHIT!!")
 			
-			// TODO: Explode instead of remove
-			remove()
+			explode()
 			
 			if let overlappingRocketSprite = overlappingSprite as? RocketSprite {
 				handleCollisionWith(rocketSprite: overlappingRocketSprite)
@@ -187,6 +186,16 @@ class Rocket: BaseEntity {
 		))
 
 		// TODO: Remove exhaust
+	}
+	
+	func explode() {
+		let _ = Explosion(Explosion.Config(
+			position: sprite.position,
+			maxRadius: 30,
+			entityStore: entityStore,
+		))
+		
+		remove()
 	}
 	
 	func setThrust(newThrust: Float) {
