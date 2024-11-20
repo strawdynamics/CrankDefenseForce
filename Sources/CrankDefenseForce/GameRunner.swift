@@ -1,10 +1,3 @@
-//
-//  GameRunner.swift
-//
-//
-//  Created by Paul Straw on 8/26/24.
-//
-
 import PlaydateKit
 
 nonisolated(unsafe) let groundBitmap = try! Graphics.Bitmap(path: "ground.png")

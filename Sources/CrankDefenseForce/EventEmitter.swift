@@ -1,10 +1,3 @@
-//
-//  EventEmitter.swift
-//
-//
-//  Created by Paul Straw on 8/26/24.
-//
-
 protocol EventProtocol {
 	associatedtype Payload
 }

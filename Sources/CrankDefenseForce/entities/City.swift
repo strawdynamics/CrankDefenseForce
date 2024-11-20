@@ -1,10 +1,3 @@
-//
-//  City.swift
-//
-//
-//  Created by Paul Straw on 8/27/24.
-//
-
 import PlaydateKit
 
 class City: BaseEntity {

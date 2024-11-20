@@ -1,10 +1,3 @@
-//
-//  BaseSceneTransition.swift
-//
-//
-//  Created by Paul Straw on 8/25/24.
-//
-
 enum SceneTransitionExitResult {
 	case exiting
 	case complete

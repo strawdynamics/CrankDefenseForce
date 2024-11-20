@@ -1,10 +1,3 @@
-//
-//  RocketSilo.swift
-//
-//
-//  Created by Paul Straw on 8/26/24.
-//
-
 import PlaydateKit
 
 nonisolated(unsafe) let siloBBitmap = try! Graphics.Bitmap(path: "siloB.png")

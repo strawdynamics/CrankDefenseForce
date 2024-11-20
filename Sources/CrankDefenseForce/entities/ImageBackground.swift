@@ -1,10 +1,3 @@
-//
-//  ImageBackground.swift
-//
-//
-//  Created by Paul Straw on 8/25/24.
-//
-
 import PlaydateKit
 
 enum ImageBackgroundType {

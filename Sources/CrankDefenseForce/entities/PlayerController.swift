@@ -1,10 +1,3 @@
-//
-//  PlayerController.swift
-//
-//
-//  Created by Paul Straw on 8/26/24.
-//
-
 import PlaydateKit
 
 nonisolated(unsafe) private let SCREEN_CENTER = Point(x: 200.0, y: 120.0)

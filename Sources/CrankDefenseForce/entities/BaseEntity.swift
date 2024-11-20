@@ -1,10 +1,3 @@
-//
-//  BaseEntity.swift
-//
-//
-//  Created by Paul Straw on 8/25/24.
-//
-
 nonisolated(unsafe) var nextEntityId: Int = 1
 
 class BaseEntity {

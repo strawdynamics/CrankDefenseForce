@@ -1,10 +1,3 @@
-//
-//  PlayerCursor.swift
-//
-//
-//  Created by Paul Straw on 8/26/24.
-//
-
 import PlaydateKit
 
 nonisolated(unsafe) let playerCursorBitmapTable = try! Graphics.BitmapTable(path: "playerCursor.png")

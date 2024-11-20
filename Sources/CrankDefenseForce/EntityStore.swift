@@ -1,10 +1,3 @@
-//
-//  EntityStore.swift
-//
-//
-//  Created by Paul Straw on 8/25/24.
-//
-
 class EntityStore {
 	private var entities: [BaseEntity] = []
 	

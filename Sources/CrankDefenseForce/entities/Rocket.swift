@@ -1,10 +1,3 @@
-//
-//  Rocket.swift
-//
-//
-//  Created by Paul Straw on 8/26/24.
-//
-
 import PlaydateKit
 
 nonisolated(unsafe) let rocketBitmapTable = try! Graphics.BitmapTable(path: "rocket.png")

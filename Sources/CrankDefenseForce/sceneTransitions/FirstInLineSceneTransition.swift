@@ -1,10 +1,3 @@
-//
-//  FirstInLineSceneTransition.swift
-//  
-//
-//  Created by Paul Straw on 8/25/24.
-//
-
 import PlaydateKit
 
 class FirstInLineSceneTransition: BaseSceneTransition {

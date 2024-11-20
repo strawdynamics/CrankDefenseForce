@@ -1,10 +1,3 @@
-//
-//  Building.swift
-//  
-//
-//  Created by Paul Straw on 8/27/24.
-//
-
 import PlaydateKit
 
 nonisolated(unsafe) let building1BitmapTable = try! Graphics.BitmapTable(path: "building1.png")

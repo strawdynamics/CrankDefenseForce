@@ -1,10 +1,3 @@
-//
-//  SpriteAnimation.swift
-//
-//
-//  Created by Paul Straw on 8/28/24.
-//
-
 import PlaydateKit
 
 class SpriteAnimation {
