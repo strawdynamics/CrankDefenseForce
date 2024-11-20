@@ -171,8 +171,8 @@ class MainMenuScene: BaseScene {
 	override func start() {
 		menu = Menu(menuItems: [
 			Menu.MenuItem(key: "LAUNCH!", action: self.handlePlayPressed),
-			Menu.MenuItem(key: "CONFIG", action: self.handleSettingsPressed),
-			Menu.MenuItem(key: "ABOUT", action: self.handleSettingsPressed),
+			Menu.MenuItem(key: "CONFIG", action: self.handleConfigPressed),
+			Menu.MenuItem(key: "ABOUT", action: self.handleAboutPressed),
 		])
 		
 		menu!.fadeIn()
@@ -195,10 +195,19 @@ class MainMenuScene: BaseScene {
 		})
 	}
 	
-	func handleSettingsPressed() {
+	func handleConfigPressed() {
 		menu!.fadeOut({
 			game.scenePresenter.changeScene(
-				newScene: PdkTestScene(),
+				newScene: ConfigScene(),
+				transition: CrtInSceneTransition()
+			)
+		})
+	}
+	
+	func handleAboutPressed() {
+		menu!.fadeOut({
+			game.scenePresenter.changeScene(
+				newScene: AboutScene(),
 				transition: CrtInSceneTransition()
 			)
 		})
