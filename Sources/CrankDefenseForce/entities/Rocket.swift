@@ -96,6 +96,18 @@ class Rocket: BaseEntity {
 		updateOob()
 	}
 	
+	func moveTo(position: Point) {
+		sprite.moveTo(position)
+	}
+	
+	var x: Float {
+		return sprite.position.x
+	}
+	
+	var y: Float {
+		return sprite.position.y
+	}
+	
 	func setImage() {
 		let roundedAngle = Int(angle.roundToNearest(15.0))
 		let newImageIndex = ((roundedAngle % 360) / 15 + 24) % 24

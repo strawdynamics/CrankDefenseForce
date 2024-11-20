@@ -11,10 +11,6 @@ nonisolated(unsafe) let siloBBitmap = try! Graphics.Bitmap(path: "siloB.png")
 
 nonisolated(unsafe) let siloABitmap = try! Graphics.Bitmap(path: "siloA.png")
 
-let SILO_SPAWN_Y: Float = 220.0;
-let SILO_B_SPAWN_X: Float = 14.0;
-let SILO_A_SPAWN_X: Float = 386.0;
-
 let DEFAULT_THRUST: Float = 42.0;
 
 class RocketSilo: BaseEntity {
@@ -36,6 +32,12 @@ class RocketSilo: BaseEntity {
 		let entityStore: EntityStore
 	}
 	
+	static let BASE_ROCKET_PREP_DURATION: Float = 2.5
+	static let SILO_SPAWN_Y: Float = 220;
+	static let SILO_SPAWN_MOVEMENT: Float = 16;
+	static let SILO_B_SPAWN_X: Float = 14;
+	static let SILO_A_SPAWN_X: Float = 386;
+	
 	let sprite = Sprite.Sprite()
 	
 	let siloType: SiloType
@@ -43,6 +45,8 @@ class RocketSilo: BaseEntity {
 	var readyForLaunch = true
 	
 	var rocket: Rocket?
+	
+	var rocketPrepAnimator: FloatAnimator?
 	
 	init(_ config: Config) {
 		siloType = config.siloType
@@ -65,6 +69,21 @@ class RocketSilo: BaseEntity {
 		sprite.addToDisplayList()
 		
 		self.spawnInitialRocket()
+	}
+	
+	override func update() {
+		if let animator = rocketPrepAnimator {
+			self.rocket!.moveTo(position: Point(
+				x: self.rocket!.x,
+				y: animator.currentValue
+			))
+			
+			animator.update()
+			if animator.ended {
+				rocketPrepAnimator = nil
+				readyForLaunch = true
+			}
+		}
 	}
 	
 	func attemptLaunch()-> Bool {
@@ -98,22 +117,30 @@ class RocketSilo: BaseEntity {
 		let x: Float
 		switch self.siloType {
 		case .b:
-			x = SILO_B_SPAWN_X
+			x = RocketSilo.SILO_B_SPAWN_X
 		case .a:
-			x = SILO_A_SPAWN_X
+			x = RocketSilo.SILO_A_SPAWN_X
 		}
 		
 		return x
 	}
 	
 	private func prepareNextRocket() {
-		// TODO: Animate
-		spawnRocket(at: Point(x: spawnX, y: SILO_SPAWN_Y - 16.0))
-		readyForLaunch = true
+		spawnRocket(at: Point(x: spawnX, y: RocketSilo.SILO_SPAWN_Y))
+		
+		rocketPrepAnimator = FloatAnimator(
+			duration: RocketSilo.BASE_ROCKET_PREP_DURATION,
+			startValue: RocketSilo.SILO_SPAWN_Y,
+			endValue: RocketSilo.SILO_SPAWN_Y - RocketSilo.SILO_SPAWN_MOVEMENT,
+			easingFn: EasingFn.overshoot(Ease.inBack),
+		)
 	}
 	
 	private func spawnInitialRocket() {
-		spawnRocket(at: Point(x: spawnX, y: SILO_SPAWN_Y - 16.0))
+		spawnRocket(at: Point(
+			x: spawnX,
+			y: RocketSilo.SILO_SPAWN_Y - RocketSilo.SILO_SPAWN_MOVEMENT
+		))
 	}
 	
 	private func spawnRocket(at: Point) {
