@@ -2,11 +2,13 @@ import PlaydateKit
 
 enum ImageBackgroundType {
 	case city
+	case configCity
 	case crt
 }
 
 class ImageBackground: BaseEntity {
 	static nonisolated(unsafe) let cityBackgroundBitmap = try! Graphics.Bitmap(path: "cityBackground.png")
+	static nonisolated(unsafe) let configCityBitmap = try! Graphics.Bitmap(path: "configCity.png")
 	static nonisolated(unsafe) let crtBackgroundBitmap = CrtTransitionDetails.CRT_ZOOM_BITMAP_TABLE[0]
 	
 	let sprite: Sprite.Sprite
@@ -17,6 +19,8 @@ class ImageBackground: BaseEntity {
 		switch backgroundType {
 		case .city:
 			sprite.image = ImageBackground.cityBackgroundBitmap
+		case .configCity:
+			sprite.image = ImageBackground.configCityBitmap
 		case .crt:
 			sprite.image = ImageBackground.crtBackgroundBitmap
 		}

@@ -18,8 +18,18 @@ class ConfigScene: BaseScene {
 	
 	override func enter() {
 		let _ = BasicBackground(
-			entityStore: self.entityStore,
-			color: Graphics.Color.pattern((0xE7, 0xDB, 0xDB, 0xDB, 0xDB, 0xBD, 0x7E, 0xFF))
+			entityStore: entityStore,
+			color: .black
 		)
+		
+		let _ = ImageBackground(
+			entityStore: entityStore,
+			backgroundType: .configCity
+		)
+		
+		print("Hello from ConfigScene");
+//		let reader = PdxinfoReader(path: "pdxinfo")
+//		let pdxinfo = try! reader.read();
+//		print("vers \(pdxinfo[Utf8Key("version")] ?? "oh no")")
 	}
 }
