@@ -3,6 +3,8 @@ import PlaydateKit
 class ConfigMenu: BaseEntity {
 	static let ITEM_HEIGHT: Int = 50
 	
+	static let OFFSET_TOP: Float = 60
+	
 	struct Config {
 		let entityStore: EntityStore
 	}
@@ -16,27 +18,27 @@ class ConfigMenu: BaseEntity {
 	init(_ config: Config) {
 		menuItems = [
 			ConfigMenuItem(ConfigMenuItem.Config(
-				offsetX: 12,
+				offsetX: 6,
 				entityStore: config.entityStore
 			)),
 			ConfigMenuItem(ConfigMenuItem.Config(
-				offsetX: 12,
+				offsetX: 6,
 				entityStore: config.entityStore
 			)),
 			ConfigMenuItem(ConfigMenuItem.Config(
-				offsetX: 12,
+				offsetX: 6,
 				entityStore: config.entityStore
 			)),
 			ConfigMenuItem(ConfigMenuItem.Config(
-				offsetX: 12,
+				offsetX: 6,
 				entityStore: config.entityStore
 			)),
 			ConfigMenuItem(ConfigMenuItem.Config(
-				offsetX: 12,
+				offsetX: 6,
 				entityStore: config.entityStore
 			)),
 			ConfigMenuItem(ConfigMenuItem.Config(
-				offsetX: 12,
+				offsetX: 6,
 				entityStore: config.entityStore
 			)),
 		]
@@ -101,7 +103,7 @@ class ConfigMenu: BaseEntity {
 		let offsetY: Float = (yAnimator == nil ? Float(selectedItemIndex) : yAnimator!.currentValue) * Float(ConfigMenu.ITEM_HEIGHT)
 		
 		menuItems.enumerated().forEach { (i, menuItem) in
-			menuItem.moveTo(y: 12 + Float(i * ConfigMenu.ITEM_HEIGHT) - offsetY)
+			menuItem.moveTo(y: ConfigMenu.OFFSET_TOP + Float(i * ConfigMenu.ITEM_HEIGHT) - offsetY)
 		}
 	}
 }
