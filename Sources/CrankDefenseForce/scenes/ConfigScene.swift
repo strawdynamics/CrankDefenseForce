@@ -3,6 +3,8 @@ import PlaydateKit
 class ConfigScene: BaseScene {
 	let entityStore = EntityStore()
 	
+	var configMenu: ConfigMenu?
+	
 	override func update() {
 		self.entityStore.update()
 		
@@ -13,6 +15,12 @@ class ConfigScene: BaseScene {
 				newScene: MainMenuScene(),
 				transition: CrtOutSceneTransition()
 			)
+		}
+		
+		if pushed.contains(.up) {
+			configMenu?.selectPrev()
+		} else if pushed.contains(.down) {
+			configMenu?.selectNext()
 		}
 	}
 	
@@ -27,7 +35,11 @@ class ConfigScene: BaseScene {
 			backgroundType: .configCity
 		)
 		
-		print("Hello from ConfigScene");
+		configMenu = ConfigMenu(ConfigMenu.Config(
+			entityStore: entityStore,
+		))
+		
+//		print("Hello from ConfigScene");
 //		let reader = PdxinfoReader(path: "pdxinfo")
 //		let pdxinfo = try! reader.read();
 //		print("vers \(pdxinfo[Utf8Key("version")] ?? "oh no")")
