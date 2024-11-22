@@ -11,9 +11,26 @@ class ConfigMenuItem: BaseEntity {
 	}
 	
 	class Sprite: PlaydateKit.Sprite.Sprite {
+		var isSelected = false
+		
 		override init() {
 			super.init()
-			self.center = .zero
+			self.center = Point(x: 0, y: 0.5)
+			self.setSize(width: 192, height: 44)
+		}
+		
+		override func draw(bounds _: Rect, drawRect _: Rect) {
+			Graphics.pushContext(nil)
+			
+			Graphics.drawBitmap(
+				ConfigMenuItem.bgBitmapTable[isSelected ? 1 : 0]!,
+				at: bounds.origin
+			)
+			
+			Graphics.drawMode = .fillWhite
+			
+			Graphics.drawText("test", at: bounds.origin)
+			Graphics.popContext()
 		}
 	}
 	
@@ -21,7 +38,7 @@ class ConfigMenuItem: BaseEntity {
 	
 	private var isSelected = false
 	
-	var bgSprite = Sprite()
+	var sprite = Sprite()
 	
 	var xAnimator: FloatAnimator?
 	
@@ -30,16 +47,15 @@ class ConfigMenuItem: BaseEntity {
 		
 		super.init(config.entityStore)
 	
-		bgSprite.image = ConfigMenuItem.bgBitmapTable[0]!
-		bgSprite.moveTo(Point(x: config.offsetX, y: 0))
-		bgSprite.addToDisplayList()
+		sprite.moveTo(Point(x: config.offsetX, y: 0))
+		sprite.addToDisplayList()
 	}
 	
 	override func update() {
 		if let xAnimator = xAnimator {
 			xAnimator.update()
 			
-			bgSprite.moveTo(Point(x: xAnimator.currentValue, y: bgSprite.position.y))
+			sprite.moveTo(Point(x: xAnimator.currentValue, y: sprite.position.y))
 			
 			if xAnimator.ended {
 				self.xAnimator = nil
@@ -48,7 +64,7 @@ class ConfigMenuItem: BaseEntity {
 	}
 	
 	func moveTo(y: Float) {
-		bgSprite.moveTo(Point(x: bgSprite.position.x, y: y))
+		sprite.moveTo(Point(x: sprite.position.x, y: y))
 	}
 	
 	func select() {
@@ -56,8 +72,7 @@ class ConfigMenuItem: BaseEntity {
 			return
 		}
 		isSelected = true
-		
-		bgSprite.image = ConfigMenuItem.bgBitmapTable[1]!
+		sprite.isSelected = true
 		
 		xAnimator = FloatAnimator(
 			duration: 0.5,
@@ -72,8 +87,7 @@ class ConfigMenuItem: BaseEntity {
 			return
 		}
 		isSelected = false
-		
-		bgSprite.image = ConfigMenuItem.bgBitmapTable[0]!
+		sprite.isSelected = false
 		
 		xAnimator = FloatAnimator(
 			duration: 0.5,

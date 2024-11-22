@@ -21,7 +21,8 @@ class ConfigMenu: BaseEntity {
 				offsetX: 6,
 				entityStore: config.entityStore
 			)),
-			ConfigMenuItem(ConfigMenuItem.Config(
+			StepperConfigMenuItem(StepperConfigMenuItem.Config(
+				max: 10,
 				offsetX: 6,
 				entityStore: config.entityStore
 			)),
