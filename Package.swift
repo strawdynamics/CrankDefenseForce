@@ -19,6 +19,7 @@ let package = Package(
 	products: [.library(name: "CrankDefenseForce", targets: ["CrankDefenseForce"])],
 	dependencies: [
 		.package(url: "https://github.com/finnvoor/PlaydateKit.git", branch: "main")
+//		.package(url: "https://github.com/paulstraw/PlaydateKit.git", branch: "unicode-data-tables-support")
 	],
 	targets: [
 		.target(

@@ -33,7 +33,7 @@ struct GameSettingsReader {
 			let valueType = JsonValueType(rawValue: value.type)
 			
 			if valueType == .string && keyString == "controlScheme" {
-				print("why does this crash?")
+//				print("why does this crash?")
 //				String(cString: value.data.stringval)
 //				controlScheme = ControlScheme.from(string: String(cString: value.data.stringval)) ?? .standard
 			}
