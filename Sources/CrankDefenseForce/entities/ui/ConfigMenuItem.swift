@@ -29,7 +29,6 @@ class ConfigMenuItem: BaseEntity {
 			
 			Graphics.drawMode = .fillWhite
 			
-			Graphics.drawText("test", at: bounds.origin)
 			Graphics.popContext()
 		}
 	}

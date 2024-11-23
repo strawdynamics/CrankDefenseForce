@@ -1,18 +1,24 @@
-class StepperConfigMenuItem: ConfigMenuItem {
+class VolumeMenuItem: ConfigMenuItem {
+	static let max: Int = 10
+	
+	enum VolumeType {
+		case music
+		case sfx
+	}
+	
 	struct Config {
-		let max: Int
 		let offsetX: Float
+		let volumeType: VolumeType
 		let entityStore: EntityStore
 	}
 	
-	let max: Int
-	
 	let currentValue: Int
 	
+	let volumeType: VolumeType
+	
 	init(_ config: Config) {
-		self.max = config.max
+		volumeType = config.volumeType
 		
-		// TODO:
 		currentValue = 5
 		
 		super.init(ConfigMenuItem.Config(

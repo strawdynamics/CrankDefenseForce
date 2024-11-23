@@ -21,9 +21,9 @@ class ConfigMenu: BaseEntity {
 				offsetX: 6,
 				entityStore: config.entityStore
 			)),
-			StepperConfigMenuItem(StepperConfigMenuItem.Config(
-				max: 10,
+			VolumeMenuItem(VolumeMenuItem.Config(
 				offsetX: 6,
+				volumeType: VolumeMenuItem.VolumeType.music,
 				entityStore: config.entityStore
 			)),
 			ConfigMenuItem(ConfigMenuItem.Config(

@@ -10,6 +10,7 @@ nonisolated(unsafe) var game: Game!
 	switch event {
 	case .initialize:
 		Playdate.initialize(with: pointer)
+		GameSettings.initialize()
 		game = Game()
 		System.updateCallback = game.update
 	default: game.handle(event)
