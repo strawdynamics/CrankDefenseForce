@@ -3,6 +3,8 @@ import PlaydateKit
 class ConfigMenuItem: BaseEntity {
 	static nonisolated(unsafe) let bgBitmapTable = try! Graphics.BitmapTable(path: "configMenuItemBg.png")
 	
+	static nonisolated(unsafe) let arrowsBitmapTable = try! Graphics.BitmapTable(path: "configMenuItemArrows.png")
+	
 	static let SELECTED_OFFSET_X: Float = 24
 	
 	struct Config {
@@ -38,6 +40,10 @@ class ConfigMenuItem: BaseEntity {
 	private var isSelected = false
 	
 	var sprite = Sprite()
+	
+//	var leftSprite = PlaydateKit.Sprite.Sprite
+//	
+//	var rightSprite = PlaydateKit.Sprite.Sprite
 	
 	var xAnimator: FloatAnimator?
 	
