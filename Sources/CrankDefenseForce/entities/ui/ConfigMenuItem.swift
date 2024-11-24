@@ -41,9 +41,9 @@ class ConfigMenuItem: BaseEntity {
 	
 	var sprite = Sprite()
 	
-//	var leftSprite = PlaydateKit.Sprite.Sprite
-//	
-//	var rightSprite = PlaydateKit.Sprite.Sprite
+	var leftSprite = PlaydateKit.Sprite.Sprite()
+	
+	var rightSprite = PlaydateKit.Sprite.Sprite()
 	
 	var xAnimator: FloatAnimator?
 	
@@ -52,8 +52,15 @@ class ConfigMenuItem: BaseEntity {
 		
 		super.init(config.entityStore)
 	
-		sprite.moveTo(Point(x: config.offsetX, y: 0))
 		sprite.addToDisplayList()
+		
+		leftSprite.image = ConfigMenuItem.arrowsBitmapTable[0]
+		leftSprite.isVisible = false
+		leftSprite.addToDisplayList()
+		
+		rightSprite.image = ConfigMenuItem.arrowsBitmapTable[1]
+		rightSprite.isVisible = false
+		rightSprite.addToDisplayList()
 	}
 	
 	override func update() {
@@ -61,6 +68,9 @@ class ConfigMenuItem: BaseEntity {
 			xAnimator.update()
 			
 			sprite.moveTo(Point(x: xAnimator.currentValue, y: sprite.position.y))
+			
+			leftSprite.moveTo(Point(x: xAnimator.currentValue - 12, y: leftSprite.position.y))
+			rightSprite.moveTo(Point(x: xAnimator.currentValue + 205, y: rightSprite.position.y))
 			
 			if xAnimator.ended {
 				self.xAnimator = nil
@@ -70,6 +80,8 @@ class ConfigMenuItem: BaseEntity {
 	
 	func moveTo(y: Float) {
 		sprite.moveTo(Point(x: sprite.position.x, y: y))
+		leftSprite.moveTo(Point(x: leftSprite.position.x, y: y))
+		rightSprite.moveTo(Point(x: rightSprite.position.x, y: y))
 	}
 	
 	func select() {
@@ -78,6 +90,9 @@ class ConfigMenuItem: BaseEntity {
 		}
 		isSelected = true
 		sprite.isSelected = true
+		
+		leftSprite.isVisible = true
+		rightSprite.isVisible = true
 		
 		xAnimator = FloatAnimator(
 			duration: 0.5,
@@ -93,6 +108,9 @@ class ConfigMenuItem: BaseEntity {
 		}
 		isSelected = false
 		sprite.isSelected = false
+		
+		leftSprite.isVisible = false
+		rightSprite.isVisible = false
 		
 		xAnimator = FloatAnimator(
 			duration: 0.5,
