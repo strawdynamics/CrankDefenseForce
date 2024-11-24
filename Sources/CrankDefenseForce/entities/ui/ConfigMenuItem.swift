@@ -67,13 +67,34 @@ class ConfigMenuItem: BaseEntity {
 		if let xAnimator = xAnimator {
 			xAnimator.update()
 			
+			let alpha: Float = isSelected ? 1 - xAnimator.currentPercent : xAnimator.currentPercent
+			let overlayColor = Graphics.Color.getBayer4x4FadePattern(foreground: 0, alpha: alpha)
+			
 			sprite.moveTo(Point(x: xAnimator.currentValue, y: sprite.position.y))
 			
+			let leftImg = Graphics.Bitmap(width: 17, height: 18)
+			Graphics.pushContext(leftImg)
+			Graphics.drawBitmap(ConfigMenuItem.self.arrowsBitmapTable[0]!, at: Point(x: 0, y: 0))
+			Graphics.fillRect(Rect(x: 0, y: 0, width: 17, height: 18), color: overlayColor)
+			Graphics.popContext()
+			leftSprite.image = leftImg
 			leftSprite.moveTo(Point(x: xAnimator.currentValue - 12, y: leftSprite.position.y))
+			
+			let rightImg = Graphics.Bitmap(width: 17, height: 18)
+			Graphics.pushContext(rightImg)
+			Graphics.drawBitmap(ConfigMenuItem.self.arrowsBitmapTable[1]!, at: Point(x: 0, y: 0))
+			Graphics.fillRect(Rect(x: 0, y: 0, width: 17, height: 18), color: overlayColor)
+			Graphics.popContext()
+			rightSprite.image = rightImg
 			rightSprite.moveTo(Point(x: xAnimator.currentValue + 205, y: rightSprite.position.y))
 			
 			if xAnimator.ended {
 				self.xAnimator = nil
+				
+				if !isSelected {
+					leftSprite.isVisible = false
+					rightSprite.isVisible = false
+				}
 			}
 		}
 	}
@@ -95,7 +116,7 @@ class ConfigMenuItem: BaseEntity {
 		rightSprite.isVisible = true
 		
 		xAnimator = FloatAnimator(
-			duration: 0.5,
+			duration: 0.2,
 			startValue: offsetX,
 			endValue: offsetX + ConfigMenuItem.SELECTED_OFFSET_X,
 			easingFn: EasingFn.basic(Ease.outQuad),
@@ -108,9 +129,6 @@ class ConfigMenuItem: BaseEntity {
 		}
 		isSelected = false
 		sprite.isSelected = false
-		
-		leftSprite.isVisible = false
-		rightSprite.isVisible = false
 		
 		xAnimator = FloatAnimator(
 			duration: 0.5,

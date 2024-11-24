@@ -13,6 +13,10 @@ class FloatAnimator {
 	
 	public private(set) var ended: Bool = false
 	
+	public var currentPercent: Float {
+		return currentTime / duration
+	}
+	
 	init(
 		duration: Float,
 		startValue: Float,
