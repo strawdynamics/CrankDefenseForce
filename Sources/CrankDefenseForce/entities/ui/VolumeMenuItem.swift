@@ -7,6 +7,7 @@ class VolumeMenuItem: ConfigMenuItem {
 	}
 	
 	struct Config {
+		let title: String
 		let offsetX: Float
 		let volumeType: VolumeType
 		let entityStore: EntityStore
@@ -22,6 +23,7 @@ class VolumeMenuItem: ConfigMenuItem {
 		currentValue = 5
 		
 		super.init(ConfigMenuItem.Config(
+			title: config.title,
 			offsetX: config.offsetX,
 			entityStore: config.entityStore,
 		))

@@ -26,7 +26,7 @@ class Explosion: BaseEntity {
 				startAngle: 0,
 				endAngle: 360,
 				// TODO: Fade
-				color: Graphics.Color.getBayer4x4FadePattern(foreground: 0, alpha: 0.5),
+				color: Graphics.Color.getBayer4x4FadeColor(foreground: 0, alpha: 0.5),
 			)
 			Graphics.popContext()
 		}

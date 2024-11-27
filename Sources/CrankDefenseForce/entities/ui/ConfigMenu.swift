@@ -1,7 +1,7 @@
 import PlaydateKit
 
 class ConfigMenu: BaseEntity {
-	static let ITEM_HEIGHT: Int = 50
+	static let ITEM_HEIGHT: Int = 52
 	
 	static let OFFSET_TOP: Float = 60
 	
@@ -16,30 +16,39 @@ class ConfigMenu: BaseEntity {
 	var yAnimator: FloatAnimator?
 	
 	init(_ config: Config) {
+		let offsetX: Float = 15
+		
 		menuItems = [
 			ConfigMenuItem(ConfigMenuItem.Config(
-				offsetX: 6,
+				title: "Testo",
+				offsetX: offsetX,
 				entityStore: config.entityStore
 			)),
 			VolumeMenuItem(VolumeMenuItem.Config(
-				offsetX: 6,
+				title: "Music",
+				offsetX: offsetX,
 				volumeType: VolumeMenuItem.VolumeType.music,
 				entityStore: config.entityStore
 			)),
-			ConfigMenuItem(ConfigMenuItem.Config(
-				offsetX: 6,
+			VolumeMenuItem(VolumeMenuItem.Config(
+				title: "SFX",
+				offsetX: offsetX,
+				volumeType: VolumeMenuItem.VolumeType.sfx,
 				entityStore: config.entityStore
 			)),
 			ConfigMenuItem(ConfigMenuItem.Config(
-				offsetX: 6,
+				title: "Testo2",
+				offsetX: offsetX,
 				entityStore: config.entityStore
 			)),
 			ConfigMenuItem(ConfigMenuItem.Config(
-				offsetX: 6,
+				title: "Testo3",
+				offsetX: offsetX,
 				entityStore: config.entityStore
 			)),
 			ConfigMenuItem(ConfigMenuItem.Config(
-				offsetX: 6,
+				title: "Testo4",
+				offsetX: offsetX,
 				entityStore: config.entityStore
 			)),
 		]

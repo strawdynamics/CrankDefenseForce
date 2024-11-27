@@ -15,7 +15,7 @@ class CrtOutSceneTransition: BaseSceneTransition {
 		
 		Graphics.fillRect(
 			Rect(x: 0, y: 0, width: 400, height: 240),
-			color: Graphics.Color.getBayer4x4FadePattern(foreground: 0, alpha: fadePct)
+			color: Graphics.Color.getBayer4x4FadeColor(foreground: 0, alpha: fadePct)
 		)
 		Graphics.popContext()
 		

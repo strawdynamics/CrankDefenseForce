@@ -114,7 +114,7 @@ class Menu {
 		if isFadingIn || isFadingOut {
 			Graphics.fillRect(
 				Rect(x: 0, y: 0, width: Self.width, height: Self.height),
-				color: Graphics.Color.getBayer4x4FadePattern(foreground: 0, alpha: fadePct)
+				color: Graphics.Color.getBayer4x4FadeColor(foreground: 0, alpha: fadePct)
 			)
 		}
 		
