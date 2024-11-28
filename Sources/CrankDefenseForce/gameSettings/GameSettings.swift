@@ -11,6 +11,8 @@ class GameSettings {
 		readFromDisk()
 	}
 	
+	public static nonisolated(unsafe) var lastMainMenuSelectedItemIndex = 0
+	
 	private static nonisolated(unsafe) var _musicVolume: Float = 10
 	
 	private static nonisolated(unsafe) var _sfxVolume: Float = 10

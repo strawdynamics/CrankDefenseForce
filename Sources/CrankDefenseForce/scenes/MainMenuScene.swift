@@ -23,7 +23,7 @@ class Menu {
 	
 	let menuItems: [MenuItem]
 	
-	var selectedItemIndex = 0
+	var selectedItemIndex = GameSettings.lastMainMenuSelectedItemIndex
 	
 	let bitmap = Graphics.Bitmap(width: Menu.width, height: Menu.height)
 	
@@ -34,6 +34,7 @@ class Menu {
 	
 	func next() {
 		selectedItemIndex = (selectedItemIndex + 1) % menuItems.count
+		GameSettings.lastMainMenuSelectedItemIndex = selectedItemIndex
 		draw()
 	}
 	
@@ -42,6 +43,7 @@ class Menu {
 		if selectedItemIndex < 0 {
 			selectedItemIndex = menuItems.count - 1
 		}
+		GameSettings.lastMainMenuSelectedItemIndex = selectedItemIndex
 		draw()
 	}
 	
@@ -128,13 +130,17 @@ class MainMenuScene: BaseScene {
 	
 	var menu: Menu?
 	
+	var exiting = false
+	
 	override func update() {
 		let pushed = System.buttonState.pushed
 		
-		if pushed.contains(.down) {
-			menu?.next()
-		} else if (pushed.contains(.up)) {
-			menu?.prev()
+		if !exiting {
+			if pushed.contains(.down) {
+				menu?.next()
+			} else if (pushed.contains(.up)) {
+				menu?.prev()
+			}
 		}
 		
 		menu?.update()
@@ -151,7 +157,7 @@ class MainMenuScene: BaseScene {
 		}
 		
 		
-		if pushed.contains(.a) {
+		if !exiting && pushed.contains(.a) {
 			menu?.menuItems[menu!.selectedItemIndex].action()
 		}
 	}
@@ -193,6 +199,8 @@ class MainMenuScene: BaseScene {
 				transition: CrtInSceneTransition()
 			)
 		})
+		
+		exiting = true
 	}
 	
 	func handleConfigPressed() {
@@ -202,6 +210,8 @@ class MainMenuScene: BaseScene {
 				transition: CrtInSceneTransition()
 			)
 		})
+		
+		exiting = true
 	}
 	
 	func handleAboutPressed() {
@@ -211,5 +221,7 @@ class MainMenuScene: BaseScene {
 				transition: CrtInSceneTransition()
 			)
 		})
+		
+		exiting = true
 	}
 }
