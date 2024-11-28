@@ -25,7 +25,6 @@ class ControlsMenuItem: ConfigMenuItem {
 			
 			Graphics.setFont(CdfFont.NicoClean16)
 			Graphics.drawMode = .fillWhite
-			// FIXME: Why does this leak???
 			Graphics.drawText(
 				GameSettings.controlScheme.title,
 				at: bounds.origin + Point(x: 16, y: 16)
