@@ -17,6 +17,7 @@ class ControlsMenuItem: ConfigMenuItem {
 		override init() {
 			super.init()
 			zIndex = 10
+			setSize(width: ConfigMenuItem.SPRITE_WIDTH, height: ConfigMenuItem.SPRITE_HEIGHT)
 		}
 		
 		override func draw(bounds _: Rect, drawRect _: Rect) {
@@ -24,6 +25,7 @@ class ControlsMenuItem: ConfigMenuItem {
 			
 			Graphics.setFont(CdfFont.NicoClean16)
 			Graphics.drawMode = .fillWhite
+			// FIXME: Why does this leak???
 			Graphics.drawText(
 				GameSettings.controlScheme.title,
 				at: bounds.origin + Point(x: 16, y: 16)

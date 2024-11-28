@@ -24,6 +24,7 @@ class VolumeMenuItem: ConfigMenuItem {
 			
 			super.init()
 			zIndex = 10
+			setSize(width: ConfigMenuItem.SPRITE_WIDTH, height: ConfigMenuItem.SPRITE_HEIGHT)
 		}
 		
 		override func draw(bounds _: Rect, drawRect _: Rect) {

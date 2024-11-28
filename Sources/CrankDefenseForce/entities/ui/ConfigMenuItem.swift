@@ -7,6 +7,9 @@ class ConfigMenuItem: BaseEntity {
 	
 	static let SELECTED_OFFSET_X: Float = 18
 	
+	static let SPRITE_WIDTH: Float = 192
+	static let SPRITE_HEIGHT: Float = 44
+	
 	struct Config {
 		let title: String
 		let offsetX: Float
@@ -14,25 +17,10 @@ class ConfigMenuItem: BaseEntity {
 	}
 	
 	class Sprite: PlaydateKit.Sprite.Sprite {
-		var isSelected = false
-		
 		override init() {
 			super.init()
+			zIndex = 5
 			center = Point(x: 0, y: 0.5)
-			setSize(width: 192, height: 44)
-		}
-		
-		override func draw(bounds _: Rect, drawRect _: Rect) {
-			Graphics.pushContext(nil)
-			
-			Graphics.drawBitmap(
-				ConfigMenuItem.bgBitmapTable[isSelected ? 1 : 0]!,
-				at: bounds.origin
-			)
-			
-			Graphics.drawMode = .fillWhite
-			
-			Graphics.popContext()
 		}
 	}
 	
@@ -86,6 +74,8 @@ class ConfigMenuItem: BaseEntity {
 		offsetX = config.offsetX
 		
 		super.init(config.entityStore)
+		
+		sprite.image = ConfigMenuItem.bgBitmapTable[0]
 		
 		sprite.moveTo(Point(x: offsetX, y: 0))
 		lineSprite.moveTo(Point(x: 0, y: 0))
@@ -167,7 +157,7 @@ class ConfigMenuItem: BaseEntity {
 			return
 		}
 		isSelected = true
-		sprite.isSelected = true
+		sprite.image = ConfigMenuItem.bgBitmapTable[1]
 		
 		leftSprite.isVisible = true
 		rightSprite.isVisible = true
@@ -185,7 +175,7 @@ class ConfigMenuItem: BaseEntity {
 			return
 		}
 		isSelected = false
-		sprite.isSelected = false
+		sprite.image = ConfigMenuItem.bgBitmapTable[0]
 		
 		xAnimator = FloatAnimator(
 			duration: 0.5,

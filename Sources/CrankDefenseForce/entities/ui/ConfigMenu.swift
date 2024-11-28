@@ -38,6 +38,11 @@ class ConfigMenu: BaseEntity {
 			)),
 			// TODO: FPS?
 			// TODO: More?
+//			ConfigMenuItem(ConfigMenuItem.Config(
+//				title: "Testo2",
+//				offsetX: offsetX,
+//				entityStore: config.entityStore
+//			)),
 		]
 		
 		super.init(config.entityStore)
