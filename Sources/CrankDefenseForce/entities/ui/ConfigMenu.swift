@@ -36,21 +36,8 @@ class ConfigMenu: BaseEntity {
 				volumeType: VolumeMenuItem.VolumeType.sfx,
 				entityStore: config.entityStore
 			)),
-			ConfigMenuItem(ConfigMenuItem.Config(
-				title: "Testo2",
-				offsetX: offsetX,
-				entityStore: config.entityStore
-			)),
-			ConfigMenuItem(ConfigMenuItem.Config(
-				title: "Testo3",
-				offsetX: offsetX,
-				entityStore: config.entityStore
-			)),
-			ConfigMenuItem(ConfigMenuItem.Config(
-				title: "Testo4",
-				offsetX: offsetX,
-				entityStore: config.entityStore
-			)),
+			// TODO: FPS?
+			// TODO: More?
 		]
 		
 		super.init(config.entityStore)

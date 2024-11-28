@@ -126,6 +126,11 @@ class Rocket: BaseEntity {
 		for coll in colls {
 			let overlappingSprite = coll.other
 			
+			// Not exactly sure what this is, but it will crash otherwise!
+			if overlappingSprite.image == nil {
+				continue
+			}
+			
 			// TODO: Explosion check
 			
 			let alphaCollided = Graphics.checkMaskCollision(
