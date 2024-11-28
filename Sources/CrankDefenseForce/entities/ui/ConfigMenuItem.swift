@@ -5,7 +5,7 @@ class ConfigMenuItem: BaseEntity {
 	
 	static nonisolated(unsafe) let arrowsBitmapTable = try! Graphics.BitmapTable(path: "configMenuItemArrows.png")
 	
-	static let SELECTED_OFFSET_X: Float = 24
+	static let SELECTED_OFFSET_X: Float = 18
 	
 	struct Config {
 		let title: String

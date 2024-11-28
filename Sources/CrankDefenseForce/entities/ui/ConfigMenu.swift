@@ -16,11 +16,11 @@ class ConfigMenu: BaseEntity {
 	var yAnimator: FloatAnimator?
 	
 	init(_ config: Config) {
-		let offsetX: Float = 15
+		let offsetX: Float = 10
 		
 		menuItems = [
-			ConfigMenuItem(ConfigMenuItem.Config(
-				title: "Testo",
+			ControlsMenuItem(ControlsMenuItem.Config(
+				title: "Controls",
 				offsetX: offsetX,
 				entityStore: config.entityStore
 			)),
