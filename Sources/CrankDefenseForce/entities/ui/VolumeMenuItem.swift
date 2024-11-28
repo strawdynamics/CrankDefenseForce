@@ -16,7 +16,14 @@ class VolumeMenuItem: ConfigMenuItem {
 	}
 	
 	class Sprite: ConfigMenuItem.Sprite {
-		override init() {
+		let title: String
+		
+		let volumeType: VolumeType
+		
+		init(title: String, volumeType: VolumeType) {
+			self.title = title
+			self.volumeType = volumeType
+			
 			super.init()
 			zIndex = 10
 		}
@@ -24,23 +31,25 @@ class VolumeMenuItem: ConfigMenuItem {
 		override func draw(bounds _: Rect, drawRect _: Rect) {
 			Graphics.pushContext(nil)
 			
+			Graphics.setFont(CdfFont.NicoClean16)
 			Graphics.drawMode = .fillWhite
 			Graphics.drawText(
-				"helloworld",
-				at: bounds.origin
+				title,
+				at: bounds.origin + Point(x: 16, y: 16)
 			)
 			
 			Graphics.popContext()
 		}
 	}
 	
-	let displaySprite = Sprite()
+	let displaySprite: Sprite
 	
 	let currentValue: Int
 	
 	let volumeType: VolumeType
 	
 	init(_ config: Config) {
+		displaySprite = Sprite(title: config.title, volumeType: config.volumeType)
 		volumeType = config.volumeType
 		
 		currentValue = 5

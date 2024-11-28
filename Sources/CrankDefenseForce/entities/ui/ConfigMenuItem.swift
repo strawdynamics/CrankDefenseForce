@@ -44,16 +44,18 @@ class ConfigMenuItem: BaseEntity {
 		}
 		
 		override func draw(bounds _: Rect, drawRect _: Rect) {
-			Graphics.pushContext(nil)
-			Graphics.drawLine(Line(
-				start: Point(x: bounds.origin.x, y: bounds.origin.y + 1),
-				end: Point(x: bounds.origin.x + bounds.width, y: bounds.origin.y + 1),
-			), lineWidth: 3, color: Graphics.Color.white)
+			let start = bounds.origin + Point(x: 0, y: 1)
+			let end = bounds.origin + Point(x: bounds.width, y: 1)
 			
-			Graphics.drawLine(Line(
-				start: Point(x: bounds.origin.x, y: bounds.origin.y + 1),
-				end: Point(x: bounds.origin.x + bounds.width, y: bounds.origin.y + 1),
-			), lineWidth: 1, color: Graphics.Color.black)
+			let line = Line(
+				start: start,
+				end: end,
+			)
+			
+			Graphics.pushContext(nil)
+			Graphics.drawLine(line, lineWidth: 3, color: Graphics.Color.white)
+			
+			Graphics.drawLine(line, lineWidth: 1, color: Graphics.Color.black)
 			
 			Graphics.popContext()
 		}
@@ -69,7 +71,11 @@ class ConfigMenuItem: BaseEntity {
 	
 	let leftSprite = PlaydateKit.Sprite.Sprite()
 	
+	var leftSpriteYAnimator: FloatAnimator?
+	
 	let rightSprite = PlaydateKit.Sprite.Sprite()
+	
+	var rightSpriteYAnimator: FloatAnimator?
 	
 	private var isSelected = false
 	
@@ -123,6 +129,30 @@ class ConfigMenuItem: BaseEntity {
 				}
 			}
 		}
+		
+		if let leftSpriteYAnimator = leftSpriteYAnimator {
+			leftSpriteYAnimator.update()
+			leftSprite.moveTo(Point(
+				x: leftSprite.position.x,
+				y: sprite.position.y + leftSpriteYAnimator.currentValue,
+			))
+			
+			if leftSpriteYAnimator.ended {
+				self.leftSpriteYAnimator = nil
+			}
+		}
+		
+		if let rightSpriteYAnimator = rightSpriteYAnimator {
+			rightSpriteYAnimator.update()
+			rightSprite.moveTo(Point(
+				x: rightSprite.position.x,
+				y: sprite.position.y + rightSpriteYAnimator.currentValue,
+			))
+			
+			if rightSpriteYAnimator.ended {
+				self.rightSpriteYAnimator = nil
+			}
+		}
 	}
 	
 	func moveTo(y: Float) {
@@ -163,6 +193,28 @@ class ConfigMenuItem: BaseEntity {
 			endValue: offsetX,
 			easingFn: EasingFn.basic(Ease.outQuad),
 		)
+	}
+	
+	func prev() {
+		leftSpriteYAnimator = FloatAnimator(
+			duration: 0.1,
+			startValue: 5,
+			endValue: 0,
+			easingFn: EasingFn.basic(Ease.outQuad),
+		)
+	}
+	
+	func next() {
+		rightSpriteYAnimator = FloatAnimator(
+			duration: 0.1,
+			startValue: 5,
+			endValue: 0,
+			easingFn: EasingFn.basic(Ease.outQuad),
+		)
+	}
+	
+	func click() {
+		//
 	}
 }
 

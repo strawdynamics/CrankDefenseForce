@@ -60,6 +60,12 @@ class ConfigMenu: BaseEntity {
 	}
 	
 	override func update() {
+		updateYAnimator()
+		
+		updateInput()
+	}
+	
+	private func updateYAnimator() {
 		if let yAnimator = yAnimator {
 			yAnimator.update()
 			
@@ -68,6 +74,18 @@ class ConfigMenu: BaseEntity {
 			if yAnimator.ended {
 				self.yAnimator = nil
 			}
+		}
+	}
+	
+	private func updateInput() {
+		let pushed = System.buttonState.pushed
+		
+		if pushed.contains(.left) {
+			menuItems[selectedItemIndex].prev()
+		} else if pushed.contains(.right) {
+			menuItems[selectedItemIndex].next()
+		} else if pushed.contains(.a) {
+			menuItems[selectedItemIndex].click()
 		}
 	}
 	
