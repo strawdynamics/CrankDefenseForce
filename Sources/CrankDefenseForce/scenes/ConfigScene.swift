@@ -6,7 +6,7 @@ class ConfigScene: BaseScene {
 	var configMenu: ConfigMenu?
 	
 	override func update() {
-		self.entityStore.update()
+		entityStore.update()
 		
 		let pushed = System.buttonState.pushed
 		
@@ -22,6 +22,8 @@ class ConfigScene: BaseScene {
 		} else if pushed.contains(.down) {
 			configMenu?.selectNext()
 		}
+		
+		entityStore.lateUpdate()
 	}
 	
 	override func enter() {
