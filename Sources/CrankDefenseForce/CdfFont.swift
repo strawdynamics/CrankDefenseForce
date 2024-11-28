@@ -10,4 +10,6 @@ enum CdfFont {
 	nonisolated(unsafe) public static let NicoPaint16: Graphics.Font = try! Graphics.Font(path: "fonts/nicoPaint16")
 	
 	nonisolated(unsafe) public static let NicoPups16: Graphics.Font = try! Graphics.Font(path: "fonts/nicoPups16")
+	
+	nonisolated(unsafe) public static let Nybble4: Graphics.Font = try! Graphics.Font(path: "fonts/nybble4")
 }
