@@ -102,7 +102,7 @@ class ConfigMenu: BaseEntity {
 	func animateY(oldIndex: Int, newIndex: Int) {
 		self.yAnimator = FloatAnimator(
 			duration: 0.3,
-			startValue: Float(oldIndex),
+			startValue: (self.yAnimator == nil) ? Float(oldIndex) : self.yAnimator!.currentValue,
 			endValue: Float(newIndex),
 			easingFn: EasingFn.basic(Ease.outQuad),
 		)
