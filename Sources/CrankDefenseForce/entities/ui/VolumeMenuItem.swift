@@ -1,8 +1,6 @@
 import PlaydateKit
 
-class VolumeMenuItem: ConfigMenuItem {
-	static let max: Int = 10
-	
+class VolumeMenuItem: ConfigMenuItem {	
 	enum VolumeType {
 		case music
 		case sfx
@@ -38,7 +36,66 @@ class VolumeMenuItem: ConfigMenuItem {
 				at: bounds.origin + Point(x: 16, y: 16)
 			)
 			
+			let currentVolume: Int
+			switch volumeType {
+			case .music:
+				currentVolume = GameSettings.musicVolume
+			case .sfx:
+				currentVolume = GameSettings.sfxVolume
+			}
+			
+			let width: Float = 4
+			let gap: Float = 1
+			let baseXOff: Float = 122
+			let baseYOff: Float = 32
+			
+			for v in 1...GameSettings.MAX_VOLUME {
+				let height = Float(v * 2)
+				let xOff: Float = baseXOff + (width + gap) * Float(v) - 1
+				
+				let color: Graphics.Color
+				if v <= currentVolume {
+					color = .white
+				} else {
+					color = Graphics.Color.getBayer4x4FadeColor(foreground: 1, alpha: 0.5)
+				}
+				
+				Graphics.fillRect(
+					Rect(
+						origin: bounds.origin + Point(
+							x: Float(xOff),
+							y: baseYOff - height
+						),
+						width: width,
+						height: height
+					),
+					color: color
+				)
+			}
+			
 			Graphics.popContext()
+		}
+	}
+	
+	override func prev() {
+		super.prev()
+		
+		switch volumeType {
+		case .music:
+			GameSettings.decreaseMusicVolume()
+		case .sfx:
+			GameSettings.decreaseSfxVolume()
+		}
+	}
+	
+	override func next() {
+		super.next()
+		
+		switch volumeType {
+		case .music:
+			GameSettings.increaseMusicVolume()
+		case .sfx:
+			GameSettings.increaseSfxVolume()
 		}
 	}
 	

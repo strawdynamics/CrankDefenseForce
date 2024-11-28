@@ -11,11 +11,11 @@ class GameSettings {
 		readFromDisk()
 	}
 	
-	public static nonisolated(unsafe) var lastMainMenuSelectedItemIndex = 0
+	static nonisolated(unsafe) var lastMainMenuSelectedItemIndex = 0
 	
-	private static nonisolated(unsafe) var _musicVolume: Float = 10
+	private static nonisolated(unsafe) var _musicVolume: Int = 10
 	
-	private static nonisolated(unsafe) var _sfxVolume: Float = 10
+	private static nonisolated(unsafe) var _sfxVolume: Int = 10
 	
 	private static nonisolated(unsafe) var _controlScheme = ControlScheme.standard
 	
@@ -30,12 +30,22 @@ class GameSettings {
 		}
 	}
 	
-	static func incrementMusicVolume() -> VolumeChangeResult {
+	static var musicVolume: Int {
+		return _musicVolume
+	}
+	
+	static var sfxVolume: Int {
+		return _sfxVolume
+	}
+	
+	static let MAX_VOLUME: Int = 10
+	
+	static func increaseMusicVolume() -> VolumeChangeResult {
 		var res = VolumeChangeResult.incremented
 		_musicVolume += 1
-		if _musicVolume > 10 {
+		if _musicVolume > MAX_VOLUME {
 			res = .unchanged
-			_musicVolume = 10
+			_musicVolume = MAX_VOLUME
 		}
 		
 		writeToDisk()
@@ -43,7 +53,7 @@ class GameSettings {
 		return res
 	}
 	
-	static func decrementMusicVolume() -> VolumeChangeResult {
+	static func decreaseMusicVolume() -> VolumeChangeResult {
 		var res = VolumeChangeResult.decremented
 		
 		_musicVolume -= 1
@@ -57,12 +67,12 @@ class GameSettings {
 		return res
 	}
 	
-	static func incrementSfxVolume() -> VolumeChangeResult {
+	static func increaseSfxVolume() -> VolumeChangeResult {
 		var res = VolumeChangeResult.incremented
 		_sfxVolume += 1
-		if _sfxVolume > 10 {
+		if _sfxVolume > MAX_VOLUME {
 			res = .unchanged
-			_sfxVolume = 10
+			_sfxVolume = MAX_VOLUME
 		}
 		
 		writeToDisk()
@@ -70,7 +80,7 @@ class GameSettings {
 		return res
 	}
 	
-	static func decrementSfxVolume() -> VolumeChangeResult {
+	static func decreaseSfxVolume() -> VolumeChangeResult {
 		var res = VolumeChangeResult.decremented
 		_sfxVolume -= 1
 		if _sfxVolume < 0 {
