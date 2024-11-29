@@ -47,7 +47,7 @@ class ConfigMenu: BaseEntity {
 		
 		super.init(config.entityStore)
 		
-		menuItems[selectedItemIndex].select()
+		menuItems[selectedItemIndex].focus()
 		positionMenuItems()
 	}
 	
@@ -83,28 +83,28 @@ class ConfigMenu: BaseEntity {
 	
 	func selectNext() {
 		let oldIndex = selectedItemIndex
-		menuItems[selectedItemIndex].deselect()
+		menuItems[selectedItemIndex].blur()
 		
 		selectedItemIndex += 1
 		if selectedItemIndex >= menuItems.count {
 			selectedItemIndex = 0
 		}
 		
-		menuItems[selectedItemIndex].select()
+		menuItems[selectedItemIndex].focus()
 		
 		animateY(oldIndex: oldIndex, newIndex: selectedItemIndex)
 	}
 	
 	func selectPrev() {
 		let oldIndex = selectedItemIndex
-		menuItems[selectedItemIndex].deselect()
+		menuItems[selectedItemIndex].blur()
 		
 		selectedItemIndex -= 1
 		if selectedItemIndex < 0 {
 			selectedItemIndex = menuItems.count - 1
 		}
 		
-		menuItems[selectedItemIndex].select()
+		menuItems[selectedItemIndex].focus()
 		
 		animateY(oldIndex: oldIndex, newIndex: selectedItemIndex)
 	}

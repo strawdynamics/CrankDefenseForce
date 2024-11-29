@@ -40,12 +40,8 @@ class ConfigMenuItem: BaseEntity {
 				end: end,
 			)
 			
-			Graphics.pushContext(nil)
 			Graphics.drawLine(line, lineWidth: 3, color: Graphics.Color.white)
-			
 			Graphics.drawLine(line, lineWidth: 1, color: Graphics.Color.black)
-			
-			Graphics.popContext()
 		}
 	}
 	
@@ -65,9 +61,9 @@ class ConfigMenuItem: BaseEntity {
 	
 	var rightSpriteYAnimator: FloatAnimator?
 	
-	private var isSelected = false
+	var isSelected = false
 	
-	var xAnimator: FloatAnimator?
+	var focusAnimator: FloatAnimator?
 	
 	init(_ config: Config) {
 		title = config.title
@@ -93,13 +89,13 @@ class ConfigMenuItem: BaseEntity {
 	}
 	
 	override func update() {
-		if let xAnimator = xAnimator {
-			xAnimator.update()
+		if let focusAnimator = focusAnimator {
+			focusAnimator.update()
 			
-			let alpha: Float = isSelected ? xAnimator.currentPercent : 1 - xAnimator.currentPercent
+			let alpha: Float = isSelected ? focusAnimator.currentPercent : 1 - focusAnimator.currentPercent
 			var overlayPattern = Graphics.Color.getBayer4x4FadePattern(foreground: 1, alpha: alpha)
 			
-			sprite.moveTo(Point(x: xAnimator.currentValue, y: sprite.position.y))
+			sprite.moveTo(Point(x: focusAnimator.currentValue, y: sprite.position.y))
 			lineSprite.moveTo(Point(x: 0, y: lineSprite.position.y))
 			
 			overlayPattern.0.withUnsafeMutableBufferPointer { ptr in
@@ -107,11 +103,11 @@ class ConfigMenuItem: BaseEntity {
 				leftSprite.setStencilPattern(ptr.baseAddress!)
 			}
 			
-			leftSprite.moveTo(Point(x: xAnimator.currentValue - 12, y: leftSprite.position.y))
-			rightSprite.moveTo(Point(x: xAnimator.currentValue + 205, y: rightSprite.position.y))
+			leftSprite.moveTo(Point(x: focusAnimator.currentValue - 12, y: leftSprite.position.y))
+			rightSprite.moveTo(Point(x: focusAnimator.currentValue + 205, y: rightSprite.position.y))
 			
-			if xAnimator.ended {
-				self.xAnimator = nil
+			if focusAnimator.ended {
+				self.focusAnimator = nil
 				
 				if !isSelected {
 					leftSprite.isVisible = false
@@ -152,7 +148,7 @@ class ConfigMenuItem: BaseEntity {
 		rightSprite.moveTo(Point(x: rightSprite.position.x, y: y))
 	}
 	
-	func select() {
+	func focus() {
 		if isSelected {
 			return
 		}
@@ -162,7 +158,7 @@ class ConfigMenuItem: BaseEntity {
 		leftSprite.isVisible = true
 		rightSprite.isVisible = true
 		
-		xAnimator = FloatAnimator(
+		focusAnimator = FloatAnimator(
 			duration: 0.2,
 			startValue: offsetX,
 			endValue: offsetX + ConfigMenuItem.SELECTED_OFFSET_X,
@@ -170,14 +166,14 @@ class ConfigMenuItem: BaseEntity {
 		)
 	}
 	
-	func deselect() {
+	func blur() {
 		if !isSelected {
 			return
 		}
 		isSelected = false
 		sprite.image = ConfigMenuItem.bgBitmapTable[0]
 		
-		xAnimator = FloatAnimator(
+		focusAnimator = FloatAnimator(
 			duration: 0.5,
 			startValue: offsetX + ConfigMenuItem.SELECTED_OFFSET_X,
 			endValue: offsetX,

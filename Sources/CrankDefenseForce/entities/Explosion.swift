@@ -14,8 +14,6 @@ class Explosion: BaseEntity {
 		var radius: Float = 0
 		
 		override func draw(bounds _: Rect, drawRect _: Rect) {
-			Graphics.pushContext(nil)
-			
 			Graphics.fillEllipse(
 				in: Rect(
 					x: position.x - radius,
@@ -28,7 +26,6 @@ class Explosion: BaseEntity {
 				// TODO: Fade
 				color: Graphics.Color.getBayer4x4FadeColor(foreground: 0, alpha: 0.5),
 			)
-			Graphics.popContext()
 		}
 	}
 	

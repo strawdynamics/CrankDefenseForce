@@ -9,6 +9,7 @@ extension Graphics.Color {
 	]
 	
 	static func getBayer4x4FadePattern(foreground: UInt8, alpha: Float) -> ([UInt8], [UInt8]) {
+		Graphics.drawMode = .whiteTransparent
 		let cAlpha = alpha.clamped(0.0, 1.0)
 		let threshold: UInt8 = UInt8(cAlpha * 16)
 		
@@ -26,7 +27,7 @@ extension Graphics.Color {
 			}
 			mask[row] = rowBits
 			
-			bitmap[row] = (foreground == 0 ? 0 : rowBits)
+			bitmap[row] = (foreground == 0 ? ~rowBits & 0xFF : rowBits)
 		}
 		
 		return (bitmap, mask)

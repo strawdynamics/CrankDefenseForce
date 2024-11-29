@@ -14,8 +14,6 @@ class ConfigScene: BaseScene {
 		}
 		
 		override func draw(bounds _: Rect, drawRect _: Rect) {
-			Graphics.pushContext(nil)
-			
 			Graphics.setFont(CdfFont.Nybble4)
 			Graphics.drawMode = .fillWhite
 			let textWidth = CdfFont.Nybble4.getTextWidth(for: version, tracking: 0)
@@ -23,8 +21,6 @@ class ConfigScene: BaseScene {
 				x: bounds.width - (Float(textWidth) + 4),
 				y: 2
 			))
-			
-			Graphics.popContext()
 		}
 	}
 	
@@ -35,7 +31,6 @@ class ConfigScene: BaseScene {
 	let versionSprite: VersionSprite
 	
 	override init() {
-				print("Hello from ConfigScene");
 //				let reader = PdxinfoReader(path: "pdxinfo")
 //				let pdxinfo = try! reader.read();
 //				print("vers \(pdxinfo[Utf8Key("version")] ?? "oh no")")

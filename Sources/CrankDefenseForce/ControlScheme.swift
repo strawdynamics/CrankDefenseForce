@@ -9,6 +9,21 @@ enum ControlScheme: CaseIterable {
 		}
 	}
 	
+	var description: String {
+		switch self {
+		case .standard: return """
+Turn: 🎣, ⬅️➡️
+Launch: ⒷⒶ
+Switch: ⬆️⬇️
+"""
+		case .leftyLauncher: return """
+Turn: 🎣, ⒷⒶ
+Launch: ⬅️➡️
+Switch: ⬆️⬇️
+"""
+		}
+	}
+	
 	var next: ControlScheme {
 		switch self {
 		case .standard: return .leftyLauncher

@@ -3,7 +3,7 @@ import PlaydateKit
 class Menu {
 	static let width = 140
 	static let height = 130
-	static let fadeDuration: Float = 0.1
+	static let fadeDuration: Float = 0.01
 	
 	var isFadingIn = false
 	var isFadingOut = false
@@ -90,8 +90,6 @@ class Menu {
 	private func draw() {
 		Graphics.pushContext(bitmap)
 		Graphics.clear(color: .clear)
-
-//		Graphics.drawRect(Rect(x: 0, y: 0, width: Self.width, height: Self.height), color: .white)
 		
 		Graphics.setFont(CdfFont.Jamma8x8Mono16)
 		Graphics.drawMode = .fillWhite
@@ -112,12 +110,12 @@ class Menu {
 			)
 		}
 		
-		// TODO: Draw fade
 		if isFadingIn || isFadingOut {
-			Graphics.fillRect(
-				Rect(x: 0, y: 0, width: Self.width, height: Self.height),
-				color: Graphics.Color.getBayer4x4FadeColor(foreground: 0, alpha: fadePct)
-			)
+			// FIXME: For some reason, sprites setting the draw mode causes this Graphics.fillRect to be overridden. Nothing to do with dither, even setting explicit black will draw white!!!
+//			Graphics.fillRect(
+//				Rect(x: 0, y: 0, width: Self.width, height: Self.height),
+//				color: .black //Graphics.Color.getBayer4x4FadeColor(foreground: 0, alpha: fadePct)
+//			)
 		}
 		
 		

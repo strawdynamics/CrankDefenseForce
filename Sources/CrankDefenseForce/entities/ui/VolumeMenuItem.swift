@@ -28,8 +28,6 @@ class VolumeMenuItem: ConfigMenuItem {
 		}
 		
 		override func draw(bounds _: Rect, drawRect _: Rect) {
-			Graphics.pushContext(nil)
-			
 			Graphics.setFont(CdfFont.NicoClean16)
 			Graphics.drawMode = .fillWhite
 			Graphics.drawText(
@@ -73,8 +71,6 @@ class VolumeMenuItem: ConfigMenuItem {
 					color: color
 				)
 			}
-			
-			Graphics.popContext()
 		}
 	}
 	
