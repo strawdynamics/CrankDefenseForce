@@ -88,8 +88,6 @@ class Menu {
 	}
 	
 	private func draw() {
-		Graphics.drawMode = .fillBlack
-		
 		Graphics.pushContext(bitmap)
 		Graphics.clear(color: .clear)
 		
@@ -116,7 +114,7 @@ class Menu {
 			// FIXME: For some reason, sprites setting the draw mode causes this Graphics.fillRect to be overridden. Nothing to do with dither, even setting explicit black will draw white!!!
 			Graphics.fillRect(
 				Rect(x: 0, y: 0, width: Self.width, height: Self.height),
-				color: .black //Graphics.Color.getBayer4x4FadeColor(foreground: 0, alpha: fadePct)
+				color: Graphics.Color.getBayer4x4FadeColor(foreground: 0, alpha: fadePct)
 			)
 		}
 		
