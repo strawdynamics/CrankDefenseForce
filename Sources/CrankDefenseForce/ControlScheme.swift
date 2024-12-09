@@ -12,14 +12,14 @@ enum ControlScheme: CaseIterable {
 	var description: String {
 		switch self {
 		case .standard: return """
-Turn: 🎣, ⬅️➡️
-Launch: ⒷⒶ
-Switch: ⬆️⬇️
+Turn: 🎣, ⬅️ ➡️
+Launch: Ⓑ Ⓐ
+Switch: ⬆️ ⬇️
 """
 		case .leftyLauncher: return """
-Turn: 🎣, ⒷⒶ
-Launch: ⬅️➡️
-Switch: ⬆️⬇️
+Turn: 🎣, Ⓑ Ⓐ
+Launch: ⬅️ ➡️
+Switch: ⬆️ ⬇️
 """
 		}
 	}

@@ -12,7 +12,7 @@ class GameplayScene: BaseScene {
 	}
 	
 	override func start() {
-		System.addMenuItem(title: "Main menu") {
+		System.addMenuItem(title: "Give up") {
 			game.scenePresenter.changeScene(
 				newScene: MainMenuScene(),
 				transition: CrtOutSceneTransition(),
