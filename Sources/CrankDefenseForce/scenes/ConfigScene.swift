@@ -8,17 +8,17 @@ class ConfigScene: BaseScene {
 			self.version = version
 			super.init()
 			center = Point(x: 1, y: 1)
-			setSize(width: 40, height: 10)
+			setSize(width: 50, height: 16)
 			moveTo(Point(x: 400, y: 240))
 			zIndex = 10
 		}
 		
 		override func draw(bounds _: Rect, drawRect _: Rect) {
-			Graphics.setFont(CdfFont.Nybble4)
+			Graphics.setFont(CdfFont.NicoPups16)
 			Graphics.drawMode = .fillWhite
-			let textWidth = CdfFont.Nybble4.getTextWidth(for: version, tracking: 0)
+			let textWidth = CdfFont.NicoPups16.getTextWidth(for: version, tracking: 0)
 			Graphics.drawText(version, at: bounds.origin + Point(
-				x: bounds.width - (Float(textWidth) + 4),
+				x: bounds.width - (Float(textWidth) + 2),
 				y: 2
 			))
 		}
@@ -31,10 +31,9 @@ class ConfigScene: BaseScene {
 	let versionSprite: VersionSprite
 	
 	override init() {
-//				let reader = PdxinfoReader(path: "pdxinfo")
-//				let pdxinfo = try! reader.read();
-//				print("vers \(pdxinfo[Utf8Key("version")] ?? "oh no")")
-		versionSprite = VersionSprite(version: "v TODO")
+		let reader = PdxinfoReader(path: "pdxinfo")
+		let pdxinfo = try! reader.read();
+		versionSprite = VersionSprite(version: pdxinfo[Utf8Key("version")]!)
 	}
 	
 	override func update() {

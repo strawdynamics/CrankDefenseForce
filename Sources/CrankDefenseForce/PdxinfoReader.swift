@@ -45,30 +45,24 @@ class PdxinfoReader {
 		let uint8Buffer = UnsafeBufferPointer<UInt8>(start: buffer.assumingMemoryBound(to: UInt8.self), count: bytesRead)
 		let pdxinfoString = String(decoding: uint8Buffer, as: Unicode.UTF8.self)
 		
-//		return [Utf8Key("test"): "stuff"]
 		return parse(pdxinfoString: pdxinfoString)
 	}
 	
 	private func parse(pdxinfoString: String) -> Dictionary<Utf8Key, String> {
 		var parsed: Dictionary<Utf8Key, String> = [:]
 		
-//		print("f \(pdxinfoString)")
-		
-		// FIXME: This line errors…
-//		let q = pdxinfoString.split(separator: "e")
-//		let q = pdxinfoString.firstIndex(of: "\n")
-//		let _ = pdxinfoString.split(separator: "\n")
-//		pdxinfoString.split(separator: "\n").forEach { line in
-//			if line.first == "#" {
-//				return
-//			}
-//			
-//			let parts = line.split(separator: "=", maxSplits: 1)
-//			
-//			if parts.count == 2 {
-//				parsed[Utf8Key(String(parts[0]))] = String(parts[1])
-//			}
-//		}
+		let _ = pdxinfoString.split(separator: "\n")
+		pdxinfoString.split(separator: "\n").forEach { line in
+			if line.first == "#" {
+				return
+			}
+			
+			let parts = line.split(separator: "=", maxSplits: 1)
+			
+			if parts.count == 2 {
+				parsed[Utf8Key(String(parts[0]))] = String(parts[1])
+			}
+		}
 		
 		return parsed
 	}
