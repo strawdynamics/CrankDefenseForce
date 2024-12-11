@@ -1,6 +1,6 @@
 import PlaydateKit
 
-class VolumeMenuItem: ConfigMenuItem {	
+class VolumeMenuItem: OptionsMenuItem {	
 	enum VolumeType {
 		case music
 		case sfx

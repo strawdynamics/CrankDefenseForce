@@ -1,7 +1,7 @@
 
 import PlaydateKit
 
-class ControlsMenuItem: ConfigMenuItem {
+class ControlsMenuItem: OptionsMenuItem {
 	enum VolumeType {
 		case music
 		case sfx
@@ -80,7 +80,7 @@ class ControlsMenuItem: ConfigMenuItem {
 			if detailsSpriteAnimator.ended {
 				self.detailsSpriteAnimator = nil
 				
-				if !isSelected {
+				if !isFocused {
 					detailsSprite.removeFromDisplayList()
 				}
 			}

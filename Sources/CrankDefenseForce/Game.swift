@@ -18,7 +18,9 @@ final class Game: PlaydateGame {
 		
 		self.scenePresenter.update()
 		
-		System.drawFPS()
+		if GameSettings.showFps {
+			System.drawFPS()
+		}
 		
 		return true
 	}

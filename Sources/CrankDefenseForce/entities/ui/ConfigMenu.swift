@@ -36,13 +36,17 @@ class ConfigMenu: BaseEntity {
 				volumeType: VolumeMenuItem.VolumeType.sfx,
 				entityStore: config.entityStore
 			)),
-			// TODO: FPS?
-			// TODO: More?
-//			ConfigMenuItem(ConfigMenuItem.Config(
-//				title: "Testo2",
-//				offsetX: offsetX,
-//				entityStore: config.entityStore
-//			)),
+			CheckmarkMenuItem(CheckmarkMenuItem.Config(
+				title: "Show FPS",
+				offsetX: offsetX,
+				entityStore: config.entityStore,
+				getChecked: { () -> Bool in
+					return GameSettings.showFps
+				},
+				toggleHandler: {() -> Void in
+					GameSettings.showFps = !GameSettings.showFps
+				}
+			)),
 		]
 		
 		super.init(config.entityStore)
@@ -53,8 +57,6 @@ class ConfigMenu: BaseEntity {
 	
 	override func update() {
 		updateYAnimator()
-		
-		updateInput()
 	}
 	
 	private func updateYAnimator() {
@@ -66,18 +68,6 @@ class ConfigMenu: BaseEntity {
 			if yAnimator.ended {
 				self.yAnimator = nil
 			}
-		}
-	}
-	
-	private func updateInput() {
-		let pushed = System.buttonState.pushed
-		
-		if pushed.contains(.left) {
-			menuItems[selectedItemIndex].prev()
-		} else if pushed.contains(.right) {
-			menuItems[selectedItemIndex].next()
-		} else if pushed.contains(.a) {
-			menuItems[selectedItemIndex].click()
 		}
 	}
 	

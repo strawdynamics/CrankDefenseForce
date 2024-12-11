@@ -1,9 +1,8 @@
 import PlaydateKit
 
+// abstract
 class ConfigMenuItem: BaseEntity {
 	static nonisolated(unsafe) let bgBitmapTable = try! Graphics.BitmapTable(path: "configMenuItemBg.png")
-	
-	static nonisolated(unsafe) let arrowsBitmapTable = try! Graphics.BitmapTable(path: "configMenuItemArrows.png")
 	
 	static let SELECTED_OFFSET_X: Float = 18
 	
@@ -53,15 +52,7 @@ class ConfigMenuItem: BaseEntity {
 	
 	let lineSprite = LineSprite()
 	
-	let leftSprite = PlaydateKit.Sprite.Sprite()
-	
-	var leftSpriteYAnimator: FloatAnimator?
-	
-	let rightSprite = PlaydateKit.Sprite.Sprite()
-	
-	var rightSpriteYAnimator: FloatAnimator?
-	
-	var isSelected = false
+	var isFocused = false
 	
 	var focusAnimator: FloatAnimator?
 	
@@ -71,72 +62,24 @@ class ConfigMenuItem: BaseEntity {
 		
 		super.init(config.entityStore)
 		
-		sprite.image = ConfigMenuItem.bgBitmapTable[0]
+		sprite.image = Self.bgBitmapTable[0]
 		
 		sprite.moveTo(Point(x: offsetX, y: 0))
 		lineSprite.moveTo(Point(x: 0, y: 0))
 	
 		lineSprite.addToDisplayList()
 		sprite.addToDisplayList()
-		
-		leftSprite.image = ConfigMenuItem.arrowsBitmapTable[0]
-		leftSprite.isVisible = false
-		leftSprite.addToDisplayList()
-		
-		rightSprite.image = ConfigMenuItem.arrowsBitmapTable[1]
-		rightSprite.isVisible = false
-		rightSprite.addToDisplayList()
 	}
 	
 	override func update() {
 		if let focusAnimator = focusAnimator {
 			focusAnimator.update()
 			
-			let alpha: Float = isSelected ? focusAnimator.currentPercent : 1 - focusAnimator.currentPercent
-			var overlayPattern = Graphics.Color.getBayer4x4FadePattern(foreground: 1, alpha: alpha)
-			
 			sprite.moveTo(Point(x: focusAnimator.currentValue, y: sprite.position.y))
 			lineSprite.moveTo(Point(x: 0, y: lineSprite.position.y))
 			
-			overlayPattern.0.withUnsafeMutableBufferPointer { ptr in
-				rightSprite.setStencilPattern(ptr.baseAddress!)
-				leftSprite.setStencilPattern(ptr.baseAddress!)
-			}
-			
-			leftSprite.moveTo(Point(x: focusAnimator.currentValue - 12, y: leftSprite.position.y))
-			rightSprite.moveTo(Point(x: focusAnimator.currentValue + 205, y: rightSprite.position.y))
-			
 			if focusAnimator.ended {
 				self.focusAnimator = nil
-				
-				if !isSelected {
-					leftSprite.isVisible = false
-					rightSprite.isVisible = false
-				}
-			}
-		}
-		
-		if let leftSpriteYAnimator = leftSpriteYAnimator {
-			leftSpriteYAnimator.update()
-			leftSprite.moveTo(Point(
-				x: leftSprite.position.x,
-				y: sprite.position.y + leftSpriteYAnimator.currentValue,
-			))
-			
-			if leftSpriteYAnimator.ended {
-				self.leftSpriteYAnimator = nil
-			}
-		}
-		
-		if let rightSpriteYAnimator = rightSpriteYAnimator {
-			rightSpriteYAnimator.update()
-			rightSprite.moveTo(Point(
-				x: rightSprite.position.x,
-				y: sprite.position.y + rightSpriteYAnimator.currentValue,
-			))
-			
-			if rightSpriteYAnimator.ended {
-				self.rightSpriteYAnimator = nil
 			}
 		}
 	}
@@ -144,19 +87,14 @@ class ConfigMenuItem: BaseEntity {
 	func moveTo(y: Float) {
 		sprite.moveTo(Point(x: sprite.position.x, y: y))
 		lineSprite.moveTo(Point(x: 0, y: y))
-		leftSprite.moveTo(Point(x: leftSprite.position.x, y: y))
-		rightSprite.moveTo(Point(x: rightSprite.position.x, y: y))
 	}
 	
 	func focus() {
-		if isSelected {
+		if isFocused {
 			return
 		}
-		isSelected = true
+		isFocused = true
 		sprite.image = ConfigMenuItem.bgBitmapTable[1]
-		
-		leftSprite.isVisible = true
-		rightSprite.isVisible = true
 		
 		focusAnimator = FloatAnimator(
 			duration: 0.2,
@@ -167,10 +105,10 @@ class ConfigMenuItem: BaseEntity {
 	}
 	
 	func blur() {
-		if !isSelected {
+		if !isFocused {
 			return
 		}
-		isSelected = false
+		isFocused = false
 		sprite.image = ConfigMenuItem.bgBitmapTable[0]
 		
 		focusAnimator = FloatAnimator(
@@ -179,28 +117,6 @@ class ConfigMenuItem: BaseEntity {
 			endValue: offsetX,
 			easingFn: EasingFn.basic(Ease.outQuad),
 		)
-	}
-	
-	func prev() {
-		leftSpriteYAnimator = FloatAnimator(
-			duration: 0.1,
-			startValue: 5,
-			endValue: 0,
-			easingFn: EasingFn.basic(Ease.outQuad),
-		)
-	}
-	
-	func next() {
-		rightSpriteYAnimator = FloatAnimator(
-			duration: 0.1,
-			startValue: 5,
-			endValue: 0,
-			easingFn: EasingFn.basic(Ease.outQuad),
-		)
-	}
-	
-	func click() {
-		//
 	}
 }
 

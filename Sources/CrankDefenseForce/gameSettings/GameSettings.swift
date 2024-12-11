@@ -19,6 +19,8 @@ class GameSettings {
 	
 	private static nonisolated(unsafe) var _controlScheme = ControlScheme.standard
 	
+	private static nonisolated(unsafe) var _showFps = false
+	
 	static var controlScheme: ControlScheme {
 		get {
 			return _controlScheme
@@ -26,6 +28,17 @@ class GameSettings {
 		
 		set(newValue) {
 			_controlScheme = newValue
+			writeToDisk()
+		}
+	}
+	
+	static var showFps: Bool {
+		get {
+			return _showFps
+		}
+		
+		set(newValue) {
+			_showFps = newValue
 			writeToDisk()
 		}
 	}
