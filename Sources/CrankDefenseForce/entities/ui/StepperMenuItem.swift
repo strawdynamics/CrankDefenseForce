@@ -1,7 +1,7 @@
 import PlaydateKit
 
 // abstract
-class OptionsMenuItem: ConfigMenuItem {
+class StepperMenuItem: ConfigMenuItem {
 	static nonisolated(unsafe) let arrowsBitmapTable = try! Graphics.BitmapTable(path: "configMenuItemArrows.png")
 	
 	let leftSprite = PlaydateKit.Sprite.Sprite()

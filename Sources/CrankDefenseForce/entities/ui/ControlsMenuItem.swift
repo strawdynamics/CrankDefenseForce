@@ -1,7 +1,7 @@
 
 import PlaydateKit
 
-class ControlsMenuItem: OptionsMenuItem {
+class ControlsMenuItem: StepperMenuItem {
 	enum VolumeType {
 		case music
 		case sfx
