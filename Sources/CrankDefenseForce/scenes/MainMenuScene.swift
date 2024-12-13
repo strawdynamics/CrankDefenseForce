@@ -123,11 +123,61 @@ class Menu {
 }
 
 class MainMenuScene: BaseScene {
+	static nonisolated(unsafe) let colonelBitmap = try! Graphics.Bitmap(path: "colonel.png")
+	
 	let entityStore = EntityStore()
 	
 	var menu: Menu?
 	
 	var exiting = false
+	
+	class ColonelSprite: PlaydateKit.Sprite.Sprite {
+		static let startOffX: Float = -160
+		static let endOffX: Float = -16
+		
+		var xAnimator: FloatAnimator?
+		
+		override init() {
+			super.init()
+			zIndex = 5
+			image = colonelBitmap
+			center = Point(x: 0, y: 0)
+			moveTo(Point(x: Self.startOffX, y: 0))
+			
+			animateIn()
+		}
+		
+		func animateIn() {
+			self.xAnimator = FloatAnimator(
+				duration: 0.8,
+				startValue: Self.startOffX,
+				endValue: Self.endOffX,
+				easingFn: EasingFn.overshoot(Ease.outBack),
+			)
+		}
+		
+		func animateOut() {
+			self.xAnimator = FloatAnimator(
+				duration: 0.25,
+				startValue: Self.endOffX,
+				endValue: Self.startOffX,
+				easingFn: EasingFn.overshoot(Ease.inBack),
+			)
+		}
+		
+		override func update() {
+			if let xAnimator = self.xAnimator {
+				xAnimator.update()
+				moveTo(Point(x: xAnimator.currentValue, y: position.y))
+				
+				if xAnimator.ended {
+					self.xAnimator = nil
+				}
+			}
+		}
+	}
+	
+	var colonelSprite = ColonelSprite()
 	
 	override func update() {
 		let pushed = System.buttonState.pushed
@@ -170,6 +220,8 @@ class MainMenuScene: BaseScene {
 			entityStore: entityStore,
 			backgroundType: .crt
 		)
+		
+		colonelSprite.addToDisplayList()
 	}
 	
 	override func start() {
@@ -198,6 +250,7 @@ class MainMenuScene: BaseScene {
 			)
 		})
 		
+		colonelSprite.animateOut()
 		exiting = true
 	}
 	
@@ -209,6 +262,7 @@ class MainMenuScene: BaseScene {
 			)
 		})
 		
+		colonelSprite.animateOut()
 		exiting = true
 	}
 	
@@ -220,6 +274,7 @@ class MainMenuScene: BaseScene {
 			)
 		})
 		
+		colonelSprite.animateOut()
 		exiting = true
 	}
 }
