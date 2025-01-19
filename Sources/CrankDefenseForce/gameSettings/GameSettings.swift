@@ -110,12 +110,11 @@ class GameSettings {
 		if GameSettingsReader.read() {
 //			print("READ SCHEME: \(GameSettingsReader.controlScheme)")
 //			_controlScheme = GameSettingsReader.controlScheme
-		} else {
-			// TODO: Write current (defaults) to disk
 		}
 	}
 	
 	private static func writeToDisk() {
-		// TODO: Write to disk
+		print("WTD")
+		GameSettingsWriter.write()
 	}
 }

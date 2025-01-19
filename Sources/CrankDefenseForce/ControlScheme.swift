@@ -9,6 +9,15 @@ enum ControlScheme: CaseIterable {
 		}
 	}
 	
+	var stringValue: String {
+		switch self {
+		case .standard:
+			return "standard"
+		case .leftyLauncher:
+			return "leftyLauncher"
+		}
+	}
+	
 	var description: String {
 		switch self {
 		case .standard: return """
