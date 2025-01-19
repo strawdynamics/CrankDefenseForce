@@ -78,4 +78,8 @@ class ConfigScene: BaseScene {
 			entityStore: entityStore,
 		))
 	}
+	
+	override func exit() {
+		GameSettings.writeToDisk()
+	}
 }

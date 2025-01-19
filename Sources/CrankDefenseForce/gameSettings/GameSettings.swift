@@ -28,7 +28,6 @@ class GameSettings {
 		
 		set(newValue) {
 			_controlScheme = newValue
-			writeToDisk()
 		}
 	}
 	
@@ -39,16 +38,29 @@ class GameSettings {
 		
 		set(newValue) {
 			_showFps = newValue
-			writeToDisk()
 		}
 	}
 	
 	static var musicVolume: Int {
-		return _musicVolume
+		get {
+			return _musicVolume
+		}
+		
+		// Prefer increase/decrease for use in UI. Used for save/load
+		set(newValue) {
+			_musicVolume = newValue
+		}
 	}
 	
 	static var sfxVolume: Int {
-		return _sfxVolume
+		get {
+			return _sfxVolume
+		}
+		
+		// Prefer increase/decrease for use in UI. Used for save/load
+		set(newValue) {
+			_sfxVolume = newValue
+		}
 	}
 	
 	static let MAX_VOLUME: Int = 10
@@ -60,8 +72,6 @@ class GameSettings {
 			res = .unchanged
 			_musicVolume = MAX_VOLUME
 		}
-		
-		writeToDisk()
 		
 		return res
 	}
@@ -75,8 +85,6 @@ class GameSettings {
 			_musicVolume = 0
 		}
 		
-		writeToDisk()
-		
 		return res
 	}
 	
@@ -87,8 +95,6 @@ class GameSettings {
 			res = .unchanged
 			_sfxVolume = MAX_VOLUME
 		}
-		
-		writeToDisk()
 		
 		return res
 	}
@@ -101,20 +107,14 @@ class GameSettings {
 			_sfxVolume = 0
 		}
 		
-		writeToDisk()
-		
 		return res
 	}
 	
 	private static func readFromDisk() {
-		if GameSettingsReader.read() {
-//			print("READ SCHEME: \(GameSettingsReader.controlScheme)")
-//			_controlScheme = GameSettingsReader.controlScheme
-		}
+		GameSettingsReader.read()
 	}
 	
-	private static func writeToDisk() {
-		print("WTD")
+	public static func writeToDisk() {
 		GameSettingsWriter.write()
 	}
 }

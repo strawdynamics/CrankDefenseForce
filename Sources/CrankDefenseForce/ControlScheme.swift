@@ -1,6 +1,14 @@
-enum ControlScheme: CaseIterable {
+enum ControlScheme {
 	case standard
 	case leftyLauncher
+	
+	static func fromString(_ input: String) -> ControlScheme? {
+		switch input.lowercased() {
+		case "standard": return .standard
+		case "leftylauncher": return .leftyLauncher
+		default: return nil
+		}
+	}
 	
 	var title: String {
 		switch self {

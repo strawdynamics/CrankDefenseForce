@@ -7,6 +7,7 @@ struct GameSettingsWriter {
 		let file = try! PlaydateKit.File.open(path: "gameSettings.json", mode: File.Options.write)
 		let pointer = UnsafeMutableRawPointer.allocate(byteCount: MemoryLayout<File.FileHandle>.size, alignment: MemoryLayout<File.FileHandle>.alignment)
 		pointer.storeBytes(of: file, as: File.FileHandle.self)
+		defer { pointer.deallocate() }
 		
 		// Set up encoder
 		var encoder = JSON.Encoder()
@@ -14,7 +15,7 @@ struct GameSettingsWriter {
 			encoder: &encoder,
 			writeFunc: GameSettingsWriter.writeStringFunc,
 			userdata: pointer,
-			pretty: false,
+			pretty: true,
 		)
 		
 		// Write the data
@@ -34,9 +35,7 @@ struct GameSettingsWriter {
 		
 		encoder.endTable(&encoder)
 		
-		// Clean up
 		try! file.close()
-		pointer.deallocate()
 		
 		return true
 	}
