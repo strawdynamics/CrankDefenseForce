@@ -66,12 +66,13 @@ class RocketSilo: BaseEntity {
 	
 	override func update() {
 		if let animator = rocketPrepAnimator {
+			animator.update()
+			
 			self.rocket!.moveTo(position: Point(
 				x: self.rocket!.x,
 				y: animator.currentValue
 			))
 			
-			animator.update()
 			if animator.ended {
 				rocketPrepAnimator = nil
 				readyForLaunch = true
@@ -125,7 +126,7 @@ class RocketSilo: BaseEntity {
 			duration: RocketSilo.BASE_ROCKET_PREP_DURATION,
 			startValue: RocketSilo.SILO_SPAWN_Y,
 			endValue: RocketSilo.SILO_SPAWN_Y - RocketSilo.SILO_SPAWN_MOVEMENT,
-			easingFn: EasingFn.overshoot(Ease.inBack),
+			easingFn: EasingFn.overshoot(Ease.inBack)
 		)
 	}
 	
