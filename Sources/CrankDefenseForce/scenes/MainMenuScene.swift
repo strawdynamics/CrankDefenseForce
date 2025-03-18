@@ -148,21 +148,21 @@ class MainMenuScene: BaseScene {
 		}
 		
 		func animateIn() {
-			self.xAnimator = FloatAnimator(
+			self.xAnimator = FloatAnimator(FloatAnimator.Config(
 				duration: 0.8,
 				startValue: Self.startOffX,
 				endValue: Self.endOffX,
 				easingFn: EasingFn.overshoot(Ease.outBack),
-			)
+			))
 		}
 		
 		func animateOut() {
-			self.xAnimator = FloatAnimator(
+			self.xAnimator = FloatAnimator(FloatAnimator.Config(
 				duration: 0.25,
 				startValue: Self.endOffX,
 				endValue: Self.startOffX,
 				easingFn: EasingFn.overshoot(Ease.inBack),
-			)
+			))
 		}
 		
 		override func update() {

@@ -115,12 +115,12 @@ class StepperMenuItem: ConfigMenuItem {
 			return
 		}
 		
-		arrowFocusAnimator = FloatAnimator(
+		arrowFocusAnimator = FloatAnimator(FloatAnimator.Config(
 			duration: 0.2,
 			startValue: offsetX,
 			endValue: offsetX + ConfigMenuItem.SELECTED_OFFSET_X,
 			easingFn: EasingFn.basic(Ease.outQuad),
-		)
+		))
 		
 		super.focus()
 		
@@ -133,31 +133,31 @@ class StepperMenuItem: ConfigMenuItem {
 			return
 		}
 		
-		arrowFocusAnimator = FloatAnimator(
+		arrowFocusAnimator = FloatAnimator(FloatAnimator.Config(
 			duration: 0.5,
 			startValue: offsetX + ConfigMenuItem.SELECTED_OFFSET_X,
 			endValue: offsetX,
 			easingFn: EasingFn.basic(Ease.outQuad),
-		)
+		))
 		
 		super.blur()
 	}
 	
 	func prev() {
-		leftSpriteYAnimator = FloatAnimator(
+		leftSpriteYAnimator = FloatAnimator(FloatAnimator.Config(
 			duration: 0.1,
 			startValue: 5,
 			endValue: 0,
 			easingFn: EasingFn.basic(Ease.outQuad),
-		)
+		))
 	}
 	
 	func next() {
-		rightSpriteYAnimator = FloatAnimator(
+		rightSpriteYAnimator = FloatAnimator(FloatAnimator.Config(
 			duration: 0.1,
 			startValue: 5,
 			endValue: 0,
 			easingFn: EasingFn.basic(Ease.outQuad),
-		)
+		))
 	}
 }

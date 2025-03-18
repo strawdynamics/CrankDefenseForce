@@ -1,8 +1,8 @@
 import PlaydateKit
 
-nonisolated(unsafe) let rocketBitmapTable = try! Graphics.BitmapTable(path: "rocket.png")
-
 class Rocket: BaseEntity {
+	nonisolated(unsafe) static let rocketBitmapTable = try! Graphics.BitmapTable(path: "rocket.png")
+	
 	struct RemoveEventPayload {
 		var rocket: Rocket
 	}
@@ -28,13 +28,21 @@ class Rocket: BaseEntity {
 	
 	var sprite = RocketSprite()
 	
+	var exhaust: RocketExhaust?
+	
 	private(set) var thrust: Float = 0.0
 	
 	var angle: Float
 	
+	var roundedAngle: Float
+	
 	var sin: Float = 0.0
 	
 	var cos: Float = 0.0
+	
+	var roundedSin: Float = 0.0
+	
+	var roundedCos: Float = 0.0
 	
 	var lastImageIndex: Int = 0
 	
@@ -43,7 +51,7 @@ class Rocket: BaseEntity {
 	}
 	
 	init(_ config: Config) {
-		let bitmap = rocketBitmapTable[0]!
+		let bitmap = Self.rocketBitmapTable[0]!
 		let (bitmapWidth, bitmapHeight, _) = bitmap.getData(mask: nil, data: nil)
 		
 		sprite.image = bitmap
@@ -58,9 +66,15 @@ class Rocket: BaseEntity {
 		sprite.addToDisplayList()
 		
 		angle = config.angle
+		roundedAngle = config.angle.roundToNearest(15.0)
 		thrust = config.thrust
 		
 		super.init(config.entityStore)
+		
+		exhaust = RocketExhaust(RocketExhaust.Config(
+			rocket: self,
+			entityStore: config.entityStore
+		))
 		
 		sprite.rocketId = id
 		
@@ -102,11 +116,10 @@ class Rocket: BaseEntity {
 	}
 	
 	func setImage() {
-		let roundedAngle = Int(angle.roundToNearest(15.0))
-		let newImageIndex = ((roundedAngle % 360) / 15 + 24) % 24
+		let newImageIndex = ((Int(roundedAngle) % 360) / 15 + 24) % 24
 		
 		if newImageIndex != lastImageIndex {
-			let bitmap = rocketBitmapTable[newImageIndex]!
+			let bitmap = Self.rocketBitmapTable[newImageIndex]!
 			sprite.image = bitmap
 			lastImageIndex = newImageIndex
 		}
@@ -178,6 +191,8 @@ class Rocket: BaseEntity {
 	
 	func remove() {
 		sprite.removeFromDisplayList()
+		entityStore.remove(exhaust!)
+		exhaust = nil
 
 		Self.removeEmitter.emit(RemoveEventPayload(
 			rocket: self,
@@ -210,5 +225,10 @@ class Rocket: BaseEntity {
 		let radAngle = (angle - 90.0).toRadians()
 		cos = cosf(radAngle)
 		sin = sinf(radAngle)
+		
+		roundedAngle = angle.roundToNearest(15.0)
+		let roundedRadAngle = (roundedAngle - 90.0).toRadians()
+		roundedCos = cosf(roundedRadAngle)
+		roundedSin = sinf(roundedRadAngle)
 	}
 }

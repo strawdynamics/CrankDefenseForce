@@ -122,12 +122,12 @@ class RocketSilo: BaseEntity {
 	private func prepareNextRocket() {
 		spawnRocket(at: Point(x: spawnX, y: RocketSilo.SILO_SPAWN_Y))
 		
-		rocketPrepAnimator = FloatAnimator(
+		rocketPrepAnimator = FloatAnimator(FloatAnimator.Config(
 			duration: RocketSilo.BASE_ROCKET_PREP_DURATION,
 			startValue: RocketSilo.SILO_SPAWN_Y,
 			endValue: RocketSilo.SILO_SPAWN_Y - RocketSilo.SILO_SPAWN_MOVEMENT,
 			easingFn: EasingFn.overshoot(Ease.inBack)
-		)
+		))
 	}
 	
 	private func spawnInitialRocket() {

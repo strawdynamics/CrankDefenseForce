@@ -105,21 +105,21 @@ class ControlsMenuItem: StepperMenuItem {
 	override func focus() {
 		super.focus()
 		
-		detailsSpriteAnimator = FloatAnimator(
+		detailsSpriteAnimator = FloatAnimator(FloatAnimator.Config(
 			duration: 0.3,
 			startValue: 0,
 			endValue: 1,
 			easingFn: EasingFn.basic(Ease.outQuad),
-		)
+		))
 	}
 	
 	override func blur() {
 		super.blur()
-		detailsSpriteAnimator = FloatAnimator(
+		detailsSpriteAnimator = FloatAnimator(FloatAnimator.Config(
 			duration: 0.3,
 			startValue: 1,
 			endValue: 0,
 			easingFn: EasingFn.basic(Ease.outQuad),
-		)
+		))
 	}
 }

@@ -96,12 +96,12 @@ class ConfigMenuItem: BaseEntity {
 		isFocused = true
 		sprite.image = ConfigMenuItem.bgBitmapTable[1]
 		
-		focusAnimator = FloatAnimator(
+		focusAnimator = FloatAnimator(FloatAnimator.Config(
 			duration: 0.2,
 			startValue: offsetX,
 			endValue: offsetX + ConfigMenuItem.SELECTED_OFFSET_X,
 			easingFn: EasingFn.basic(Ease.outQuad),
-		)
+		))
 	}
 	
 	func blur() {
@@ -111,12 +111,12 @@ class ConfigMenuItem: BaseEntity {
 		isFocused = false
 		sprite.image = ConfigMenuItem.bgBitmapTable[0]
 		
-		focusAnimator = FloatAnimator(
+		focusAnimator = FloatAnimator(FloatAnimator.Config(
 			duration: 0.5,
 			startValue: offsetX + ConfigMenuItem.SELECTED_OFFSET_X,
 			endValue: offsetX,
 			easingFn: EasingFn.basic(Ease.outQuad),
-		)
+		))
 	}
 }
 

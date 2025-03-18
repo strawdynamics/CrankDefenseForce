@@ -47,12 +47,12 @@ class Explosion: BaseEntity {
 	init(_ config: Config) {
 		self.maxRadius = config.maxRadius
 		
-		self.sizeAnimator = FloatAnimator(
+		self.sizeAnimator = FloatAnimator(FloatAnimator.Config(
 			duration: Explosion.DURATION * 0.5,
 			startValue: Explosion.STARTING_RADIUS,
 			endValue: self.maxRadius,
 			easingFn: EasingFn.basic(Ease.outQuad),
-		)
+		))
 		
 		super.init(config.entityStore)
 		
@@ -73,12 +73,12 @@ class Explosion: BaseEntity {
 			if state == .expanding {
 				state = .collapsing
 				
-				self.sizeAnimator = FloatAnimator(
+				self.sizeAnimator = FloatAnimator(FloatAnimator.Config(
 					duration: Explosion.DURATION * 0.5,
 					startValue: self.maxRadius,
 					endValue: 0,
 					easingFn: EasingFn.basic(Ease.inQuad),
-				)
+				))
 			} else {
 				entityStore.remove(self)
 			}

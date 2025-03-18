@@ -13,20 +13,26 @@ class FloatAnimator {
 	
 	public private(set) var ended: Bool = false
 	
+	public private(set) var loop: Bool
+	
 	public var currentPercent: Float {
 		return currentTime / duration
 	}
 	
-	init(
-		duration: Float,
-		startValue: Float,
-		endValue: Float,
-		easingFn: EasingFn,
-	) {
-		self.duration = duration
-		self.startValue = startValue
-		self.endValue = endValue
-		self.easingFn = easingFn
+	struct Config {
+		var duration: Float
+		var startValue: Float
+		var endValue: Float
+		var easingFn: EasingFn
+		var loop: Bool = false
+	}
+	
+	init(_ config: Config) {
+		self.duration = config.duration
+		self.startValue = config.startValue
+		self.endValue = config.endValue
+		self.easingFn = config.easingFn
+		self.loop = config.loop
 	}
 	
 	func update() {
@@ -37,7 +43,11 @@ class FloatAnimator {
 		currentTime += Time.deltaTime
 		
 		if currentTime >= duration {
-			ended = true
+			if loop {
+				currentTime = currentTime.truncatingRemainder(dividingBy: duration)
+			} else {
+				ended = true
+			}
 		}
 		
 		if (ended) {
