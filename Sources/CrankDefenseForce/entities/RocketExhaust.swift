@@ -9,7 +9,10 @@ class RocketExhaust : BaseEntity {
 	
 	var sprite = Sprite.Sprite()
 	
-	var rocket: Rocket
+	var rocketPtr: Int
+	var rocket: Rocket {
+		return unsafeBitCast(rocketPtr, to: Rocket.self)
+	}
 	
 	var frameAnimator: FloatAnimator
 	
@@ -19,7 +22,7 @@ class RocketExhaust : BaseEntity {
 	}
 	
 	init(_ config: Config) {
-		rocket = config.rocket
+		rocketPtr = unsafeBitCast(config.rocket, to: Int.self)
 		
 		frameAnimator = FloatAnimator(FloatAnimator.Config(
 			duration: 0.4,
