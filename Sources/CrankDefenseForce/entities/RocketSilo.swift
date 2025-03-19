@@ -1,12 +1,17 @@
 import PlaydateKit
 
-nonisolated(unsafe) let siloBBitmap = try! Graphics.Bitmap(path: "siloB.png")
-
-nonisolated(unsafe) let siloABitmap = try! Graphics.Bitmap(path: "siloA.png")
-
-let DEFAULT_THRUST: Float = 42.0;
 
 class RocketSilo: BaseEntity {
+	static let DEFAULT_THRUST: Float = 42.0;
+	
+	nonisolated(unsafe) static let siloBBitmap = try! Graphics.Bitmap(path: "siloB.png")
+
+	nonisolated(unsafe) static let siloABitmap = try! Graphics.Bitmap(path: "siloA.png")
+	
+	nonisolated(unsafe) static let siloLeftBitmap = try! Graphics.Bitmap(path: "siloLeft.png")
+
+	nonisolated(unsafe) static let siloRightBitmap = try! Graphics.Bitmap(path: "siloRight.png")
+	
 	struct LaunchEventPayload {
 		var rocket: Rocket
 	}
@@ -48,11 +53,11 @@ class RocketSilo: BaseEntity {
 		
 		switch config.siloType {
 		case .b:
-			sprite.image = siloBBitmap
+			sprite.image = GameSettings.controlScheme == .standard ? Self.siloBBitmap : Self.siloLeftBitmap
 			sprite.center = Point(x: 0.0, y: 1.0)
 			sprite.moveTo(Point(x: 0.0, y: 240.0))
 		case .a:
-			sprite.image = siloABitmap
+			sprite.image = GameSettings.controlScheme == .standard ? Self.siloABitmap : Self.siloRightBitmap
 			sprite.center = Point(x: 1.0, y: 1.0)
 			sprite.moveTo(Point(x: 400.0, y: 240.0))
 		}
@@ -95,7 +100,7 @@ class RocketSilo: BaseEntity {
 			readyForLaunch = false
 			rocket.sprite.collisionsEnabled = true
 			rocket.sprite.zIndex = 30
-			rocket.setThrust(newThrust: DEFAULT_THRUST)
+			rocket.setThrust(newThrust: Self.DEFAULT_THRUST)
 			
 			Self.launchEmitter.emit(LaunchEventPayload(rocket: rocket))
 			

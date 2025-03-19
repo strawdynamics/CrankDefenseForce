@@ -56,4 +56,12 @@ class RocketExhaust : BaseEntity {
 		
 		sprite.moveTo(Point(x: x, y: y))
 	}
+	
+	func show() {
+		sprite.isVisible = true
+	}
+	
+	func hide() {
+		sprite.isVisible = false
+	}
 }

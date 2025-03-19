@@ -86,9 +86,9 @@ class Rocket: BaseEntity {
 		super.update()
 		
 		if thrust == 0.0 {
-			// TODO: Hide exhaust
+			exhaust?.hide()
 		} else {
-			// TODO: Show exhaust
+			exhaust?.show()
 			
 			let deltaX = thrust * Time.deltaTime * cos
 			let deltaY = thrust * Time.deltaTime * sin

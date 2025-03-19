@@ -2,9 +2,11 @@ import PlaydateKit
 
 nonisolated(unsafe) private let SCREEN_CENTER = Point(x: 200.0, y: 120.0)
 
-private let CRANK_COEFFICIENT: Float = 0.3;
-
 class PlayerController: BaseEntity {
+	private static let CRANK_COEFFICIENT: Float = 0.3;
+	
+	private static let DPAD_TURN_DEGREES_PER_SECOND: Float = 360.0;
+	
 	enum PlayerInput {
 		case launchSiloB
 		case launchSiloA
@@ -99,10 +101,19 @@ class PlayerController: BaseEntity {
 	
 	private func updateInputs() {
 		inputs.removeAll()
-		// TODO: Base this on user settings
 		
+		switch GameSettings.controlScheme {
+		case .standard:
+			updateStandardInputs()
+		case .leftyLauncher:
+			updateLeftyLauncherInputs()
+		}
+	}
+	
+	private func updateStandardInputs() {
 		let pushed = System.buttonState.pushed
 		
+		// Launch
 		if pushed.contains(.b) {
 			inputs.append(.launchSiloB)
 		}
@@ -111,16 +122,61 @@ class PlayerController: BaseEntity {
 			inputs.append(.launchSiloA)
 		}
 		
-		if pushed.contains(.left) {
+		// Switch
+		if pushed.contains(.down) {
 			inputs.append(.selectPreviousRocket)
-		} else if pushed.contains(.right) {
+		} else if pushed.contains(.up) {
 			inputs.append(.selectNextRocket)
 		}
 		
+		// Turn
+		let current = System.buttonState.current
+		
+		if current.contains(.left) {
+			inputs.append(.turnRocket(Time.deltaTime * -Self.DPAD_TURN_DEGREES_PER_SECOND))
+		} else if current.contains(.right) {
+			inputs.append(.turnRocket(Time.deltaTime * Self.DPAD_TURN_DEGREES_PER_SECOND))
+		}
+		
+		updateCrankInput()
+	}
+	
+	private func updateLeftyLauncherInputs() {
+		let pushed = System.buttonState.pushed
+		
+		// Launch
+		if pushed.contains(.left) {
+			inputs.append(.launchSiloB)
+		}
+		
+		if pushed.contains(.right) {
+			inputs.append(.launchSiloA)
+		}
+		
+		// Switch
+		if pushed.contains(.down) {
+			inputs.append(.selectPreviousRocket)
+		} else if pushed.contains(.up) {
+			inputs.append(.selectNextRocket)
+		}
+		
+		// Turn
+		let current = System.buttonState.current
+		
+		if current.contains(.b) {
+			inputs.append(.turnRocket(Time.deltaTime * -Self.DPAD_TURN_DEGREES_PER_SECOND))
+		} else if current.contains(.a) {
+			inputs.append(.turnRocket(Time.deltaTime * Self.DPAD_TURN_DEGREES_PER_SECOND))
+		}
+		
+		updateCrankInput()
+	}
+	
+	private func updateCrankInput() {
 		let crankChange = System.crankChange
 		
 		if crankChange != 0.0 {
-			inputs.append(.turnRocket(crankChange * CRANK_COEFFICIENT))
+			inputs.append(.turnRocket(crankChange * Self.CRANK_COEFFICIENT))
 		}
 	}
 	
