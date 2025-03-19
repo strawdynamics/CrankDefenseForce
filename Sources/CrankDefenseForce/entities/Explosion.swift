@@ -1,17 +1,18 @@
 import PlaydateKit
 
 class Explosion: BaseEntity {
-	static let STARTING_RADIUS: Float = 5
-	static let DURATION: Float = 1.8
+	static let STARTING_RADIUS: Float = 8
 	
 	struct Config {
 		let position: Point
 		let maxRadius: Float
+		let duration: Float = 1.8
 		let entityStore: EntityStore
 	}
 	
 	class ExplosionSprite: Sprite.Sprite {
 		var radius: Float = 0
+		var alpha: Float = 0
 		
 		override func draw(bounds _: Rect, drawRect _: Rect) {
 			Graphics.fillEllipse(
@@ -23,8 +24,7 @@ class Explosion: BaseEntity {
 				),
 				startAngle: 0,
 				endAngle: 360,
-				// TODO: Fade
-				color: Graphics.Color.getBayer4x4FadeColor(foreground: 0, alpha: 0.5),
+				color: Graphics.Color.getBayer4x4FadeColor(foreground: 0, alpha: alpha),
 			)
 		}
 	}
@@ -38,20 +38,32 @@ class Explosion: BaseEntity {
 	
 	let maxRadius: Float
 	
+	let duration: Float
+	
 	var currentRadius: Float = Explosion.STARTING_RADIUS
 
 	var sizeAnimator: FloatAnimator
+	
+	var alphaAnimator: FloatAnimator
 	
 	var state: State = .expanding
 	
 	init(_ config: Config) {
 		self.maxRadius = config.maxRadius
+		self.duration = config.duration
 		
 		self.sizeAnimator = FloatAnimator(FloatAnimator.Config(
-			duration: Explosion.DURATION * 0.5,
+			duration: self.duration * 0.5,
 			startValue: Explosion.STARTING_RADIUS,
 			endValue: self.maxRadius,
 			easingFn: EasingFn.basic(Ease.outQuad),
+		))
+		
+		self.alphaAnimator = FloatAnimator(FloatAnimator.Config(
+			duration: self.duration * 0.5,
+			startValue: 0.7,
+			endValue: 0.4,
+			easingFn: EasingFn.basic(Ease.inBounce),
 		))
 		
 		super.init(config.entityStore)
@@ -66,18 +78,27 @@ class Explosion: BaseEntity {
 	
 	override func update() {
 		sizeAnimator.update()
+		alphaAnimator.update()
 		
 		sprite.radius = sizeAnimator.currentValue
+		sprite.alpha = alphaAnimator.currentValue
 		
 		if sizeAnimator.ended {
 			if state == .expanding {
 				state = .collapsing
 				
 				self.sizeAnimator = FloatAnimator(FloatAnimator.Config(
-					duration: Explosion.DURATION * 0.5,
+					duration: self.duration * 0.5,
 					startValue: self.maxRadius,
 					endValue: 0,
 					easingFn: EasingFn.basic(Ease.inQuad),
+				))
+				
+				self.alphaAnimator = FloatAnimator(FloatAnimator.Config(
+					duration: self.duration * 0.5,
+					startValue: 0.4,
+					endValue: 0,
+					easingFn: EasingFn.basic(Ease.inOutQuad),
 				))
 			} else {
 				entityStore.remove(self)
