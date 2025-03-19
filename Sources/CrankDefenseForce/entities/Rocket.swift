@@ -24,6 +24,7 @@ class Rocket: BaseEntity {
 		var angle: Float
 		var thrust: Float = 0.0
 		var entityStore: EntityStore
+		var owner: Owner
 	}
 	
 	var sprite = RocketSprite()
@@ -50,7 +51,11 @@ class Rocket: BaseEntity {
 		return sprite.position
 	}
 	
+	let owner: Owner
+	
 	init(_ config: Config) {
+		owner = config.owner
+		
 		let bitmap = Self.rocketBitmapTable[0]!
 		let (bitmapWidth, bitmapHeight, _) = bitmap.getData(mask: nil, data: nil)
 		
@@ -161,32 +166,39 @@ class Rocket: BaseEntity {
 				continue
 			}
 			
-			print("ALPHAHIT!!")
-			
-			explode()
-			
+//			print("ALPHAHIT!!")
+						
 			if let overlappingRocketSprite = overlappingSprite as? RocketSprite {
 				handleCollisionWith(rocketSprite: overlappingRocketSprite)
 			} else if let overlappingBuildingSprite = overlappingSprite as? Building.BuildingSprite {
 				handleCollisionWith(buildingSprite: overlappingBuildingSprite)
 			} else {
+				explode()
 				print("Collided with unknown object \(overlappingSprite.collisionsEnabled)")
 			}
 		}
 	}
 	
 	func handleCollisionWith(rocketSprite: RocketSprite) {
-		guard let otherRocket = entityStore.get(rocketSprite.rocketId) else { return }
-		
-		print("HIT ANOTHER ROCKET!!!!! \(id), \(otherRocket.id)")
+		guard let otherRocket = entityStore.get(rocketSprite.rocketId) as? Rocket else { return }
+	
+		if owner == .cpu && otherRocket.owner == .cpu {
+			// noop, CPU rockets don't collide with each other
+		} else {
+			explode()
+			otherRocket.remove()
+		}
 	}
 	
 	func handleCollisionWith(buildingSprite: Building.BuildingSprite) {
-		guard let buildingEnt = entityStore.get(buildingSprite.buildingId) else { return }
-		
-		if let building = buildingEnt as? Building {
-			building.attemptDestroy()
+		if owner == .player {
+			// Player rockets don't collide with buildings
+			return
 		}
+		guard let building = entityStore.get(buildingSprite.buildingId) as? Building else { return }
+		
+		explode()
+		building.attemptDestroy()
 	}
 	
 	func remove() {
@@ -197,8 +209,6 @@ class Rocket: BaseEntity {
 		Self.removeEmitter.emit(RemoveEventPayload(
 			rocket: self,
 		))
-
-		// TODO: Remove exhaust
 	}
 	
 	func explode() {

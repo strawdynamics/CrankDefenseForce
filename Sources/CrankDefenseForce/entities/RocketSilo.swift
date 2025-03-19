@@ -146,7 +146,8 @@ class RocketSilo: BaseEntity {
 		self.rocket = Rocket(Rocket.Config(
 			position: at,
 			angle: 0.0,
-			entityStore: self.entityStore
+			entityStore: self.entityStore,
+			owner: .player
 		))
 		self.rocket?.sprite.collisionsEnabled = false
 	}
