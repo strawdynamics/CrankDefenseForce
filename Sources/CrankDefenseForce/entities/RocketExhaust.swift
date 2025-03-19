@@ -42,6 +42,10 @@ class RocketExhaust : BaseEntity {
 		sprite.addToDisplayList()
 	}
 	
+	deinit {
+		deactivate()
+	}
+	
 	override func update() {
 		super.update()
 		

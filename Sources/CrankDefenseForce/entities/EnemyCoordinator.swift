@@ -18,7 +18,9 @@ class EnemyCoordinator: BaseEntity {
 	
 	private static let difficultyLevels: [DifficultyLevel] = [
 		DifficultyLevel(
-			baseSpawnInterval: 5.0,
+//			baseSpawnInterval: 5.0, // previous easiest
+			baseSpawnInterval: 1.25, // previous hardest
+//			baseSpawnInterval: 0.5, // too many!
 			spawnWeights: [
 				.rocket: 100,
 			]
@@ -111,8 +113,8 @@ class EnemyCoordinator: BaseEntity {
 		}
 		let buildingPos = targetBuilding.sprite.position
 				
-		let down = Vector2D(x: 0, y: -1)
-		let vecToTarget = Vector2D(x: buildingPos.x - pos.x, y: buildingPos.y - pos.y).normalized()
+		let down = Vector2(x: 0, y: -1)
+		let vecToTarget = Vector2(x: buildingPos.x - pos.x, y: buildingPos.y - pos.y).normalized()
 		let angleToTarget = down.angle(with: vecToTarget).toDegrees()
 				
 		let _ = Rocket(Rocket.Config(
