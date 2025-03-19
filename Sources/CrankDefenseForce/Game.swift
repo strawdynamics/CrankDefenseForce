@@ -13,7 +13,6 @@ final class Game: PlaydateGame {
 	func update() -> Bool {
 		Time.updateDeltaTime()
 		
-		Graphics.clear()
 		Sprite.updateAndDrawDisplayListSprites()
 		
 		self.scenePresenter.update()
