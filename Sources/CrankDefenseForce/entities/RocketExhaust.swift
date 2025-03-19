@@ -5,6 +5,8 @@ import PlaydateKit
 class RocketExhaust : BaseEntity {
 	nonisolated(unsafe) static let rocketExhaustBitmapTable = try! Graphics.BitmapTable(path: "rocketExhaust.png")
 	
+	nonisolated(unsafe) static let engineSfx = RocketEngineSfx()
+	
 	static let distance: Float = 9
 	
 	var sprite = Sprite.Sprite()
@@ -15,6 +17,8 @@ class RocketExhaust : BaseEntity {
 	}
 	
 	var frameAnimator: FloatAnimator
+	
+	var active = false
 	
 	struct Config {
 		var rocket: Rocket
@@ -36,7 +40,7 @@ class RocketExhaust : BaseEntity {
 		
 		sprite.image = Self.rocketExhaustBitmapTable[0]
 		sprite.addToDisplayList()
-	} 
+	}
 	
 	override func update() {
 		super.update()
@@ -57,11 +61,25 @@ class RocketExhaust : BaseEntity {
 		sprite.moveTo(Point(x: x, y: y))
 	}
 	
-	func show() {
+	func activate() {
+		if active {
+			return
+		}
+		active = true
+		
+		Self.engineSfx.incActiveRockets()
+		
 		sprite.isVisible = true
 	}
 	
-	func hide() {
+	func deactivate() {
+		if !active {
+			return
+		}
+		active = false
+		
+		Self.engineSfx.decActiveRockets()
+		
 		sprite.isVisible = false
 	}
 }

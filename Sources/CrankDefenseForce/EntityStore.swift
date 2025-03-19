@@ -32,4 +32,6 @@ class EntityStore {
 			$0.id == entityId
 		}
 	}
+	
+	// TODO: iterate entities?
 }

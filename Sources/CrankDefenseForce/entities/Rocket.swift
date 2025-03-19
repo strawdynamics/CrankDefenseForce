@@ -91,9 +91,9 @@ class Rocket: BaseEntity {
 		super.update()
 		
 		if thrust == 0.0 {
-			exhaust?.hide()
+			exhaust?.deactivate()
 		} else {
-			exhaust?.show()
+			exhaust?.activate()
 			
 			let deltaX = thrust * Time.deltaTime * cos
 			let deltaY = thrust * Time.deltaTime * sin
@@ -131,6 +131,10 @@ class Rocket: BaseEntity {
 	}
 	
 	func updateOob() {
+		if owner != .player {
+			return
+		}
+		
 		let pos = position
 		if pos.x < -20 || pos.x > 420 || pos.y < -20 || pos.y > 260 {
 			remove()
@@ -203,6 +207,7 @@ class Rocket: BaseEntity {
 	
 	func remove() {
 		sprite.removeFromDisplayList()
+		exhaust?.deactivate()
 		entityStore.remove(exhaust!)
 		exhaust = nil
 

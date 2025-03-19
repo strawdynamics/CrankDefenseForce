@@ -1,7 +1,7 @@
 import PlaydateKit
 
 class City: BaseEntity {
-	var buildings: [Building] = []
+	private(set) var buildings: [Building] = []
 	
 	struct Config {
 		let groundHeight: Float

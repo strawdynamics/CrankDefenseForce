@@ -18,18 +18,19 @@ class RocketEngineSfx {
 		engineNoise2.setWaveform(.noise)
 		engineNoise2.setAttackTime(0.1)
 		engineNoise2.setReleaseTime(0.1)
-		
-		let _ = RocketSilo.launchEmitter.on(handleRocketLaunch)
-		let _ = Rocket.removeEmitter.on(handleRocketRemove)
 	}
 	
-	private func handleRocketLaunch(payload: RocketSilo.LaunchEventPayload) {
+	func incActiveRockets() {
 		activeRocketsCount += 1
 		updateNoise()
 	}
 	
-	private func handleRocketRemove(payload: Rocket.RemoveEventPayload) {
+	func decActiveRockets() {
 		activeRocketsCount -= 1
+		if activeRocketsCount < 0 {
+			activeRocketsCount = 0
+		}
+		
 		updateNoise()
 	}
 	

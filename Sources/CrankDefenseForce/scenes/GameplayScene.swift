@@ -20,6 +20,8 @@ class GameplayScene: BaseScene {
 			
 			System.removeAllMenuItems()
 		}
+		
+		gameRunner?.start()
 	}
 	
 	override func exit() {

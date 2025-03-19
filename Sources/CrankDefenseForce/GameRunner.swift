@@ -5,8 +5,8 @@ nonisolated(unsafe) let groundBitmap = try! Graphics.Bitmap(path: "ground.png")
 class GameRunner {
 	let entityStore = EntityStore()
 	
-	let rocketEngineSfx = RocketEngineSfx()
-	
+	let enemyCoordinator: EnemyCoordinator
+		
 	let playerController: PlayerController
 	
 	let siloB: RocketSilo
@@ -19,15 +19,23 @@ class GameRunner {
 		playerController = PlayerController(entityStore)
 		
 		city = City(City.Config(
-			groundHeight: 12.0, entityStore: entityStore
+			groundHeight: 12.0,
+			entityStore: entityStore
+		))
+		
+		enemyCoordinator = EnemyCoordinator(EnemyCoordinator.Config(
+			entityStore: entityStore,
+			city: city
 		))
 		
 		siloB = RocketSilo(RocketSilo.Config(
-			siloType: .b, entityStore: entityStore
+			siloType: .b,
+			entityStore: entityStore
 		))
 		
 		siloA = RocketSilo(RocketSilo.Config(
-			siloType: .a, entityStore: entityStore
+			siloType: .a,
+			entityStore: entityStore
 		))
 		
 		let _ = Rocket.removeEmitter.on(handleRocketRemove)
@@ -48,6 +56,10 @@ class GameRunner {
 	
 	func handleRocketRemove(payload: Rocket.RemoveEventPayload) {
 		entityStore.remove(payload.rocket)
+	}
+	
+	func start() {
+		enemyCoordinator.start()
 	}
 	
 	func update() {

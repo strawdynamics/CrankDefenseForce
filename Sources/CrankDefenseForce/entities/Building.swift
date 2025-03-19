@@ -35,8 +35,8 @@ class Building: BaseEntity {
 	
 	let destroyAnimation: SpriteAnimation
 	
-	var destroyed = false
-	var destructionComplete = false
+	private(set) var destroyed = false
+	private var destructionComplete = false
 	
 	init(_ config: Config) {
 		buildingType = config.buildingType
