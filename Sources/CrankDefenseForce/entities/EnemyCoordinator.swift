@@ -3,6 +3,7 @@ import PlaydateKit
 enum EnemyType {
 	case rocket
 	case fastRocket
+	case bigUfo
 	case none
 }
 
@@ -22,7 +23,8 @@ class EnemyCoordinator: BaseEntity {
 			baseSpawnInterval: 1.25, // previous hardest
 //			baseSpawnInterval: 0.5, // too many!
 			spawnWeights: [
-				.rocket: 100,
+//				.rocket: 100,
+				.bigUfo: 100
 			]
 		),
 	]
@@ -36,6 +38,8 @@ class EnemyCoordinator: BaseEntity {
 	private var started = false
 	
 	private var nextSpawnTime: Float = 0
+	
+	private var bigUfo: BigUfo?
 	
 	struct Config {
 		let entityStore: EntityStore
@@ -58,6 +62,12 @@ class EnemyCoordinator: BaseEntity {
 	override func update() {
 		if !started {
 			return
+		}
+		
+		if let bigUfo = bigUfo {
+			if bigUfo.destroyed {
+				self.bigUfo = nil
+			}
 		}
 		
 		uptime += Time.deltaTime
@@ -98,6 +108,8 @@ class EnemyCoordinator: BaseEntity {
 			spawnRocket()
 		case .fastRocket:
 			spawnFastRocket()
+		case .bigUfo:
+			spawnBigUfo()
 		case .none:
 			break
 		}
@@ -129,6 +141,24 @@ class EnemyCoordinator: BaseEntity {
 	private func spawnFastRocket() {
 		// warning first
 		// 30 thrust?
+	}
+	
+	private func spawnBigUfo() {
+		if bigUfo != nil {
+			return
+		}
+		
+		let left = Float.random(in: 0..<1) < 0.5
+		let pos = Point(
+			x: left ? -90 : 400 + 90,
+			y: Float.random(in: 50..<60)
+		)
+		
+		bigUfo = BigUfo(BigUfo.Config(
+			city: city,
+			entityStore: entityStore,
+			position: pos
+		))
 	}
 }
 

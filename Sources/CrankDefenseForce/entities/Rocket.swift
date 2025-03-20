@@ -2,9 +2,7 @@ import PlaydateKit
 
 class Rocket: BaseEntity {
 	nonisolated(unsafe) static let rocketBitmapTable = try! Graphics.BitmapTable(path: "rocket.png")
-	
-	nonisolated(unsafe) static let rocketNightBitmapTable = try! Graphics.BitmapTable(path: "rocketNight.png")
-	
+		
 	struct RemoveEventPayload {
 		var rocket: Rocket
 	}

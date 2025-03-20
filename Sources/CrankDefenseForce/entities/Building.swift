@@ -38,6 +38,10 @@ class Building: BaseEntity {
 	private(set) var destroyed = false
 	private var destructionComplete = false
 	
+	var position: Point {
+		return sprite.position
+	}
+	
 	init(_ config: Config) {
 		buildingType = config.buildingType
 		
