@@ -13,7 +13,7 @@ class ConfigMenu: BaseEntity {
 	
 	var selectedItemIndex = 0
 	
-	var yAnimator: FloatAnimator?
+	var yAnimator: Animator<Float>?
 	
 	init(_ config: Config) {
 		let offsetX: Float = 10
@@ -105,7 +105,7 @@ class ConfigMenu: BaseEntity {
 	}
 	
 	func animateY(oldIndex: Int, newIndex: Int) {
-		self.yAnimator = FloatAnimator(FloatAnimator.Config(
+		self.yAnimator = Animator(Animator.Config(
 			duration: 0.3,
 			startValue: (self.yAnimator == nil) ? Float(oldIndex) : self.yAnimator!.currentValue,
 			endValue: Float(newIndex),

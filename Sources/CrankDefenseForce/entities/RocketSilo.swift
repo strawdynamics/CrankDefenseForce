@@ -48,7 +48,7 @@ class RocketSilo: BaseEntity {
 	
 	var rocket: Rocket?
 	
-	var rocketPrepAnimator: FloatAnimator?
+	var rocketPrepAnimator: Animator<Float>?
 	
 	init(_ config: Config) {
 		siloType = config.siloType
@@ -141,7 +141,7 @@ class RocketSilo: BaseEntity {
 	private func prepareNextRocket() {
 		spawnRocket(at: Point(x: spawnX, y: RocketSilo.SILO_SPAWN_Y))
 		
-		rocketPrepAnimator = FloatAnimator(FloatAnimator.Config(
+		rocketPrepAnimator = Animator(Animator.Config(
 			duration: RocketSilo.BASE_ROCKET_PREP_DURATION,
 			startValue: RocketSilo.SILO_SPAWN_Y,
 			endValue: RocketSilo.SILO_SPAWN_Y - RocketSilo.SILO_SPAWN_MOVEMENT,

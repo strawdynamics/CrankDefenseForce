@@ -6,13 +6,13 @@ class StepperMenuItem: ConfigMenuItem {
 	
 	let leftSprite = PlaydateKit.Sprite.Sprite()
 	
-	var leftSpriteYAnimator: FloatAnimator?
+	var leftSpriteYAnimator: Animator<Float>?
 	
 	let rightSprite = PlaydateKit.Sprite.Sprite()
 	
-	var rightSpriteYAnimator: FloatAnimator?
+	var rightSpriteYAnimator: Animator<Float>?
 	
-	var arrowFocusAnimator: FloatAnimator?
+	var arrowFocusAnimator: Animator<Float>?
 	
 	override init(_ config: ConfigMenuItem.Config) {
 		super.init(config)
@@ -115,7 +115,7 @@ class StepperMenuItem: ConfigMenuItem {
 			return
 		}
 		
-		arrowFocusAnimator = FloatAnimator(FloatAnimator.Config(
+		arrowFocusAnimator = Animator(Animator.Config(
 			duration: 0.2,
 			startValue: offsetX,
 			endValue: offsetX + ConfigMenuItem.SELECTED_OFFSET_X,
@@ -133,7 +133,7 @@ class StepperMenuItem: ConfigMenuItem {
 			return
 		}
 		
-		arrowFocusAnimator = FloatAnimator(FloatAnimator.Config(
+		arrowFocusAnimator = Animator(Animator.Config(
 			duration: 0.5,
 			startValue: offsetX + ConfigMenuItem.SELECTED_OFFSET_X,
 			endValue: offsetX,
@@ -144,7 +144,7 @@ class StepperMenuItem: ConfigMenuItem {
 	}
 	
 	func prev() {
-		leftSpriteYAnimator = FloatAnimator(FloatAnimator.Config(
+		leftSpriteYAnimator = Animator(Animator.Config(
 			duration: 0.1,
 			startValue: 5,
 			endValue: 0,
@@ -153,7 +153,7 @@ class StepperMenuItem: ConfigMenuItem {
 	}
 	
 	func next() {
-		rightSpriteYAnimator = FloatAnimator(FloatAnimator.Config(
+		rightSpriteYAnimator = Animator(Animator.Config(
 			duration: 0.1,
 			startValue: 5,
 			endValue: 0,

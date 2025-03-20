@@ -21,7 +21,7 @@ class SkyBackground: BaseEntity {
 	
 	var lastTimeOfDay: TimeOfDay
 	
-	var timeOfDayAnimator: FloatAnimator?
+	var timeOfDayAnimator: Animator<Float>?
 	
 	init(entityStore: EntityStore) {
 		lastTimeOfDay = GameSettings.timeOfDay
@@ -58,7 +58,7 @@ class SkyBackground: BaseEntity {
 	}
 	
 	private func updateTimeOfDay(_ newTimeOfDay: TimeOfDay) {
-		timeOfDayAnimator = FloatAnimator(FloatAnimator.Config(
+		timeOfDayAnimator = Animator(Animator.Config(
 			duration: 0.3,
 			startValue: sprite.alpha,
 			endValue: newTimeOfDay == .day ? 0 : 1,

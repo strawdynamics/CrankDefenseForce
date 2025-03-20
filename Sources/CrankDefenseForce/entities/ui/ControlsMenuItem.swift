@@ -45,7 +45,7 @@ class ControlsMenuItem: StepperMenuItem {
 	
 	let detailsSprite = DetailsSprite()
 	
-	var detailsSpriteAnimator: FloatAnimator?
+	var detailsSpriteAnimator: Animator<Float>?
 		
 	init(_ config: Config) {
 		titleSprite.addToDisplayList()
@@ -100,7 +100,7 @@ class ControlsMenuItem: StepperMenuItem {
 	override func focus() {
 		super.focus()
 		
-		detailsSpriteAnimator = FloatAnimator(FloatAnimator.Config(
+		detailsSpriteAnimator = Animator(Animator.Config(
 			duration: 0.3,
 			startValue: 0,
 			endValue: 1,
@@ -110,7 +110,7 @@ class ControlsMenuItem: StepperMenuItem {
 	
 	override func blur() {
 		super.blur()
-		detailsSpriteAnimator = FloatAnimator(FloatAnimator.Config(
+		detailsSpriteAnimator = Animator(Animator.Config(
 			duration: 0.3,
 			startValue: 1,
 			endValue: 0,

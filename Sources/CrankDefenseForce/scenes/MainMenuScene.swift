@@ -135,7 +135,7 @@ class MainMenuScene: BaseScene {
 		static let startOffX: Float = -160
 		static let endOffX: Float = -16
 		
-		var xAnimator: FloatAnimator?
+		var xAnimator: Animator<Float>?
 		
 		override init() {
 			super.init()
@@ -148,7 +148,7 @@ class MainMenuScene: BaseScene {
 		}
 		
 		func animateIn() {
-			self.xAnimator = FloatAnimator(FloatAnimator.Config(
+			self.xAnimator = Animator(Animator.Config(
 				duration: 0.8,
 				startValue: Self.startOffX,
 				endValue: Self.endOffX,
@@ -157,7 +157,7 @@ class MainMenuScene: BaseScene {
 		}
 		
 		func animateOut() {
-			self.xAnimator = FloatAnimator(FloatAnimator.Config(
+			self.xAnimator = Animator(Animator.Config(
 				duration: 0.25,
 				startValue: Self.endOffX,
 				endValue: Self.startOffX,

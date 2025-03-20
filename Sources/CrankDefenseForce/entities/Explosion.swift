@@ -45,9 +45,9 @@ class Explosion: BaseEntity {
 	
 	var currentRadius: Float = Explosion.STARTING_RADIUS
 
-	var sizeAnimator: FloatAnimator
+	var sizeAnimator: Animator<Float>
 	
-	var alphaAnimator: FloatAnimator
+	var alphaAnimator: Animator<Float>
 	
 	var state: State = .expanding
 	
@@ -55,14 +55,14 @@ class Explosion: BaseEntity {
 		self.maxRadius = config.maxRadius
 		self.duration = config.duration
 		
-		self.sizeAnimator = FloatAnimator(FloatAnimator.Config(
+		self.sizeAnimator = Animator(Animator.Config(
 			duration: self.duration * 0.5,
 			startValue: Explosion.STARTING_RADIUS,
 			endValue: self.maxRadius,
 			easingFn: EasingFn.basic(Ease.outQuad),
 		))
 		
-		self.alphaAnimator = FloatAnimator(FloatAnimator.Config(
+		self.alphaAnimator = Animator(Animator.Config(
 			duration: self.duration * 0.5,
 			startValue: 0.7,
 			endValue: 0.4,
@@ -90,14 +90,14 @@ class Explosion: BaseEntity {
 			if state == .expanding {
 				state = .collapsing
 				
-				self.sizeAnimator = FloatAnimator(FloatAnimator.Config(
+				self.sizeAnimator = Animator(Animator.Config(
 					duration: self.duration * 0.5,
 					startValue: self.maxRadius,
 					endValue: 0,
 					easingFn: EasingFn.basic(Ease.inQuad),
 				))
 				
-				self.alphaAnimator = FloatAnimator(FloatAnimator.Config(
+				self.alphaAnimator = Animator(Animator.Config(
 					duration: self.duration * 0.5,
 					startValue: 0.4,
 					endValue: 0,

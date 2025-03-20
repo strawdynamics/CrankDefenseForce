@@ -55,7 +55,7 @@ class ConfigMenuItem: BaseEntity {
 	
 	var isFocused = false
 	
-	var focusAnimator: FloatAnimator?
+	var focusAnimator: Animator<Float>?
 	
 	init(_ config: Config) {
 		title = config.title
@@ -97,7 +97,7 @@ class ConfigMenuItem: BaseEntity {
 		isFocused = true
 		sprite.image = ConfigMenuItem.bgBitmapTable[1]
 		
-		focusAnimator = FloatAnimator(FloatAnimator.Config(
+		focusAnimator = Animator(Animator.Config(
 			duration: 0.2,
 			startValue: offsetX,
 			endValue: offsetX + ConfigMenuItem.SELECTED_OFFSET_X,
@@ -112,7 +112,7 @@ class ConfigMenuItem: BaseEntity {
 		isFocused = false
 		sprite.image = ConfigMenuItem.bgBitmapTable[0]
 		
-		focusAnimator = FloatAnimator(FloatAnimator.Config(
+		focusAnimator = Animator(Animator.Config(
 			duration: 0.5,
 			startValue: offsetX + ConfigMenuItem.SELECTED_OFFSET_X,
 			endValue: offsetX,

@@ -1,15 +1,15 @@
-class FloatAnimator {
+class Animator<T: Lerpable> {
 	var duration: Float
 	
-	var startValue: Float
+	var startValue: T
 	
-	var endValue: Float
+	var endValue: T
 	
 	var easingFn: EasingFn
 	
 	var currentTime: Float = 0
 	
-	public private(set) var currentValue: Float = 0
+	public private(set) var currentValue: T
 	
 	public private(set) var ended: Bool = false
 	
@@ -27,8 +27,8 @@ class FloatAnimator {
 	
 	struct Config {
 		var duration: Float
-		var startValue: Float
-		var endValue: Float
+		var startValue: T
+		var endValue: T
 		var easingFn: EasingFn
 		var loopMode: LoopMode = .none
 	}
@@ -36,6 +36,7 @@ class FloatAnimator {
 	init(_ config: Config) {
 		duration = config.duration
 		startValue = config.startValue
+		currentValue = config.startValue
 		endValue = config.endValue
 		easingFn = config.easingFn
 		loopMode = config.loopMode
@@ -56,7 +57,7 @@ class FloatAnimator {
 				currentTime = currentTime.truncatingRemainder(dividingBy: duration)
 			case .pingPong:
 				currentTime = currentTime.truncatingRemainder(dividingBy: duration)
-				(startValue, endValue) = (endValue, startValue)
+				swap(&startValue, &endValue)
 			}
 		}
 		
@@ -74,6 +75,7 @@ class FloatAnimator {
 	}
 	
 	private func updateValue() {
-		currentValue = easingFn.ease(currentTime, startValue, endValue - startValue, duration)
+		let easedPercent = easingFn.ease(currentTime, 0, 1, duration)
+		currentValue = T.lerp(from: startValue, to: endValue, percent: easedPercent)
 	}
 }

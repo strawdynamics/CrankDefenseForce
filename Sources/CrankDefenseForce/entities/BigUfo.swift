@@ -3,6 +3,8 @@ import PlaydateKit
 class BigUfo: BaseEntity {
 	nonisolated(unsafe) static let bigUfoBitmapTable = try! Graphics.BitmapTable(path: "bigUfo.png")
 	
+	nonisolated(unsafe) static let laserBitmap = try! Graphics.Bitmap(path: "bigUfoLaser.png")
+	
 	static let MOVE_TO_BUILDING_FRAME: Int = 0
 	
 	static let CHARGE_LASER_FRAMES = 1...9
@@ -10,6 +12,10 @@ class BigUfo: BaseEntity {
 	static let DESTROYED_FRAME: Int = 10
 	
 	static let MOVE_TO_BUILDING_Y_PPS: Float = 30
+	
+	class BigUfoSprite: Sprite.Sprite {
+		var bigUfoId: Int = -1
+	}
 	
 	private enum Activity {
 		case moveToBuilding
@@ -25,7 +31,9 @@ class BigUfo: BaseEntity {
 		var position: Point
 	}
 	
-	var sprite = Sprite.Sprite()
+	var sprite = BigUfoSprite()
+	
+	var laserSprite = BigUfoSprite()
 	
 	var city: City
 	
@@ -34,6 +42,8 @@ class BigUfo: BaseEntity {
 	private var _currentActivity = Activity.moveToBuilding
 	
 	private(set) var destroyed = false
+	
+	private var laserVisible = false
 	
 	private var currentActivity: Activity {
 		get {
@@ -51,8 +61,8 @@ class BigUfo: BaseEntity {
 		}
 	}
 	
-	private var moveToBuildingXAnimator: FloatAnimator?
-	private var moveToBuildingYAnimator: FloatAnimator?
+	private var moveToBuildingXAnimator: Animator<Float>?
+	private var moveToBuildingYAnimator: Animator<Float>?
 	
 	init(_ config: Config) {
 		let bitmap = Self.bigUfoBitmapTable[0]!
@@ -89,6 +99,8 @@ class BigUfo: BaseEntity {
 		case .crashLand:
 			break
 		}
+		
+		updateLaser()
 	}
 	
 	private func updateMoveToBuilding() {
@@ -125,7 +137,7 @@ class BigUfo: BaseEntity {
 		let endX = buildingPos.x + Float.random(in: -5..<5)
 		let deltaX = fabsf(endX - startX)
 		
-		moveToBuildingXAnimator = FloatAnimator(FloatAnimator.Config(
+		moveToBuildingXAnimator = Animator(Animator.Config(
 			duration: deltaX / Self.MOVE_TO_BUILDING_Y_PPS,
 			startValue: startX,
 			endValue: endX,
@@ -134,13 +146,34 @@ class BigUfo: BaseEntity {
 		
 		let startY = sprite.position.y
 		let endY = startY + 2
-		moveToBuildingYAnimator = FloatAnimator(FloatAnimator.Config(
+		moveToBuildingYAnimator = Animator(Animator.Config(
 			duration: 0.4,
 			startValue: startY,
 			endValue: endY,
 			easingFn: EasingFn.basic(Ease.inOutQuad),
 			loopMode: .pingPong,
 		))
+	}
+	
+	private func updateLaser() {
+		
+	}
+	
+	private func beginChargingLaser() {
+		
+	}
+	
+	private func deployLaser() {
+		if laserVisible {
+			return
+		}
+		laserVisible = true
+	}
+	
+	private func retractLaser() {
+		if !laserVisible {
+			return
+		}
 	}
 	
 	private func pickTargetBuilding() {

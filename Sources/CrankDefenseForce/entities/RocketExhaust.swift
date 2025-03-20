@@ -16,7 +16,7 @@ class RocketExhaust : BaseEntity {
 		return unsafeBitCast(rocketPtr, to: Rocket.self)
 	}
 	
-	var frameAnimator: FloatAnimator
+	var frameAnimator: Animator<Float>
 	
 	var active = false
 	
@@ -28,7 +28,7 @@ class RocketExhaust : BaseEntity {
 	init(_ config: Config) {
 		rocketPtr = unsafeBitCast(config.rocket, to: Int.self)
 		
-		frameAnimator = FloatAnimator(FloatAnimator.Config(
+		frameAnimator = Animator(Animator.Config(
 			duration: 0.4,
 			startValue: 0.0,
 			endValue: 4.0,
