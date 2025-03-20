@@ -103,11 +103,13 @@ class BigUfo: BaseEntity {
 		}
 		
 		guard let xAnim = moveToBuildingXAnimator else { return }
+		guard let yAnim = moveToBuildingYAnimator else { return }
 		xAnim.update()
+		yAnim.update()
 		
 		sprite.moveTo(Point(
 			x: xAnim.currentValue,
-			y: sprite.position.y
+			y: yAnim.currentValue
 		))
 		
 		if xAnim.ended {
@@ -120,7 +122,7 @@ class BigUfo: BaseEntity {
 		let buildingPos = target.position
 		
 		let startX = sprite.position.x
-		let endX = buildingPos.x + Float.random(in: -5...5)
+		let endX = buildingPos.x + Float.random(in: -5..<5)
 		let deltaX = fabsf(endX - startX)
 		
 		moveToBuildingXAnimator = FloatAnimator(FloatAnimator.Config(
@@ -128,6 +130,16 @@ class BigUfo: BaseEntity {
 			startValue: startX,
 			endValue: endX,
 			easingFn: EasingFn.basic(Ease.inOutQuad),
+		))
+		
+		let startY = sprite.position.y
+		let endY = startY + 2
+		moveToBuildingYAnimator = FloatAnimator(FloatAnimator.Config(
+			duration: 0.4,
+			startValue: startY,
+			endValue: endY,
+			easingFn: EasingFn.basic(Ease.inOutQuad),
+			loopMode: .pingPong,
 		))
 	}
 	

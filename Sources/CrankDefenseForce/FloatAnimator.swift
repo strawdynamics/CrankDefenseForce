@@ -13,10 +13,16 @@ class FloatAnimator {
 	
 	public private(set) var ended: Bool = false
 	
-	public private(set) var loop: Bool
+	public private(set) var loopMode: LoopMode
 	
 	public var currentPercent: Float {
 		return currentTime / duration
+	}
+	
+	enum LoopMode {
+		case none
+		case loop
+		case pingPong
 	}
 	
 	struct Config {
@@ -24,15 +30,15 @@ class FloatAnimator {
 		var startValue: Float
 		var endValue: Float
 		var easingFn: EasingFn
-		var loop: Bool = false
+		var loopMode: LoopMode = .none
 	}
 	
 	init(_ config: Config) {
-		self.duration = config.duration
-		self.startValue = config.startValue
-		self.endValue = config.endValue
-		self.easingFn = config.easingFn
-		self.loop = config.loop
+		duration = config.duration
+		startValue = config.startValue
+		endValue = config.endValue
+		easingFn = config.easingFn
+		loopMode = config.loopMode
 	}
 	
 	func update() {
@@ -43,10 +49,14 @@ class FloatAnimator {
 		currentTime += Time.deltaTime
 		
 		if currentTime >= duration {
-			if loop {
-				currentTime = currentTime.truncatingRemainder(dividingBy: duration)
-			} else {
+			switch loopMode {
+			case .none:
 				ended = true
+			case .loop:
+				currentTime = currentTime.truncatingRemainder(dividingBy: duration)
+			case .pingPong:
+				currentTime = currentTime.truncatingRemainder(dividingBy: duration)
+				(startValue, endValue) = (endValue, startValue)
 			}
 		}
 		

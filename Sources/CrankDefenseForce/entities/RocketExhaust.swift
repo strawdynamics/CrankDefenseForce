@@ -33,7 +33,7 @@ class RocketExhaust : BaseEntity {
 			startValue: 0.0,
 			endValue: 4.0,
 			easingFn: EasingFn.basic(Ease.linear),
-			loop: true,
+			loopMode: .loop,
 		))
 		
 		super.init(config.entityStore)
