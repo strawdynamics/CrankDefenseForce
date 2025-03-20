@@ -24,7 +24,10 @@ class Explosion: BaseEntity {
 				),
 				startAngle: 0,
 				endAngle: 360,
-				color: Graphics.Color.getBayer4x4FadeColor(foreground: 0, alpha: alpha),
+				color: Graphics.Color.getBayer4x4FadeColor(
+					foreground: GameSettings.timeOfDay == .day ? 0 : 1,
+					alpha: alpha
+				),
 			)
 		}
 	}

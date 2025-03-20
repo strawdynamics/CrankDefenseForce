@@ -3,6 +3,8 @@ import PlaydateKit
 class Rocket: BaseEntity {
 	nonisolated(unsafe) static let rocketBitmapTable = try! Graphics.BitmapTable(path: "rocket.png")
 	
+	nonisolated(unsafe) static let rocketNightBitmapTable = try! Graphics.BitmapTable(path: "rocketNight.png")
+	
 	struct RemoveEventPayload {
 		var rocket: Rocket
 	}
@@ -60,6 +62,9 @@ class Rocket: BaseEntity {
 		let (bitmapWidth, bitmapHeight, _) = bitmap.getData(mask: nil, data: nil)
 		
 		sprite.image = bitmap
+		if GameSettings.timeOfDay == .night {
+			sprite.setDrawMode(.inverted)
+		}
 		sprite.moveTo(config.position)
 		sprite.collideRect = Rect.init(
 			x: 0,
@@ -127,6 +132,10 @@ class Rocket: BaseEntity {
 			let bitmap = Self.rocketBitmapTable[newImageIndex]!
 			sprite.image = bitmap
 			lastImageIndex = newImageIndex
+			
+			if GameSettings.timeOfDay == .night {
+				sprite.setDrawMode(.inverted)
+			}
 		}
 	}
 	

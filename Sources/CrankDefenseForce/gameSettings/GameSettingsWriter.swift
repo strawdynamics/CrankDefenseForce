@@ -21,6 +21,9 @@ struct GameSettingsWriter {
 		// Write the data
 		encoder.startTable(&encoder)
 		
+		encoder.addTableMember(&encoder, "timeOfDay", 9)
+		encoder.writeString(&encoder, GameSettings.timeOfDay.stringValue, Int32(GameSettings.timeOfDay.stringValue.count))
+		
 		encoder.addTableMember(&encoder, "controlScheme", 13)
 		encoder.writeString(&encoder, GameSettings.controlScheme.stringValue, Int32(GameSettings.controlScheme.stringValue.count))
 		

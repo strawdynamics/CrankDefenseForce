@@ -54,6 +54,8 @@ struct GameSettingsReader {
 				GameSettings.sfxVolume = Int(value.data.intval)
 			} else if (valueType == .trueValue || valueType == .falseValue) && keyString == "showFps" {
 				GameSettings.showFps = valueType == .trueValue
+			} else if valueType == .string && keyString == "timeOfDay" {
+				GameSettings.timeOfDay = TimeOfDay.fromString(String(cString: value.data.stringval))!
 			}
 		} else {
 			print("Unexpected nil key in GameSettingsDecoder!")

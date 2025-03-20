@@ -19,7 +19,19 @@ class GameSettings {
 	
 	private static nonisolated(unsafe) var _controlScheme = ControlScheme.standard
 	
+	private static nonisolated(unsafe) var _timeOfDay: TimeOfDay = .night
+	
 	private static nonisolated(unsafe) var _showFps = false
+	
+	static var timeOfDay: TimeOfDay {
+		get {
+			return _timeOfDay
+		}
+		
+		set(newValue) {
+			_timeOfDay = newValue
+		}
+	}
 	
 	static var controlScheme: ControlScheme {
 		get {

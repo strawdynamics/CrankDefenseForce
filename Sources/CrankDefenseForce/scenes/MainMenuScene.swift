@@ -196,8 +196,8 @@ class MainMenuScene: BaseScene {
 			Graphics.drawMode = .copy
 			Graphics.drawBitmap(
 				menu!.bitmap,
-				at: Point(x: 200, y: 45),
-				degrees: 12,
+				at: Point(x: 200, y: 38),
+				degrees: 13,
 				center: Point(x: 0, y: 0),
 				xScale: 1.0,
 				yScale: 1.0
@@ -228,6 +228,7 @@ class MainMenuScene: BaseScene {
 		menu = Menu(menuItems: [
 			Menu.MenuItem(key: "LAUNCH!", action: self.handlePlayPressed),
 			Menu.MenuItem(key: "CONFIG", action: self.handleConfigPressed),
+			Menu.MenuItem(key: "MANUAL", action: self.handleAboutPressed),
 			Menu.MenuItem(key: "ABOUT", action: self.handleAboutPressed),
 		])
 		

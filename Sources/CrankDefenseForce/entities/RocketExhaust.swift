@@ -39,6 +39,7 @@ class RocketExhaust : BaseEntity {
 		super.init(config.entityStore)
 		
 		sprite.image = Self.rocketExhaustBitmapTable[0]
+		sprite.isVisible = false
 		sprite.addToDisplayList()
 	}
 	

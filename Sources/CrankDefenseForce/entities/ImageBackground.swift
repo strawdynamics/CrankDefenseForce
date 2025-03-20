@@ -34,4 +34,8 @@ class ImageBackground: BaseEntity {
 		
 		super.init(entityStore)
 	}
+	
+	func setDrawMode(_ drawMode: Graphics.Bitmap.DrawMode) {
+		sprite.setDrawMode(drawMode)
+	}
 }

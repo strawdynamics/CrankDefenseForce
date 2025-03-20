@@ -4,7 +4,6 @@ final class Game: PlaydateGame {
 	var scenePresenter: ScenePresenter
 	
 	init() {
-//		Graphics.drawMode = .fillWhite
 		Display.refreshRate = 40.0
 		Sprite.setAlwaysRedraw(true)
 		self.scenePresenter = ScenePresenter(firstScene: MainMenuScene())

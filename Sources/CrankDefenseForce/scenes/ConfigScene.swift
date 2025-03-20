@@ -62,9 +62,8 @@ class ConfigScene: BaseScene {
 	}
 	
 	override func enter() {
-		let _ = BasicBackground(
-			entityStore: entityStore,
-			color: .black
+		let _ = SkyBackground(
+			entityStore: entityStore
 		)
 		
 		let _ = ImageBackground(

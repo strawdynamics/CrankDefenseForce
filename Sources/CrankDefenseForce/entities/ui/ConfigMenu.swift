@@ -24,6 +24,11 @@ class ConfigMenu: BaseEntity {
 				offsetX: offsetX,
 				entityStore: config.entityStore
 			)),
+			TimeOfDayMenuItem(TimeOfDayMenuItem.Config(
+				title: "Time of day",
+				offsetX: offsetX,
+				entityStore: config.entityStore
+			)),
 			VolumeMenuItem(VolumeMenuItem.Config(
 				title: "Music",
 				offsetX: offsetX,

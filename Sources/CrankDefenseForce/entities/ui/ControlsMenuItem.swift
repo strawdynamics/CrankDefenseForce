@@ -2,11 +2,6 @@
 import PlaydateKit
 
 class ControlsMenuItem: StepperMenuItem {
-	enum VolumeType {
-		case music
-		case sfx
-	}
-	
 	struct Config {
 		let title: String
 		let offsetX: Float
@@ -39,7 +34,7 @@ class ControlsMenuItem: StepperMenuItem {
 		}
 		
 		override func draw(bounds _: Rect, drawRect _: Rect) {
-			Graphics.drawMode = .fillWhite
+			Graphics.drawMode = GameSettings.timeOfDay == .day ? .fillBlack : .fillWhite
 			Graphics.setTextLeading(10)
 			Graphics.setFont(CdfFont.NicoPups16)
 			Graphics.drawText(GameSettings.controlScheme.description, at: bounds.origin)

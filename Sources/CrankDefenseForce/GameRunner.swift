@@ -40,10 +40,13 @@ class GameRunner {
 		
 		let _ = Rocket.removeEmitter.on(handleRocketRemove)
 		
-		let _ = ImageBackground(
+		let bg = ImageBackground(
 			entityStore: entityStore,
 			backgroundType: .city
 		)
+		if GameSettings.timeOfDay == .night {
+			bg.setDrawMode(.inverted)
+		}
 		
 		let ground = StaticCollider(StaticCollider.Config(
 			bitmap: groundBitmap,

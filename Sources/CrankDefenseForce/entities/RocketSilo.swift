@@ -8,9 +8,7 @@ class RocketSilo: BaseEntity {
 
 	nonisolated(unsafe) static let siloABitmap = try! Graphics.Bitmap(path: "siloA.png")
 	
-	nonisolated(unsafe) static let siloLeftBitmap = try! Graphics.Bitmap(path: "siloLeft.png")
-
-	nonisolated(unsafe) static let siloRightBitmap = try! Graphics.Bitmap(path: "siloRight.png")
+	nonisolated(unsafe) static let siloIconsBitmapTable = try! Graphics.BitmapTable(path: "siloIcons")
 	
 	struct LaunchEventPayload {
 		var rocket: Rocket
@@ -38,6 +36,8 @@ class RocketSilo: BaseEntity {
 	
 	let sprite = Sprite.Sprite()
 	
+	let iconSprite = Sprite.Sprite()
+	
 	let siloType: SiloType
 	
 	var readyForLaunch = true
@@ -51,20 +51,30 @@ class RocketSilo: BaseEntity {
 		
 		super.init(config.entityStore)
 		
+		iconSprite.center = Point(x: 0.5, y: 1.0)
+		
 		switch config.siloType {
 		case .b:
-			sprite.image = GameSettings.controlScheme == .standard ? Self.siloBBitmap : Self.siloLeftBitmap
+			sprite.image = Self.siloBBitmap
 			sprite.center = Point(x: 0.0, y: 1.0)
-			sprite.moveTo(Point(x: 0.0, y: 240.0))
+			sprite.moveTo(Point(x: 0, y: 229))
+			
+			iconSprite.image = GameSettings.controlScheme == .standard ? Self.siloIconsBitmapTable[0] : Self.siloIconsBitmapTable[2]
+			iconSprite.moveTo(Point(x: 14, y: 240))
 		case .a:
-			sprite.image = GameSettings.controlScheme == .standard ? Self.siloABitmap : Self.siloRightBitmap
+			sprite.image = Self.siloABitmap
 			sprite.center = Point(x: 1.0, y: 1.0)
-			sprite.moveTo(Point(x: 400.0, y: 240.0))
+			sprite.moveTo(Point(x: 400, y: 229))
+			
+			iconSprite.image = GameSettings.controlScheme == .standard ? Self.siloIconsBitmapTable[1] : Self.siloIconsBitmapTable[3]
+			iconSprite.moveTo(Point(x: 400 - 14, y: 240))
 		}
 		
 		sprite.zIndex = 50
-		
 		sprite.addToDisplayList()
+		
+		iconSprite.zIndex = 50
+		iconSprite.addToDisplayList()
 		
 		self.spawnInitialRocket()
 	}

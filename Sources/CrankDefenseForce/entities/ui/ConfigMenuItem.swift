@@ -27,7 +27,7 @@ class ConfigMenuItem: BaseEntity {
 		override init() {
 			super.init()
 			center = Point(x: 0, y: 0.5)
-			setSize(width: 40, height: 3)
+			setSize(width: 40, height: 5)
 		}
 		
 		override func draw(bounds _: Rect, drawRect _: Rect) {
@@ -39,6 +39,7 @@ class ConfigMenuItem: BaseEntity {
 				end: end,
 			)
 			
+			Graphics.drawLine(line, lineWidth: 5, color: Graphics.Color.black)
 			Graphics.drawLine(line, lineWidth: 3, color: Graphics.Color.white)
 			Graphics.drawLine(line, lineWidth: 1, color: Graphics.Color.black)
 		}
