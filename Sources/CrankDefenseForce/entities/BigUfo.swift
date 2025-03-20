@@ -21,8 +21,8 @@ class BigUfo: BaseEntity {
 		case moveToBuilding
 		case chargeLaser
 		case fireLaser
-		case leave
-		case crashLand
+		case leavingDestroyed
+		case idle
 	}
 	
 	struct Config {
@@ -43,7 +43,9 @@ class BigUfo: BaseEntity {
 	
 	private(set) var destroyed = false
 	
-	private var laserVisible = false
+	private var laserYOffset: Float = 0
+	
+	private var laserYOffsetAnimator: Animator<Float>?
 	
 	private var currentActivity: Activity {
 		get {
@@ -54,7 +56,9 @@ class BigUfo: BaseEntity {
 			let oldActivity = _currentActivity
 			
 			if newActivity == .moveToBuilding {
-				beginMovingToBuilding()
+				enterMoveToBuilding()
+			} else if newActivity == .chargeLaser {
+				enterChargeLaser()
 			}
 			
 			_currentActivity = newActivity
@@ -63,6 +67,8 @@ class BigUfo: BaseEntity {
 	
 	private var moveToBuildingXAnimator: Animator<Float>?
 	private var moveToBuildingYAnimator: Animator<Float>?
+	
+	private var chargeLaserYAnimator: Animator<Float>?
 	
 	init(_ config: Config) {
 		let bitmap = Self.bigUfoBitmapTable[0]!
@@ -77,6 +83,19 @@ class BigUfo: BaseEntity {
 			height: bitmapHeight
 		)
 		
+		let laserBitmap = Self.laserBitmap
+		let (laserBitmapWidth, laserBitmapHeight, _) = laserBitmap.getData(mask: nil, data: nil)
+		laserSprite.image = laserBitmap
+		laserSprite.center = Point(x: 0.5, y: 0.0)
+		laserSprite.moveTo(config.position)
+		laserSprite.collideRect = Rect.init(
+			x: 0,
+			y: 0,
+			width: laserBitmapWidth,
+			height: laserBitmapHeight
+		)
+		
+		laserSprite.addToDisplayList()
 		sprite.addToDisplayList()
 		
 		city = config.city
@@ -91,12 +110,12 @@ class BigUfo: BaseEntity {
 		case .moveToBuilding:
 			updateMoveToBuilding()
 		case .chargeLaser:
-			break
+			updateChargeLaser()
 		case .fireLaser:
 			break
-		case .leave:
+		case .leavingDestroyed:
 			break
-		case .crashLand:
+		case .idle:
 			break
 		}
 		
@@ -129,7 +148,36 @@ class BigUfo: BaseEntity {
 		}
 	}
 	
-	private func beginMovingToBuilding() {
+	private func updateChargeLaser() {
+		guard let target = targetBuilding else {
+			pickTargetBuilding()
+			return
+		}
+		
+		if target.destroyed {
+			pickTargetBuilding()
+			return
+		}
+		
+		guard let yAnim = chargeLaserYAnimator else { return }
+		yAnim.update()
+		sprite.moveTo(Point(
+			x: sprite.position.x,
+			y: yAnim.currentValue.rounded()
+		))
+		
+		if let laserYAnim = laserYOffsetAnimator {
+			laserYAnim.update()
+			
+			laserYOffset = laserYAnim.currentValue
+			
+			if laserYAnim.ended {
+				laserYOffsetAnimator = nil
+			}
+		}
+	}
+	
+	private func enterMoveToBuilding() {
 		guard let target = targetBuilding else { return }
 		let buildingPos = target.position
 		
@@ -147,7 +195,7 @@ class BigUfo: BaseEntity {
 		let startY = sprite.position.y
 		let endY = startY + 2
 		moveToBuildingYAnimator = Animator(Animator.Config(
-			duration: 0.4,
+			duration: 0.5,
 			startValue: startY,
 			endValue: endY,
 			easingFn: EasingFn.basic(Ease.inOutQuad),
@@ -155,25 +203,25 @@ class BigUfo: BaseEntity {
 		))
 	}
 	
+	private func enterChargeLaser() {
+		laserYOffsetAnimator = Animator(Animator.Config(
+			duration: 2.0,
+			startValue: 0,
+			endValue: 24,
+			easingFn: EasingFn.basic(Ease.outQuad),
+		))
+
+		chargeLaserYAnimator = Animator(Animator.Config(
+			duration: 0.5,
+			startValue: sprite.position.y,
+			endValue: sprite.position.y + 2,
+			easingFn: EasingFn.basic(Ease.inOutQuad),
+			loopMode: .pingPong
+		))
+	}
+	
 	private func updateLaser() {
-		
-	}
-	
-	private func beginChargingLaser() {
-		
-	}
-	
-	private func deployLaser() {
-		if laserVisible {
-			return
-		}
-		laserVisible = true
-	}
-	
-	private func retractLaser() {
-		if !laserVisible {
-			return
-		}
+		laserSprite.moveTo(sprite.position + Point(x: 0, y: laserYOffset))
 	}
 	
 	private func pickTargetBuilding() {
@@ -182,7 +230,7 @@ class BigUfo: BaseEntity {
 		}).randomElement()
 		
 		if targetBuilding == nil {
-			currentActivity = .leave
+			currentActivity = .idle
 		} else {
 			currentActivity = .moveToBuilding
 		}

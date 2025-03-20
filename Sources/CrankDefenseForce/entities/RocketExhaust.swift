@@ -63,7 +63,7 @@ class RocketExhaust : BaseEntity {
 		frameAnimator.update()
 		sprite.image = Self.rocketExhaustBitmapTable[rotFrame + animFrame]
 		
-		sprite.moveTo(Point(x: x, y: y))
+		sprite.moveTo(Point(x: x, y: y).rounded)
 	}
 	
 	func activate() {

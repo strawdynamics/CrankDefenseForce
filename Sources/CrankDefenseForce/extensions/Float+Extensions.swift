@@ -1,7 +1,6 @@
 extension Float {
 	func roundToNearest(_ toNearest: Float) -> Self {
 		return (self / toNearest).rounded() * toNearest
-
 	}
 	
 	func toRadians() -> Self {
