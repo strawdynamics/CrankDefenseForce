@@ -234,8 +234,9 @@ class BigUfo: BaseEntity {
 		guard let posAnim = destroyedLeavingPosAnimator else { return }
 		posAnim.update()
 		
+		let baseImg = Self.bigUfoBitmapTable[Self.destroyedFrame]!
+		sprite.image = baseImg.rotated(by: 5, xScale: 0.8, yScale: 0.8).bitmap
 		sprite.moveTo(posAnim.currentValue)
-//		laserSprite.moveTo(posAnim.currentValue + Point(x: 0, y: laserYOffset))
 		
 		if posAnim.ended {
 			zigZagDestroyedLeaving()
@@ -305,11 +306,11 @@ class BigUfo: BaseEntity {
 	
 	private func zigZagDestroyedLeaving() {
 		destroyedLeavingPosAnimator = Animator(Animator.Config(
-			duration: Float.random(in: 0.2...0.4),
+			duration: Float.random(in: 0.3...0.5),
 			startValue: sprite.position,
 			endValue: sprite.position - Point(
-				x: (destroyedLeavingMovingRight ? 1 : -1) * Float.random(in: 0...40),
-				y: Float.random(in: 10...25)
+				x: (destroyedLeavingMovingRight ? 1 : -1) * Float.random(in: 20...60),
+				y: Float.random(in: 15...40)
 			),
 			easingFn: EasingFn.basic(Ease.inOutQuad),
 		))
