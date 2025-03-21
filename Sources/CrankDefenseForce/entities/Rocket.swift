@@ -226,9 +226,11 @@ class Rocket: BaseEntity {
 	
 	func remove() {
 		sprite.removeFromDisplayList()
-		exhaust?.deactivate()
-		entityStore.remove(exhaust!)
-		exhaust = nil
+		if let e = exhaust {
+			e.deactivate()
+			entityStore.remove(e)
+			exhaust = nil
+		}
 
 		Self.removeEmitter.emit(RemoveEventPayload(
 			rocket: self,

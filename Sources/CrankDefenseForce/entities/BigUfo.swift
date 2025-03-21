@@ -13,6 +13,8 @@ class BigUfo: BaseEntity {
 	
 	static let moveToBuildingXPps: Float = 25
 	
+	private static let maxDestroyedLeavingZigZagCount = 5
+	
 	class BigUfoSprite: Sprite.Sprite {
 		var bigUfoId: Int = -1
 	}
@@ -22,7 +24,7 @@ class BigUfo: BaseEntity {
 		case chargeLaser
 		case fireLaser
 		case destroyed
-		case leavingDestroyed
+		case destroyedLeaving
 		case idle
 	}
 	
@@ -52,20 +54,24 @@ class BigUfo: BaseEntity {
 	private var laserYOffsetAnimator: Animator<Float>?
 	private var laserChargeAnimator: Animator<Float>?
 	
+	private var destroyedLeavingZigZagCount: Int = 0
+	private var destroyedLeavingPosAnimator: Animator<Point>?
+	private var destroyedLeavingMovingRight = Float.random(in: 0..<1) < 0.5
+	
 	private var currentActivity: Activity {
 		get {
 			return _currentActivity
 		}
 		
 		set(newActivity) {
-			let oldActivity = _currentActivity
-			
 			if newActivity == .moveToBuilding {
 				enterMoveToBuilding()
 			} else if newActivity == .chargeLaser {
 				enterChargeLaser()
 			} else if newActivity == .destroyed {
 				enterDestroyed()
+			} else if newActivity == .destroyedLeaving {
+				enterDestroyedLeaving()
 			}
 			
 			_currentActivity = newActivity
@@ -133,9 +139,9 @@ class BigUfo: BaseEntity {
 		case .fireLaser:
 			updateFireLaser()
 		case .destroyed:
-			break
-		case .leavingDestroyed:
-			break
+			updateDestroyed()
+		case .destroyedLeaving:
+			updateDestroyedLeaving()
 		case .idle:
 			break
 		}
@@ -220,6 +226,22 @@ class BigUfo: BaseEntity {
 		pickTargetBuilding()
 	}
 	
+	private func updateDestroyed() {
+		currentActivity = .destroyedLeaving
+	}
+	
+	private func updateDestroyedLeaving() {
+		guard let posAnim = destroyedLeavingPosAnimator else { return }
+		posAnim.update()
+		
+		sprite.moveTo(posAnim.currentValue)
+//		laserSprite.moveTo(posAnim.currentValue + Point(x: 0, y: laserYOffset))
+		
+		if posAnim.ended {
+			zigZagDestroyedLeaving()
+		}
+	}
+	
 	private func enterMoveToBuilding() {
 		guard let target = targetBuilding else { return }
 		let buildingPos = target.position
@@ -257,6 +279,9 @@ class BigUfo: BaseEntity {
 	private func enterDestroyed() {
 		destroyed = true
 		
+		sprite.collisionsEnabled = false
+		laserSprite.collisionsEnabled = false
+		
 		sprite.image = Self.bigUfoBitmapTable[Self.destroyedFrame]
 		
 		let explosionCount = Int.random(in: 3...5)
@@ -271,6 +296,28 @@ class BigUfo: BaseEntity {
 				entityStore: entityStore,
 				duration: Float.random(in: 1.5...2.2),
 			))
+		}
+	}
+	
+	private func enterDestroyedLeaving() {
+		zigZagDestroyedLeaving()
+	}
+	
+	private func zigZagDestroyedLeaving() {
+		destroyedLeavingPosAnimator = Animator(Animator.Config(
+			duration: Float.random(in: 0.2...0.4),
+			startValue: sprite.position,
+			endValue: sprite.position - Point(
+				x: (destroyedLeavingMovingRight ? 1 : -1) * Float.random(in: 0...40),
+				y: Float.random(in: 10...25)
+			),
+			easingFn: EasingFn.basic(Ease.inOutQuad),
+		))
+		
+		destroyedLeavingMovingRight = !destroyedLeavingMovingRight
+		destroyedLeavingZigZagCount += 1
+		if destroyedLeavingZigZagCount > Self.maxDestroyedLeavingZigZagCount {
+			entityStore.remove(self)
 		}
 	}
 	
