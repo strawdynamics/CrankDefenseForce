@@ -5,13 +5,13 @@ class BigUfo: BaseEntity {
 	
 	nonisolated(unsafe) static let laserBitmap = try! Graphics.Bitmap(path: "bigUfoLaser.png")
 	
-	static let MOVE_TO_BUILDING_FRAME: Int = 0
+	static let moveToBuildingFrame: Int = 0
 	
-	static let CHARGE_LASER_FRAMES = 1...9
+	static let chargeLaserFrames = 1...9
 	
-	static let DESTROYED_FRAME: Int = 10
+	static let destroyedFrame: Int = 10
 	
-	static let MOVE_TO_BUILDING_Y_PPS: Float = 30
+	static let moveToBuildingXPps: Float = 25
 	
 	class BigUfoSprite: Sprite.Sprite {
 		var bigUfoId: Int = -1
@@ -64,6 +64,8 @@ class BigUfo: BaseEntity {
 				enterMoveToBuilding()
 			} else if newActivity == .chargeLaser {
 				enterChargeLaser()
+			} else if newActivity == .destroyed {
+				enterDestroyed()
 			}
 			
 			_currentActivity = newActivity
@@ -116,6 +118,9 @@ class BigUfo: BaseEntity {
 		
 		super.init(config.entityStore)
 		
+		sprite.bigUfoId = id
+		laserSprite.bigUfoId = id
+		
 		pickTargetBuilding()
 	}
 	
@@ -137,6 +142,14 @@ class BigUfo: BaseEntity {
 		
 		updateBob()
 		updateLaser()
+	}
+	
+	func damage() {
+		hitPoints -= 1
+		
+		if hitPoints <= 0 {
+			currentActivity = .destroyed
+		}
 	}
 	
 	private func updateMoveToBuilding() {
@@ -211,14 +224,14 @@ class BigUfo: BaseEntity {
 		guard let target = targetBuilding else { return }
 		let buildingPos = target.position
 		
-		sprite.image = Self.bigUfoBitmapTable[Self.MOVE_TO_BUILDING_FRAME]
+		sprite.image = Self.bigUfoBitmapTable[Self.moveToBuildingFrame]
 		
 		let startX = sprite.position.x
 		let endX = buildingPos.x + Float.random(in: -5..<5)
 		let deltaX = fabsf(endX - startX)
 		
 		moveToBuildingXAnimator = Animator(Animator.Config(
-			duration: deltaX / Self.MOVE_TO_BUILDING_Y_PPS,
+			duration: deltaX / Self.moveToBuildingXPps,
 			startValue: startX,
 			endValue: endX,
 			easingFn: EasingFn.basic(Ease.inOutQuad),
@@ -235,10 +248,30 @@ class BigUfo: BaseEntity {
 		
 		laserChargeAnimator = Animator(Animator.Config(
 			duration: 5.0,
-			startValue: Float(Self.CHARGE_LASER_FRAMES.lowerBound),
-			endValue: Float(Self.CHARGE_LASER_FRAMES.upperBound) + 0.999,
+			startValue: Float(Self.chargeLaserFrames.lowerBound),
+			endValue: Float(Self.chargeLaserFrames.upperBound) + 0.999,
 			easingFn: EasingFn.basic(Ease.linear),
 		))
+	}
+	
+	private func enterDestroyed() {
+		destroyed = true
+		
+		sprite.image = Self.bigUfoBitmapTable[Self.destroyedFrame]
+		
+		let explosionCount = Int.random(in: 3...5)
+		
+		for _ in 0..<explosionCount {
+			let _ = Explosion(Explosion.Config(
+				position: sprite.position + Point(
+					x: Float.random(in: -60...60),
+					y: Float.random(in: -40...40),
+				),
+				maxRadius: Float.random(in: 20...35),
+				entityStore: entityStore,
+				duration: Float.random(in: 1.5...2.2),
+			))
+		}
 	}
 	
 	private func updateBob() {

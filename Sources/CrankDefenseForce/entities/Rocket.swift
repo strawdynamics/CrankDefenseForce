@@ -183,9 +183,10 @@ class Rocket: BaseEntity {
 				handleCollisionWith(rocketSprite: overlappingRocketSprite)
 			} else if let overlappingBuildingSprite = overlappingSprite as? Building.BuildingSprite {
 				handleCollisionWith(buildingSprite: overlappingBuildingSprite)
+			} else if let overlappingBigUfoSprite = overlappingSprite as? BigUfo.BigUfoSprite {
+				handleCollisionWith(bigUfoSprite: overlappingBigUfoSprite)
 			} else {
 				explode()
-				print("Collided with unknown object \(overlappingSprite.collisionsEnabled)")
 			}
 		}
 	}
@@ -210,6 +211,17 @@ class Rocket: BaseEntity {
 		
 		explode()
 		building.attemptDestroy()
+	}
+	
+	func handleCollisionWith(bigUfoSprite: BigUfo.BigUfoSprite) {
+		if owner == .cpu {
+			// CPU rockets don't collide with BigUfos
+			return
+		}
+		guard let bigUfo = entityStore.get(bigUfoSprite.bigUfoId) as? BigUfo else { return }
+		
+		explode()
+		bigUfo.damage()
 	}
 	
 	func remove() {
