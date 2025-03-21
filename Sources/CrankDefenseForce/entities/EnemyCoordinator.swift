@@ -157,7 +157,8 @@ class EnemyCoordinator: BaseEntity {
 		bigUfo = BigUfo(BigUfo.Config(
 			city: city,
 			entityStore: entityStore,
-			position: pos
+			position: pos,
+			hitPoints: 5
 		))
 	}
 }

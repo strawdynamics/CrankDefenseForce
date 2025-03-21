@@ -6,8 +6,8 @@ class Explosion: BaseEntity {
 	struct Config {
 		let position: Point
 		let maxRadius: Float
-		let duration: Float = 1.8
 		let entityStore: EntityStore
+		var duration: Float = 1.8
 	}
 	
 	class ExplosionSprite: Sprite.Sprite {
