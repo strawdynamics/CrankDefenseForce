@@ -97,13 +97,15 @@ class Building: BaseEntity {
 		sprite.buildingId = id
 	}
 	
-	func attemptDestroy() {
+	func attemptDestroy() -> Bool {
 		if destroyed {
-			return
+			return false
 		}
 		
 		destroyed = true
 		destroyAnimation.play()
+		
+		return true
 	}
 	
 	override func update() {

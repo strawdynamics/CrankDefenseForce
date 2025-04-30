@@ -19,8 +19,9 @@ class EnemyCoordinator: BaseEntity {
 	
 	private static let difficultyLevels: [DifficultyLevel] = [
 		DifficultyLevel(
+			baseSpawnInterval: 15.0,
 //			baseSpawnInterval: 5.0, // previous easiest
-			baseSpawnInterval: 1.25, // previous hardest
+//			baseSpawnInterval: 1.25, // previous hardest
 //			baseSpawnInterval: 0.5, // too many!
 			spawnWeights: [
 //				.rocket: 100,
@@ -158,7 +159,7 @@ class EnemyCoordinator: BaseEntity {
 			city: city,
 			entityStore: entityStore,
 			position: pos,
-			hitPoints: 3
+			hitPoints: 1
 		))
 	}
 }

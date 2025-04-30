@@ -57,6 +57,12 @@ class BigUfo: BaseEntity {
 	private var destroyedLeavingZigZagCount: Int = 0
 	private var destroyedLeavingPosAnimator: Animator<Point>?
 	private var destroyedLeavingMovingRight = Float.random(in: 0..<1) < 0.5
+	private var destroyedLeavingScaleAnimator: Animator<Float>?
+	private var destroyedLeavingRotationAnimator: Animator<Float>?
+	private var destroyedLeavingCurrentAngle: Float = 0.0
+	private var destroyedLeavingTargetAngle: Float = 0.0
+	
+	private var pendingExplosions: [TimedCallback] = []
 	
 	private var currentActivity: Activity {
 		get {
@@ -148,6 +154,7 @@ class BigUfo: BaseEntity {
 		
 		updateBob()
 		updateLaser()
+		updatePendingExplosions()
 	}
 	
 	func damage() {
@@ -232,11 +239,18 @@ class BigUfo: BaseEntity {
 	
 	private func updateDestroyedLeaving() {
 		guard let posAnim = destroyedLeavingPosAnimator else { return }
+		guard let scaleAnim = destroyedLeavingScaleAnimator else { return }
+		guard let rotAnim = destroyedLeavingRotationAnimator else { return }
 		posAnim.update()
+		scaleAnim.update()
+		rotAnim.update()
 		
 		let baseImg = Self.bigUfoBitmapTable[Self.destroyedFrame]!
-		sprite.image = baseImg.rotated(by: 5, xScale: 0.8, yScale: 0.8).bitmap
+		let s = scaleAnim.currentValue
+		let r: Float = rotAnim.currentValue
+		sprite.image = baseImg.rotated(by: r, xScale: s, yScale: s).bitmap
 		sprite.moveTo(posAnim.currentValue)
+		laserSprite.image = Self.laserBitmap.rotated(by: r, xScale: s, yScale: s).bitmap
 		
 		if posAnim.ended {
 			zigZagDestroyedLeaving()
@@ -285,18 +299,40 @@ class BigUfo: BaseEntity {
 		
 		sprite.image = Self.bigUfoBitmapTable[Self.destroyedFrame]
 		
-		let explosionCount = Int.random(in: 3...5)
+		scheduleDestroyedUfoExplosions()
+	}
+	
+	private func scheduleDestroyedUfoExplosions() {
+		let explosionCount = Int.random(in: 4...6)
+		var delay: Float = 0
 		
 		for _ in 0..<explosionCount {
-			let _ = Explosion(Explosion.Config(
-				position: sprite.position + Point(
-					x: Float.random(in: -60...60),
-					y: Float.random(in: -40...40),
-				),
-				maxRadius: Float.random(in: 20...35),
-				entityStore: entityStore,
-				duration: Float.random(in: 1.5...2.2),
-			))
+			delay += Float.random(in: 0.25...0.4)
+
+			let callback = TimedCallback(duration: delay) {
+				guard let scaleAnim = self.destroyedLeavingScaleAnimator else { return }
+				let s = scaleAnim.currentValue
+
+				let _ = Explosion(Explosion.Config(
+					position: self.sprite.position + Point(
+						x: Float.random(in: -65...65) * s,
+						y: Float.random(in: -25...25) * s
+					),
+					maxRadius: Float.random(in: 20...35) * s,
+					entityStore: self.entityStore,
+					duration: Float.random(in: 1.5...2.2)
+				))
+			}
+
+			pendingExplosions.append(callback)
+		}
+	}
+	
+	private func updatePendingExplosions() {
+		for i in (0..<pendingExplosions.count).reversed() {
+			if pendingExplosions[i].update() {
+				pendingExplosions.remove(at: i)
+			}
 		}
 	}
 	
@@ -305,13 +341,37 @@ class BigUfo: BaseEntity {
 	}
 	
 	private func zigZagDestroyedLeaving() {
+		let stepDur = Float.random(in: 0.5...0.8)
+		
+		let direction: Float = destroyedLeavingMovingRight ? 1 : -1
+
+		// Rotation
+		destroyedLeavingCurrentAngle = destroyedLeavingTargetAngle
+		destroyedLeavingTargetAngle = destroyedLeavingCurrentAngle == 0 ? direction * -8.0 : -destroyedLeavingCurrentAngle
+		destroyedLeavingRotationAnimator = Animator(Animator.Config(
+			duration: stepDur,
+			startValue: destroyedLeavingCurrentAngle,
+			endValue: destroyedLeavingTargetAngle,
+			easingFn: EasingFn.basic(Ease.inOutQuad)
+		))
+		
+		// Position
 		destroyedLeavingPosAnimator = Animator(Animator.Config(
-			duration: Float.random(in: 0.3...0.5),
+			duration: stepDur,
 			startValue: sprite.position,
 			endValue: sprite.position - Point(
-				x: (destroyedLeavingMovingRight ? 1 : -1) * Float.random(in: 20...60),
-				y: Float.random(in: 15...40)
+				x: direction * Float.random(in: 35...60),
+				y: Float.random(in: 8...16)
 			),
+			easingFn: EasingFn.basic(Ease.inOutQuad),
+		))
+		
+		// Scale
+		let startScale = 1 - (Float(destroyedLeavingZigZagCount) * 0.2)
+		destroyedLeavingScaleAnimator = Animator(Animator.Config(
+			duration: stepDur,
+			startValue: startScale,
+			endValue: startScale - 0.2,
 			easingFn: EasingFn.basic(Ease.inOutQuad),
 		))
 		
@@ -323,6 +383,7 @@ class BigUfo: BaseEntity {
 	}
 	
 	private func updateBob() {
+		guard currentActivity != .destroyedLeaving else { return }
 		guard let yAnim = bobYAnimator else { return }
 		yAnim.update()
 		sprite.moveTo(Point(
@@ -332,26 +393,57 @@ class BigUfo: BaseEntity {
 	}
 	
 	private func updateLaser() {
-		laserSprite.moveTo(sprite.position + Point(x: 0, y: laserYOffset))
+		var scale: Float = 1
+		if let scaleAnim = destroyedLeavingScaleAnimator {
+			scale = scaleAnim.currentValue
+		}
+		
+		var offset = Point(x: 0, y: laserYOffset * scale)
+
+		if currentActivity == .destroyedLeaving, let rotation = destroyedLeavingRotationAnimator?.currentValue {
+				let radians = rotation * .pi / 180
+				let sinA = sinf(radians)
+				let cosA = cosf(radians)
+
+				offset = Point(
+					x: offset.x * cosA - offset.y * sinA,
+					y: offset.x * sinA + offset.y * cosA
+				)
+			}
+		
+		laserSprite.moveTo(sprite.position + offset)
 	}
 	
 	private func destroyBuilding(_ building: Building) {
+		let destroyed = building.attemptDestroy()
+		
+		if destroyed {
+			scheduleDestroyedBuildingExplosions(building)
+		}
+	}
+	
+	private func scheduleDestroyedBuildingExplosions(_ building: Building) {
 		let bPos = building.position
-		let explosionCount = Int.random(in: 2...3)
+		let explosionCount = Int.random(in: 3...4)
+		var delay: Float = 0
 		
 		for _ in 0..<explosionCount {
-			let _ = Explosion(Explosion.Config(
-				position: bPos + Point(
-					x: Float.random(in: -20...20),
-					y: Float.random(in: -30...0),
-				),
-				maxRadius: Float.random(in: 20...35),
-				entityStore: entityStore,
-				duration: Float.random(in: 1.5...2.2),
-			))
+			delay += Float.random(in: 0.05...0.2)
+
+			let callback = TimedCallback(duration: delay) {
+				let _ = Explosion(Explosion.Config(
+					position: bPos + Point(
+						x: Float.random(in: -20...20),
+						y: Float.random(in: -30...0),
+					),
+					maxRadius: Float.random(in: 20...35),
+					entityStore: self.entityStore,
+					duration: Float.random(in: 1.5...2.2),
+				))
+			}
+
+			pendingExplosions.append(callback)
 		}
-		
-		building.attemptDestroy()
 	}
 	
 	private func pickTargetBuilding() {
