@@ -40,6 +40,7 @@ class RocketExhaust : BaseEntity {
 		
 		sprite.image = Self.rocketExhaustBitmapTable[0]
 		sprite.isVisible = false
+		sprite.zIndex = 99
 		sprite.addToDisplayList()
 	}
 	

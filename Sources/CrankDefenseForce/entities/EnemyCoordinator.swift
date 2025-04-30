@@ -159,7 +159,7 @@ class EnemyCoordinator: BaseEntity {
 			city: city,
 			entityStore: entityStore,
 			position: pos,
-			hitPoints: 1
+			hitPoints: 3
 		))
 	}
 }
