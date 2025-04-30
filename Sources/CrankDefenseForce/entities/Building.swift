@@ -62,6 +62,7 @@ class Building: BaseEntity {
 		sprite.image = bitmapTable[0]
 		sprite.center = Point(x: 0.5, y: 1.0)
 		sprite.moveTo(config.position)
+		sprite.zIndex = 50
 		
 		let (bitmapWidth, bitmapHeight, _) = sprite.image!.getData(mask: nil, data: nil)
 		sprite.collideRect = Rect.init(

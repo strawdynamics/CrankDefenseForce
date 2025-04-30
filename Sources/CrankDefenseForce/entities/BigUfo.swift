@@ -78,6 +78,8 @@ class BigUfo: BaseEntity {
 				enterDestroyed()
 			} else if newActivity == .destroyedLeaving {
 				enterDestroyedLeaving()
+			} else if newActivity == .fireLaser {
+				enterFireLaser()
 			}
 			
 			_currentActivity = newActivity
@@ -102,6 +104,7 @@ class BigUfo: BaseEntity {
 			width: bitmapWidth,
 			height: bitmapHeight
 		)
+		sprite.zIndex = 60
 		
 		let laserBitmap = Self.laserBitmap
 		let (laserBitmapWidth, laserBitmapHeight, _) = laserBitmap.getData(mask: nil, data: nil)
@@ -114,6 +117,7 @@ class BigUfo: BaseEntity {
 			width: laserBitmapWidth,
 			height: laserBitmapHeight
 		)
+		laserSprite.zIndex = 59
 		
 		laserSprite.addToDisplayList()
 		sprite.addToDisplayList()
@@ -291,6 +295,14 @@ class BigUfo: BaseEntity {
 		))
 	}
 	
+	private func enterFireLaser() {
+		let _ = BigUfoBeam(BigUfoBeam.Config(
+			entityStore: entityStore,
+			position: sprite.position + Point(x: 0, y: laserYOffset + 20),
+			duration: 0.25,
+		))
+	}
+	
 	private func enterDestroyed() {
 		destroyed = true
 		
@@ -428,8 +440,6 @@ class BigUfo: BaseEntity {
 		var delay: Float = 0
 		
 		for _ in 0..<explosionCount {
-			delay += Float.random(in: 0.05...0.2)
-
 			let callback = TimedCallback(duration: delay) {
 				let _ = Explosion(Explosion.Config(
 					position: bPos + Point(
@@ -443,6 +453,8 @@ class BigUfo: BaseEntity {
 			}
 
 			pendingExplosions.append(callback)
+			
+			delay += Float.random(in: 0.05...0.2)
 		}
 	}
 	

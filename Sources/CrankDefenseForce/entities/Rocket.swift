@@ -85,6 +85,7 @@ class Rocket: BaseEntity {
 		))
 		
 		sprite.rocketId = id
+		sprite.zIndex = 100
 		
 		setAngle(newAngle: config.angle)
 		setImage()

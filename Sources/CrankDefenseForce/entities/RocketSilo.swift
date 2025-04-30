@@ -74,10 +74,10 @@ class RocketSilo: BaseEntity {
 			iconSprite.moveTo(Point(x: 400 - 14, y: 240))
 		}
 		
-		sprite.zIndex = 50
+		sprite.zIndex = 110
 		sprite.addToDisplayList()
 		
-		iconSprite.zIndex = 50
+		iconSprite.zIndex = 110
 		iconSprite.addToDisplayList()
 		
 		self.spawnInitialRocket()
@@ -113,7 +113,6 @@ class RocketSilo: BaseEntity {
 		if let rocket = self.rocket {
 			readyForLaunch = false
 			rocket.sprite.collisionsEnabled = true
-			rocket.sprite.zIndex = 30
 			rocket.setThrust(newThrust: Self.DEFAULT_THRUST)
 			
 			Self.launchEmitter.emit(LaunchEventPayload(rocket: rocket))

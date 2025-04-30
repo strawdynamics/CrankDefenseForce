@@ -7,6 +7,7 @@ class StaticCollider: BaseEntity {
 	struct Config {
 		var bitmap: Graphics.Bitmap
 		var entityStore: EntityStore
+		var zIndex: Int16 = 0
 	}
 	
 	var sprite: StaticColliderSprite
@@ -16,6 +17,7 @@ class StaticCollider: BaseEntity {
 		sprite.image = config.bitmap
 		let (bitmapWidth, bitmapHeight, _) = config.bitmap.getData(mask: nil, data: nil)
 		sprite.collideRect = Rect.init(x: 0, y: 0, width: bitmapWidth, height: bitmapHeight)
+		sprite.zIndex = config.zIndex
 		sprite.addToDisplayList()
 		self.sprite = sprite
 		

@@ -51,6 +51,7 @@ class GameRunner {
 		let ground = StaticCollider(StaticCollider.Config(
 			bitmap: groundBitmap,
 			entityStore: entityStore,
+			zIndex: 150
 		))
 		
 		ground.sprite.center = Point(x: 0.0, y: 1.0)

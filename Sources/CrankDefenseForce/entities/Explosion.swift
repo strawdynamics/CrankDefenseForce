@@ -73,6 +73,7 @@ class Explosion: BaseEntity {
 		
 		let size = maxRadius * 2
 		
+		sprite.zIndex = 180
 		sprite.position = config.position
 		sprite.setSize(width: maxRadius * 2, height: size)
 		sprite.collideRect = Rect(x: 0, y: 0, width: size, height: size)
