@@ -15,6 +15,8 @@ class BigUfo: BaseEntity {
 	
 	private static let maxDestroyedLeavingZigZagCount = 5
 	
+	private static let maxDamagedTime: Float = 1.2
+	
 	class BigUfoSprite: Sprite.Sprite {
 		var bigUfoId: Int = -1
 	}
@@ -90,6 +92,9 @@ class BigUfo: BaseEntity {
 	
 	private var bobYAnimator: Animator<Float>?
 	
+	private var damagedAnimator: Animator<Float>?
+	private var damagedTime: Float = 0
+	
 	init(_ config: Config) {
 		let bitmap = Self.bigUfoBitmapTable[0]!
 		let (bitmapWidth, bitmapHeight, _) = bitmap.getData(mask: nil, data: nil)
@@ -159,9 +164,19 @@ class BigUfo: BaseEntity {
 		updateBob()
 		updateLaser()
 		updatePendingExplosions()
+		updateDamaged()
 	}
 	
 	func damage() {
+		damagedTime = 0
+		damagedAnimator = Animator(Animator.Config(
+			duration: 0.15,
+			startValue: 0,
+			endValue: 1,
+			easingFn: EasingFn.basic(Ease.linear),
+			loopMode: .pingPong
+		))
+		
 		hitPoints -= 1
 		
 		if hitPoints <= 0 {
@@ -424,6 +439,22 @@ class BigUfo: BaseEntity {
 			}
 		
 		laserSprite.moveTo(sprite.position + offset)
+	}
+	
+	private func updateDamaged() {
+		guard let damAnim = damagedAnimator else { return }
+		damAnim.update()
+		damagedTime += Time.deltaTime
+		
+		if damagedTime > Self.maxDamagedTime {
+			damagedAnimator = nil
+			sprite.setDrawMode(.copy)
+			laserSprite.setDrawMode(.copy)
+		} else {
+			let dm: LCDBitmapDrawMode = damAnim.currentValue.rounded() == 1 ? .inverted : .copy
+			sprite.setDrawMode(dm)
+			laserSprite.setDrawMode(dm)
+		}
 	}
 	
 	private func destroyBuilding(_ building: Building) {
