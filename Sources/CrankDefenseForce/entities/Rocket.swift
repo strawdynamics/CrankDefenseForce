@@ -1,6 +1,11 @@
 import PlaydateKit
 
-class Rocket: BaseEntity {
+class Rocket: BaseEntity, PowerUpDropper {
+	static let powerUpDropTable: [PowerUpType: Float] = [
+		.none: 1,
+		.pauseEnemies: 1
+	]
+	
 	nonisolated(unsafe) static let rocketBitmapTable = try! Graphics.BitmapTable(path: "rocket.png")
 		
 	struct RemoveEventPayload {
