@@ -1,8 +1,8 @@
 import PlaydateKit
 
 class Menu {
-	static let width = 140
-	static let height = 130
+	static let width = 120
+	static let height = 120
 	static let fadeDuration: Float = 0.2
 	
 	var isFadingIn = false
@@ -97,16 +97,21 @@ class Menu {
 		let lineHeight = Int(Float(CdfFont.Jamma8x8Mono16.height) * 1.75)
 		
 		menuItems.enumerated().forEach { i, menuItem in
-			let y = 20 + i * lineHeight
+			let y = i * lineHeight
 			let selected = selectedItemIndex == i
 			
 			if selected {
-				Graphics.drawText(">", at: Point(x: 12, y: y))
+				Graphics.drawText(">", at: Point(x: 0, y: y))
 			}
 			
 			Graphics.drawText(
 				menuItem.key,
-				at: Point(x: (selected ? CdfFont.Jamma8x8Mono16.getTextWidth(for: ">", tracking: 0) : 0) + 12, y: y)
+				at: Point(
+					x: (selected
+						? CdfFont.Jamma8x8Mono16.getTextWidth(for: ">", tracking: 0)
+						: 0),
+					y: y
+				)
 			)
 		}
 		
@@ -116,7 +121,6 @@ class Menu {
 				color: Graphics.Color.getBayer4x4FadeColor(foreground: 0, alpha: fadePct)
 			)
 		}
-		
 		
 		Graphics.popContext()
 	}
@@ -196,7 +200,7 @@ class MainMenuScene: BaseScene {
 			Graphics.drawMode = .copy
 			Graphics.drawBitmap(
 				menu!.bitmap,
-				at: Point(x: 200, y: 38),
+				at: Point(x: 210, y: 60),
 				degrees: 13,
 				center: Point(x: 0, y: 0),
 				xScale: 1.0,
