@@ -156,12 +156,16 @@ class Rocket: BaseEntity {
 		for coll in colls {
 			let overlappingSprite = coll.other
 			
-			// Not exactly sure what this is, but it will crash otherwise!
-			if overlappingSprite.image == nil {
+			// Check for explosions first (nil image on overlappingSprite in this case)
+			if let overlappingExplosionSprite = overlappingSprite as? Explosion.ExplosionSprite {
+				let dist = pos.distance(to: overlappingExplosionSprite.position)
+				
+				if dist <= overlappingExplosionSprite.radius {
+					explode()
+				}
+				
 				continue
 			}
-			
-			// TODO: Explosion check
 			
 			let alphaCollided = Graphics.checkMaskCollision(
 				bitmap1: sprite.image!,
@@ -174,12 +178,9 @@ class Rocket: BaseEntity {
 			)
 			
 			if (!alphaCollided) {
-//				print("NOALPHASKIP")
 				continue
 			}
-			
-//			print("ALPHAHIT!!")
-						
+
 			if let overlappingRocketSprite = overlappingSprite as? RocketSprite {
 				handleCollisionWith(rocketSprite: overlappingRocketSprite)
 			} else if let overlappingBuildingSprite = overlappingSprite as? Building.BuildingSprite {
