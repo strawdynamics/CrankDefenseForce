@@ -1,3 +1,0 @@
-protocol PowerUp: AnyObject {
-	
-}

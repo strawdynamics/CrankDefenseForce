@@ -1,7 +1,7 @@
 import PlaydateKit
 
 class Rocket: BaseEntity, PowerUpDropper {
-	static let powerUpDropTable: [PowerUpType: Float] = [
+	static let powerUpDropTable: [PowerUp.PowerUpType: Float] = [
 		.none: 1,
 		.pauseEnemies: 1
 	]
