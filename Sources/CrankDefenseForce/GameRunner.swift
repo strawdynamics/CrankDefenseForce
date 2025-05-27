@@ -79,6 +79,7 @@ class GameRunner {
 	func exit() {
 		Rocket.removeEmitter.reset()
 		RocketSilo.launchEmitter.reset()
+		PowerUp.collectEmitter.reset()
 	}
 
 	func finish() {

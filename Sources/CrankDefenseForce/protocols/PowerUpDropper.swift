@@ -5,7 +5,7 @@ protocol PowerUpDropper: AnyObject {
 }
 
 extension PowerUpDropper {
-	func dropPowerUp() {
+	private func dropPowerUp() {
 		let type = pickPowerUp()
 		
 		switch type {

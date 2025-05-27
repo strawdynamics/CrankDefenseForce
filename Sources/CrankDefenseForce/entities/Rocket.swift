@@ -185,9 +185,11 @@ class Rocket: BaseEntity, PowerUpDropper {
 			if (!alphaCollided) {
 				continue
 			}
-
+			
 			if let overlappingRocketSprite = overlappingSprite as? RocketSprite {
 				handleCollisionWith(rocketSprite: overlappingRocketSprite)
+			} else if let overlappingPowerUpSprite = overlappingSprite as? PowerUp.PowerUpSprite {
+				handleCollisionWith(powerUpSprite: overlappingPowerUpSprite)
 			} else if let overlappingBuildingSprite = overlappingSprite as? Building.BuildingSprite {
 				handleCollisionWith(buildingSprite: overlappingBuildingSprite)
 			} else if let overlappingBigUfoSprite = overlappingSprite as? BigUfo.BigUfoSprite {
@@ -207,6 +209,15 @@ class Rocket: BaseEntity, PowerUpDropper {
 			explode()
 			otherRocket.remove()
 		}
+	}
+	
+	func handleCollisionWith(powerUpSprite: PowerUp.PowerUpSprite) {
+		if owner == .cpu {
+			// CPU rockets don't collect power-ups
+			return
+		}
+		
+		powerUpSprite.collect()
 	}
 	
 	func handleCollisionWith(buildingSprite: Building.BuildingSprite) {
