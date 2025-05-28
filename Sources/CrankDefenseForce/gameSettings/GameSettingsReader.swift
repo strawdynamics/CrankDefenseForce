@@ -2,8 +2,6 @@ import CPlaydate
 import PlaydateKit
 
 struct GameSettingsReader {
-	static nonisolated(unsafe) var controlScheme = ControlScheme.standard
-	
 	static func read() -> Bool {
 		let stat = try? PlaydateKit.File.stat(path: "gameSettings.json")
 		

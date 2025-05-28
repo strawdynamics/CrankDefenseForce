@@ -236,6 +236,27 @@ class MainMenuScene: BaseScene {
 			Menu.MenuItem(key: "ABOUT", action: self.handleAboutPressed),
 		])
 		
+		let mp = MasterPlayer(songPath: "songs/universe-map.mid")
+
+		print("uhhhhh \(mp.trackProps.count)")
+		
+		var i = 0
+		for trackProps in mp.trackProps {
+			print(i)
+			i += 1
+			print("isMuted \(trackProps.isMuted)")
+			print("isSolo \(trackProps.isSolo)")
+			print("attack \(trackProps.attack)")
+			print("decay \(trackProps.decay)")
+			print("release \(trackProps.release)")
+			print("sustain \(trackProps.sustain)")
+			print("volume \(trackProps.volume)")
+			print("inst \(trackProps.instrument)")
+			print("notesCount \(trackProps.notes.count)")
+			print("notes \(trackProps.notes.map { $0.description }.joined(separator: ", "))")
+			print("polyphony \(trackProps.polyphony)")
+		}
+		
 		menu!.fadeIn()
 	}
 	

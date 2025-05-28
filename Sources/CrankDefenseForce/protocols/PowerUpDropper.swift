@@ -2,6 +2,8 @@ import PlaydateKit
 
 protocol PowerUpDropper: AnyObject {
 	static var powerUpDropTable: [PowerUp.PowerUpType: Float] { get }
+	
+	var position: Point { get }
 }
 
 extension PowerUpDropper {
@@ -12,6 +14,10 @@ extension PowerUpDropper {
 		case .none:
 			break
 		case .pauseEnemies:
+			break
+		case .repairCity:
+			break
+		case .destroyEnemies:
 			break
 		}
 	}

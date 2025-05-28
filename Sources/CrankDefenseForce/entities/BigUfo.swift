@@ -1,6 +1,14 @@
 import PlaydateKit
 
-class BigUfo: BaseEntity {
+class BigUfo: BaseEntity, PowerUpDropper {
+	static let powerUpDropTable: [PowerUp.PowerUpType: Float] = [
+		.none: 1
+	]
+	
+	var position: Point {
+		return sprite.position
+	}
+	
 	nonisolated(unsafe) static let bigUfoBitmapTable = try! Graphics.BitmapTable(path: "bigUfo.png")
 	
 	nonisolated(unsafe) static let laserBitmap = try! Graphics.Bitmap(path: "bigUfoLaser.png")

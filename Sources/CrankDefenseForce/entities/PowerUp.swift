@@ -63,6 +63,6 @@ class PowerUp: BaseEntity {
 	
 	func collect() {
 		Self.collectEmitter.emit(CollectEventPayload(type: type))
-		entityStore.remove(entity: self)
+		entityStore.remove(self)
 	}
 }

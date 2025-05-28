@@ -6,14 +6,19 @@ import PackageDescription
 let package = Package(
 	name: "CrankDefenseForce",
 	platforms: [.macOS(.v14)],
-	products: [.library(name: "CrankDefenseForce", targets: ["CrankDefenseForce"])],
+	products: [
+		.library(name: "CrankDefenseForce", targets: ["CrankDefenseForce"]),
+	],
 	dependencies: [
 		.package(url: "https://github.com/finnvoor/PlaydateKit.git", branch: "main")
 	],
 	targets: [
 		.target(
 			name: "CrankDefenseForce",
-			dependencies: [.product(name: "PlaydateKit", package: "PlaydateKit"), "SwiftStubs"],
+			dependencies: [
+				.product(name: "PlaydateKit", package: "PlaydateKit"),
+				"SwiftStubs"
+			],
 			swiftSettings: [
 				.enableExperimentalFeature("Embedded"),
 				.unsafeFlags([
