@@ -22,7 +22,7 @@ public class MasterPlayer {
 	}
 	
 	class SynthInstrument {
-		static nonisolated(unsafe) var instruments: [String: SynthInstrument] = [:]
+		static nonisolated(unsafe) var instruments: [String.UTF8View: SynthInstrument] = [:]
 		
 		struct NoteProps {
 			let path: String
@@ -43,7 +43,7 @@ public class MasterPlayer {
 		@discardableResult static func add(id: String, notes: [MIDINote: NoteProps]) -> SynthInstrument {
 			let inst = SynthInstrument(id: id, notes: notes)
 			
-			Self.instruments[id] = inst
+			Self.instruments[id.utf8] = inst
 			
 			return inst
 		}
@@ -137,15 +137,15 @@ public class MasterPlayer {
 				let dptr = ptr,
 				let ctx = dptr.pointee.userdata
 					.flatMap({ Unmanaged<Context>.fromOpaque($0).takeUnretainedValue() }),
-				let key = keyC.map(String.init(cString:))
+				let key = keyC.map(String.init(cString:))?.utf8
 			else { return }
 			
 			switch (key, type) {
-			case ("instrument", .table):
+			case ("instrument".utf8, .table):
 				ctx.isDecodingInstrument = true
 				ctx.currentInstrument = InstrumentData()
 				
-			case ("notes", .array):
+			case ("notes".utf8, .array):
 				ctx.isDecodingNotes = true
 				
 			default:
@@ -162,7 +162,7 @@ public class MasterPlayer {
 				let ctxPtr = dptr.pointee.userdata
 			else { return }
 			
-			let key = String(cString: keyC)
+			let key = String(cString: keyC).utf8
 			
 			let ctx = Unmanaged<Context>
 				.fromOpaque(ctxPtr)
@@ -171,7 +171,7 @@ public class MasterPlayer {
 			if ctx.isDecodingInstrument {
 				let instr = ctx.currentInstrument
 				
-				if key == "id" {
+				if key == "id".utf8 {
 					switch JsonValueType(rawValue: val.type) {
 					case .integer:
 						instr.idInt = Int(val.data.intval)
@@ -181,34 +181,34 @@ public class MasterPlayer {
 						break
 					}
 					
-				} else if key == "name" {
+				} else if key == "name".utf8 {
 					instr.name = String(cString: val.data.stringval)
 				}
 				
 			} else if let track = ctx.currentTrack {
 				switch (key) {
-				case "attack":
+				case "attack".utf8:
 					track.attack = val.data.floatval
 					
-				case "decay":
+				case "decay".utf8:
 					track.decay = val.data.floatval
 					
-				case "isMuted":
+				case "isMuted".utf8:
 					track.isMuted = (JsonValueType(rawValue: val.type)! == .trueValue)
 					
-				case "isSolo":
+				case "isSolo".utf8:
 					track.isSolo = (JsonValueType(rawValue: val.type)! == .trueValue)
 					
-				case "polyphony":
+				case "polyphony".utf8:
 					track.polyphony = Int(val.data.intval)
 					
-				case "release":
+				case "release".utf8:
 					track.release = val.data.floatval
 					
-				case "sustain":
+				case "sustain".utf8:
 					track.sustain = val.data.floatval
 					
-				case "volume":
+				case "volume".utf8:
 					track.volume = val.data.floatval
 					
 				// “notes” is handled in didDecodeArrayValue
@@ -227,7 +227,7 @@ public class MasterPlayer {
 				.takeUnretainedValue()
 			guard let track = ctx.currentTrack else { return }
 			if let cPath = dptr.pointee.path {
-				let path = String(cString: cPath)
+				let path = String(cString: cPath).utf8
 				if path.hasSuffix(".notes") {
 					track.notes.append(MIDINote(val.data.intval))
 				}
@@ -270,15 +270,15 @@ public class MasterPlayer {
 	}
 	
 	public enum SampleCache {
-		private static nonisolated(unsafe) var cache: [String: Sound.Sample] = [:]
+		private static nonisolated(unsafe) var cache: [String.UTF8View: Sound.Sample] = [:]
 		
 		static func getOrLoad(_ samplePath: String) -> Sound.Sample {
-			if cache[samplePath] != nil {
-				return cache[samplePath]!
+			if cache[samplePath.utf8] != nil {
+				return cache[samplePath.utf8]!
 			}
 			
 			let sample = Sound.Sample(path: samplePath)!
-			cache[samplePath] = sample
+			cache[samplePath.utf8] = sample
 			
 			return sample
 		}
@@ -357,7 +357,7 @@ public class MasterPlayer {
 				return inst
 			}
 			
-			guard let synthInst = SynthInstrument.instruments[instrumentId] else {
+			guard let synthInst = SynthInstrument.instruments[instrumentId.utf8] else {
 				System.error("[Midi] Synth instrument \(instrumentId) not registered. Call `MasterPlayer.SynthInstrument.add`")
 				return inst
 			}

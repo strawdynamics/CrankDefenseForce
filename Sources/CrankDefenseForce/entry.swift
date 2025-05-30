@@ -3,7 +3,7 @@ import PlaydateKit
 /// Boilerplate entry code
 nonisolated(unsafe) var game: Game!
 @_cdecl("eventHandler") func eventHandler(
-	pointer: UnsafeMutableRawPointer!,
+	pointer: UnsafeMutablePointer<PlaydateAPI>!,
 	event: System.Event,
 	_: CUnsignedInt
 ) -> CInt {
@@ -12,7 +12,7 @@ nonisolated(unsafe) var game: Game!
 		Playdate.initialize(with: pointer)
 
 		DrumsPd.register()
-		
+
 		GameSettings.initialize()
 		game = Game()
 		System.updateCallback = game.update

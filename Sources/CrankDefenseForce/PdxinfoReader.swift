@@ -14,7 +14,7 @@ class PdxinfoReader {
 		self.path = path
 	}
 	
-	func read() throws(PdxinfoReaderError) -> Dictionary<Utf8Key, String> {
+	func read() throws(PdxinfoReaderError) -> Dictionary<String.UTF8View, String> {
 		guard let stat = try? File.stat(path: path) else {
 			throw PdxinfoReaderError.noStat(path: path)
 		}
@@ -48,19 +48,18 @@ class PdxinfoReader {
 		return parse(pdxinfoString: pdxinfoString)
 	}
 	
-	private func parse(pdxinfoString: String) -> Dictionary<Utf8Key, String> {
-		var parsed: Dictionary<Utf8Key, String> = [:]
+	private func parse(pdxinfoString: String) -> Dictionary<String.UTF8View, String> {
+		var parsed: Dictionary<String.UTF8View, String> = [:]
 		
-		let _ = pdxinfoString.split(separator: "\n")
-		pdxinfoString.split(separator: "\n").forEach { line in
-			if line.first == "#" {
+		pdxinfoString.utf8.split(separator: "\n".utf8.first!).forEach { line in
+			if line.first! == "#".utf8.first! {
 				return
 			}
 			
-			let parts = line.split(separator: "=", maxSplits: 1)
+			let parts = line.split(separator: "=".utf8.first!, maxSplits: 1)
 			
 			if parts.count == 2 {
-				parsed[Utf8Key(String(parts[0]))] = String(parts[1])
+				parsed[String(decoding: parts[0], as: UTF8.self).utf8] = String(parts[1])
 			}
 		}
 		

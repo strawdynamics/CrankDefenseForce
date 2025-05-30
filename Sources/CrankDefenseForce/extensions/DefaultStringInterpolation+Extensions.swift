@@ -17,7 +17,7 @@ extension DefaultStringInterpolation {
 		for _ in 0..<precision { multiplier *= 10 }
 		let fracPart = Int((absVal - Float(integerPart)) * multiplier + 0.5)
 		let fracString = String(fracPart)
-		let paddedFrac = String(repeating: "0", count: max(0, precision - fracString.count)) + fracString
+		let paddedFrac = String(repeating: "0", count: max(0, precision - fracString.utf8.count)) + fracString
 		appendLiteral("\(sign)\(integerPart).\(paddedFrac)")
 	}
 }

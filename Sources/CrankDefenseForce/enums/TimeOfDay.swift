@@ -3,7 +3,7 @@ enum TimeOfDay {
 	case night
 	
 	static func fromString(_ input: String) -> TimeOfDay? {
-		switch input.lowercased() {
+		switch input.utf8 {
 		case "day": return .day
 		case "night": return .night
 		default: return nil

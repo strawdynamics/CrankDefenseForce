@@ -3,7 +3,7 @@ enum ControlScheme {
 	case leftyLauncher
 	
 	static func fromString(_ input: String) -> ControlScheme? {
-		switch input.lowercased() {
+		switch input.utf8 {
 		case "standard": return .standard
 		case "leftylauncher": return .leftyLauncher
 		default: return nil

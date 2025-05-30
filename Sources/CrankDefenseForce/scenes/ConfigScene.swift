@@ -33,7 +33,7 @@ class ConfigScene: BaseScene {
 	override init() {
 		let reader = PdxinfoReader(path: "pdxinfo")
 		let pdxinfo = try! reader.read();
-		versionSprite = VersionSprite(version: pdxinfo[Utf8Key("version")]!)
+		versionSprite = VersionSprite(version: pdxinfo["version".utf8]!)
 	}
 	
 	override func update() {

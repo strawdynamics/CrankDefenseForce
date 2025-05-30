@@ -20,13 +20,13 @@ struct GameSettingsWriter {
 		
 		// Write the data
 		encoder.startTable(&encoder)
-		
+
 		encoder.addTableMember(&encoder, "timeOfDay", 9)
-		encoder.writeString(&encoder, GameSettings.timeOfDay.stringValue, Int32(GameSettings.timeOfDay.stringValue.count))
-		
+		encoder.writeString(&encoder, GameSettings.timeOfDay.stringValue, Int32(GameSettings.timeOfDay.stringValue.utf8.count))
+
 		encoder.addTableMember(&encoder, "controlScheme", 13)
-		encoder.writeString(&encoder, GameSettings.controlScheme.stringValue, Int32(GameSettings.controlScheme.stringValue.count))
-		
+		encoder.writeString(&encoder, GameSettings.controlScheme.stringValue, Int32(GameSettings.controlScheme.stringValue.utf8.count))
+
 		encoder.addTableMember(&encoder, "showFps", 7)
 		GameSettings.showFps ? encoder.writeTrue(&encoder) : encoder.writeFalse(&encoder)
 		
@@ -35,7 +35,7 @@ struct GameSettingsWriter {
 		
 		encoder.addTableMember(&encoder, "sfxVolume", 9)
 		encoder.writeInt(&encoder, Int32(GameSettings.sfxVolume))
-		
+
 		encoder.endTable(&encoder)
 		
 		try! file.close()
