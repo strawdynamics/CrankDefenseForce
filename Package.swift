@@ -10,7 +10,7 @@ let package = Package(
 		.library(name: "CrankDefenseForce", targets: ["CrankDefenseForce"]),
 	],
 	dependencies: [
-		.package(url: "https://github.com/finnvoor/PlaydateKit.git", branch: "main")
+		.package(url: "https://github.com/finnvoor/PlaydateKit.git", revision: "87c8b0c")
 //		.package(path: "../PlaydateKit")
 	],
 	targets: [
