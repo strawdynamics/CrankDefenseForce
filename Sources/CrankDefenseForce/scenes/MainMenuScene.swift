@@ -135,6 +135,8 @@ class MainMenuScene: BaseScene {
 	
 	var exiting = false
 	
+	var mp: MasterPlayer?
+	
 	class ColonelSprite: PlaydateKit.Sprite.Sprite {
 		static let startOffX: Float = -160
 		static let endOffX: Float = -16
@@ -236,12 +238,10 @@ class MainMenuScene: BaseScene {
 			Menu.MenuItem(key: "ABOUT", action: self.handleAboutPressed),
 		])
 		
-		let mp = MasterPlayer(songPath: "songs/universe-map.mid")
-
-		print("uhhhhh \(mp.trackProps.count)")
+		mp = MasterPlayer(songPath: "songs/universe-map.mid")
 		
 		var i = 0
-		for trackProps in mp.trackProps {
+		for trackProps in mp!.trackProps {
 			print(i)
 			i += 1
 			print("isMuted \(trackProps.isMuted)")
@@ -257,6 +257,8 @@ class MainMenuScene: BaseScene {
 			print("polyphony \(trackProps.polyphony)")
 		}
 		
+		mp!.play()
+	
 		menu!.fadeIn()
 	}
 	

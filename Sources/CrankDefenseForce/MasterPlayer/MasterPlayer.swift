@@ -270,6 +270,43 @@ public class MasterPlayer {
 			
 			return seq
 		}
+		
+		private static func createWaveInstrument(_ trackProps: TrackProps) -> Sound.Instrument {
+			let inst = Sound.Instrument()
+			guard case let .wave(waveform) = trackProps.instrument else {
+				System.error("[Midi] Invalid instrument")
+				return inst
+			}
+			
+			for _ in 0..<trackProps.polyphony {
+				let synth = Sound.Synth()
+				synth.setWaveform(waveform)
+				synth.setAttackTime(trackProps.attack)
+				synth.setDecayTime(trackProps.decay)
+				synth.setSustainLevel(trackProps.sustain)
+				synth.setReleaseTime(trackProps.release)
+				
+				_ = inst.addVoice(synth: synth, rangeStart: MIDINote(trackProps.notes.first!), rangeEnd: MIDINote(trackProps.notes.last!))
+			}
+			
+			return inst
+		}
+		
+		static func createInstrument(_ trackProps: TrackProps) -> Sound.Instrument {
+			let inst: Sound.Instrument
+			switch trackProps.instrument {
+			case .wave:
+				inst = createWaveInstrument(trackProps)
+			case .sample:
+				trackProps.instrument = .wave(.triangle)
+				inst = createWaveInstrument(trackProps)
+			}
+			
+			// https://discord.com/channels/675983554655551509/1217244550666518589/1377598500400922686
+			_ = Sound.defaultChannel.addSource(inst)
+			
+			return inst
+		}
 	}
 	
 	let songPath: String
@@ -278,10 +315,36 @@ public class MasterPlayer {
 	
 	let sequence: Sound.Sequence
 	
+	var volume: Float = 1.0 {
+		didSet {
+			zip(trackProps, sequence.tracks).forEach { props, track in
+				let effectiveVolume = volume * props.volume
+				track.instrument!.volume = (effectiveVolume, effectiveVolume)
+			}
+		}
+	}
+	
 	public init(songPath: String) {
 		self.songPath = songPath
 		
 		trackProps = TrackProps.load(songPath: songPath)
 		sequence = Midi.loadMidi(songPath: songPath, trackPropsCount: trackProps.count)
+
+		var i = 0
+		for trackProps in self.trackProps {
+			let instrument = Midi.createInstrument(trackProps)
+			sequence.tracks[i].instrument = instrument
+			
+			i += 1
+		}
+	}
+	
+	public func play() {
+		sequence.setLoops(startStep: 0, endStep: sequence.length)
+		sequence.play()
+	}
+	
+	public func stop() {
+		sequence.stop()
 	}
 }
