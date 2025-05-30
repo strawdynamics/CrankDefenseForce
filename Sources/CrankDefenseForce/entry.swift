@@ -10,6 +10,8 @@ nonisolated(unsafe) var game: Game!
 	switch event {
 	case .initialize:
 		Playdate.initialize(with: pointer)
+
+		DrumsPd.register()
 		
 		GameSettings.initialize()
 		game = Game()

@@ -16,9 +16,37 @@ public class MasterPlayer {
 	}
 	
 	private class InstrumentData {
-	  var idInt: Int?
-	  var idStr: String?
-	  var name: String?
+		var idInt: Int?
+		var idStr: String?
+		var name: String?
+	}
+	
+	class SynthInstrument {
+		static nonisolated(unsafe) var instruments: [String: SynthInstrument] = [:]
+		
+		struct NoteProps {
+			let path: String
+			var noteStart: MIDINote?
+			var noteEnd: MIDINote?
+			var noteRoot: MIDINote?
+		}
+		
+		let id: String
+		
+		let notes: [MIDINote: NoteProps]
+		
+		private init(id: String, notes: [MIDINote: NoteProps]) {
+			self.id = id
+			self.notes = notes
+		}
+		
+		@discardableResult static func add(id: String, notes: [MIDINote: NoteProps]) -> SynthInstrument {
+			let inst = SynthInstrument(id: id, notes: notes)
+			
+			Self.instruments[id] = inst
+			
+			return inst
+		}
 	}
 	
 	public class TrackProps {
@@ -27,7 +55,7 @@ public class MasterPlayer {
 		var instrument: Instrument = .wave(.sine)
 		var isMuted: Bool = false
 		var isSolo: Bool = false
-		var notes: [Int] = []
+		var notes: [MIDINote] = []
 		var polyphony: Int = 0
 		var release: Float = 0
 		var sustain: Float = 0
@@ -201,7 +229,7 @@ public class MasterPlayer {
 			if let cPath = dptr.pointee.path {
 				let path = String(cString: cPath)
 				if path.hasSuffix(".notes") {
-					track.notes.append(Int(val.data.intval))
+					track.notes.append(MIDINote(val.data.intval))
 				}
 			}
 		}
@@ -238,6 +266,21 @@ public class MasterPlayer {
 			}
 			
 			return ctxPtr
+		}
+	}
+	
+	public enum SampleCache {
+		private static nonisolated(unsafe) var cache: [String: Sound.Sample] = [:]
+		
+		static func getOrLoad(_ samplePath: String) -> Sound.Sample {
+			if cache[samplePath] != nil {
+				return cache[samplePath]!
+			}
+			
+			let sample = Sound.Sample(path: samplePath)!
+			cache[samplePath] = sample
+			
+			return sample
 		}
 	}
 	
@@ -281,6 +324,7 @@ public class MasterPlayer {
 			for _ in 0..<trackProps.polyphony {
 				let synth = Sound.Synth()
 				synth.setWaveform(waveform)
+				synth.volume = (trackProps.volume, trackProps.volume)
 				synth.setAttackTime(trackProps.attack)
 				synth.setDecayTime(trackProps.decay)
 				synth.setSustainLevel(trackProps.sustain)
@@ -292,14 +336,59 @@ public class MasterPlayer {
 			return inst
 		}
 		
+		private static func createSampleSynth(samplePath: String, trackProps: TrackProps) -> Sound.Synth {
+			let synth = Sound.Synth()
+			let sample = SampleCache.getOrLoad(samplePath)
+			
+			synth.setSample(sample)
+			synth.volume = (trackProps.volume, trackProps.volume)
+			synth.setAttackTime(trackProps.attack)
+			synth.setDecayTime(trackProps.decay)
+			synth.setSustainLevel(trackProps.sustain)
+			synth.setReleaseTime(trackProps.release)
+			
+			return synth
+		}
+		
+		private static func createSampleInstrument(_ trackProps: TrackProps) -> Sound.Instrument {
+			let inst = Sound.Instrument()
+			guard case let .sample(instrumentId) = trackProps.instrument else {
+				System.error("[Midi] Invalid instrument")
+				return inst
+			}
+			
+			guard let synthInst = SynthInstrument.instruments[instrumentId] else {
+				System.error("[Midi] Synth instrument \(instrumentId) not registered. Call `MasterPlayer.SynthInstrument.add`")
+				return inst
+			}
+			
+			trackProps.notes.forEach { note in
+				guard let noteProps = synthInst.notes[note] else {
+					System.error("[Midi] Note \(note) not found in instrument \(instrumentId)")
+					return
+				}
+				
+				let noteStart = noteProps.noteStart ?? note
+				let noteEnd = noteProps.noteEnd ?? noteStart
+				let noteRoot = noteProps.noteRoot ?? noteStart
+				let offset = noteRoot - noteStart
+				let transpose = Float(NOTE_C4) - noteStart - offset
+				
+				let synth = Self.createSampleSynth(samplePath: noteProps.path, trackProps: trackProps)
+				
+				_ = inst.addVoice(synth: synth, rangeStart: noteStart, rangeEnd: noteEnd, transpose: transpose)
+			}
+			
+			return inst
+		}
+		
 		static func createInstrument(_ trackProps: TrackProps) -> Sound.Instrument {
 			let inst: Sound.Instrument
 			switch trackProps.instrument {
 			case .wave:
 				inst = createWaveInstrument(trackProps)
 			case .sample:
-				trackProps.instrument = .wave(.triangle)
-				inst = createWaveInstrument(trackProps)
+				inst = createSampleInstrument(trackProps)
 			}
 			
 			// https://discord.com/channels/675983554655551509/1217244550666518589/1377598500400922686
