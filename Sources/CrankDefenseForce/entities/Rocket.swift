@@ -258,8 +258,9 @@ class Rocket: BaseEntity, PowerUpDropper {
 	func explode() {
 		let _ = Explosion(Explosion.Config(
 			position: sprite.position,
-			maxRadius: 30,
+			maxRadius: 32,
 			entityStore: entityStore,
+			duration: 2,
 		))
 		
 		remove()

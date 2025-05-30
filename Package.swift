@@ -11,6 +11,7 @@ let package = Package(
 	],
 	dependencies: [
 		.package(url: "https://github.com/finnvoor/PlaydateKit.git", branch: "main")
+//		.package(path: "../PlaydateKit")
 	],
 	targets: [
 		.target(

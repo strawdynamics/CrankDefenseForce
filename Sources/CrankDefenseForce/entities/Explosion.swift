@@ -8,6 +8,8 @@ class Explosion: BaseEntity {
 		let maxRadius: Float
 		let entityStore: EntityStore
 		var duration: Float = 1.8
+		var inPercentage: Float = 0.35
+		var outPercentage: Float = 0.65
 	}
 	
 	class ExplosionSprite: Sprite.Sprite {
@@ -51,19 +53,25 @@ class Explosion: BaseEntity {
 	
 	var state: State = .expanding
 	
+	let inPercentage: Float
+	let outPercentage: Float
+	
 	init(_ config: Config) {
 		self.maxRadius = config.maxRadius
 		self.duration = config.duration
 		
+		self.inPercentage = config.inPercentage
+		self.outPercentage = config.outPercentage
+		
 		self.sizeAnimator = Animator(Animator.Config(
-			duration: self.duration * 0.5,
+			duration: self.duration * inPercentage,
 			startValue: Explosion.STARTING_RADIUS,
 			endValue: self.maxRadius,
 			easingFn: EasingFn.basic(Ease.outQuad),
 		))
 		
 		self.alphaAnimator = Animator(Animator.Config(
-			duration: self.duration * 0.5,
+			duration: self.duration * inPercentage,
 			startValue: 0.7,
 			endValue: 0.4,
 			easingFn: EasingFn.basic(Ease.inBounce),
@@ -92,14 +100,14 @@ class Explosion: BaseEntity {
 				state = .collapsing
 				
 				self.sizeAnimator = Animator(Animator.Config(
-					duration: self.duration * 0.5,
+					duration: self.duration * outPercentage,
 					startValue: self.maxRadius,
 					endValue: 0,
 					easingFn: EasingFn.basic(Ease.inQuad),
 				))
 				
 				self.alphaAnimator = Animator(Animator.Config(
-					duration: self.duration * 0.5,
+					duration: self.duration * outPercentage,
 					startValue: 0.4,
 					endValue: 0,
 					easingFn: EasingFn.basic(Ease.inOutQuad),
