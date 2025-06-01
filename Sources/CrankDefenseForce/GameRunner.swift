@@ -37,9 +37,7 @@ class GameRunner {
 			siloType: .a,
 			entityStore: entityStore
 		))
-		
-		let _ = Rocket.removeEmitter.on(handleRocketRemove)
-		
+
 		let bg = ImageBackground(
 			entityStore: entityStore,
 			backgroundType: .city
@@ -57,11 +55,7 @@ class GameRunner {
 		ground.sprite.center = Point(x: 0.0, y: 1.0)
 		ground.sprite.moveTo(Point(x: 0.0, y: 240.0))
 	}
-	
-	func handleRocketRemove(payload: Rocket.RemoveEventPayload) {
-		entityStore.remove(payload.rocket)
-	}
-	
+
 	func start() {
 		enemyCoordinator.start()
 	}
@@ -78,6 +72,7 @@ class GameRunner {
 	
 	func exit() {
 		Rocket.removeEmitter.reset()
+		SmallUfo.removeEmitter.reset()
 		RocketSilo.launchEmitter.reset()
 		PowerUp.collectEmitter.reset()
 	}

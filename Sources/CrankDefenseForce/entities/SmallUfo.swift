@@ -5,13 +5,19 @@ class SmallUfo: BaseEntity, PowerUpDropper {
 		.none: 1
 	]
 
+	struct RemoveEventPayload {
+		var smallUfo: SmallUfo
+	}
+	struct RemoveEvent: EventProtocol {
+		typealias Payload = RemoveEventPayload
+	}
+	nonisolated(unsafe) static var removeEmitter = EventEmitter<RemoveEvent>()
+
 	var position: Point {
 		return sprite.position
 	}
 
 	nonisolated(unsafe) static let smallUfoBitmapTable = try! Graphics.BitmapTable(path: "entities/SmallUfo/smallUfo")
-
-	static let moveToBuildingXPps: Float = 25
 
 
 	class SmallUfoSprite: Sprite.Sprite {
@@ -21,17 +27,25 @@ class SmallUfo: BaseEntity, PowerUpDropper {
 	struct Config {
 		var entityStore: EntityStore
 		var position: Point
+		var facingLeft: Bool
+		var speed: Float
 	}
 
 	var sprite = SmallUfoSprite()
 
 	private(set) var destroyed = false
 
-	private var moveToBuildingXAnimator: Animator<Float>?
-
 	private var bobYAnimator: Animator<Float>?
+
+	private let facingLeft: Bool
+
+	private let speed: Float
+
 	init(_ config: Config) {
-		let bitmap = Self.smallUfoBitmapTable[0]!
+		facingLeft = config.facingLeft
+		speed = config.speed
+
+		let bitmap = Self.smallUfoBitmapTable[facingLeft ? 0 : 1]!
 		let (bitmapWidth, bitmapHeight, _) = bitmap.getData(mask: nil, data: nil)
 
 		sprite.image = bitmap
@@ -42,14 +56,14 @@ class SmallUfo: BaseEntity, PowerUpDropper {
 			width: bitmapWidth,
 			height: bitmapHeight
 		)
-		sprite.zIndex = 60
+		sprite.zIndex = 70
 
 		sprite.addToDisplayList()
 
 		bobYAnimator = Animator(Animator.Config(
 			duration: 0.5,
 			startValue: config.position.y,
-			endValue: config.position.y + 2,
+			endValue: config.position.y + 1,
 			easingFn: EasingFn.basic(Ease.inOutQuad),
 			loopMode: .pingPong
 		))
@@ -60,32 +74,24 @@ class SmallUfo: BaseEntity, PowerUpDropper {
 	}
 
 	override func update() {
+		updateOob()
+		sprite.moveBy(dx: Time.deltaTime * speed * (facingLeft ? -1 : 1), dy: 0)
 		updateBob()
 	}
 
-//	private func updateMoveToBuilding() {
-//		guard let target = targetBuilding else {
-//			pickTargetBuilding()
-//			return
-//		}
-//
-//		if target.destroyed {
-//			pickTargetBuilding()
-//			return
-//		}
-//
-//		guard let xAnim = moveToBuildingXAnimator else { return }
-//		xAnim.update()
-//
-//		sprite.moveTo(Point(
-//			x: xAnim.currentValue,
-//			y: sprite.position.y
-//		))
-//
-//		if xAnim.ended {
-//			currentActivity = .chargeLaser
-//		}
-//	}
+	func updateOob() {
+		let pos = position
+		if pos.x < -40 || pos.x > 440 {
+			destroy()
+		}
+	}
+
+	func destroy() {
+		Self.removeEmitter.emit(RemoveEventPayload(
+			smallUfo: self,
+		))
+		entityStore.remove(self)
+	}
 
 	private func updateBob() {
 		guard let yAnim = bobYAnimator else { return }

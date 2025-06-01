@@ -194,6 +194,8 @@ class Rocket: BaseEntity, PowerUpDropper {
 				handleCollisionWith(buildingSprite: overlappingBuildingSprite)
 			} else if let overlappingBigUfoSprite = overlappingSprite as? BigUfo.BigUfoSprite {
 				handleCollisionWith(bigUfoSprite: overlappingBigUfoSprite)
+			} else if let overlappingSmallUfoSprite = overlappingSprite as? SmallUfo.SmallUfoSprite {
+				handleCollisionWith(smallUfoSprite: overlappingSmallUfoSprite)
 			} else {
 				explode()
 			}
@@ -241,7 +243,18 @@ class Rocket: BaseEntity, PowerUpDropper {
 		explode()
 		bigUfo.damage()
 	}
-	
+
+	func handleCollisionWith(smallUfoSprite: SmallUfo.SmallUfoSprite) {
+		if owner == .cpu {
+			// CPU rockets don't collide with SmallUfos
+			return
+		}
+		guard let smallUfo = entityStore.get(smallUfoSprite.smallUfoId) as? SmallUfo else { return }
+
+		explode()
+		smallUfo.destroy()
+	}
+
 	func remove() {
 		sprite.removeFromDisplayList()
 		if let e = exhaust {
@@ -253,6 +266,8 @@ class Rocket: BaseEntity, PowerUpDropper {
 		Self.removeEmitter.emit(RemoveEventPayload(
 			rocket: self,
 		))
+
+		entityStore.remove(self)
 	}
 	
 	func explode() {

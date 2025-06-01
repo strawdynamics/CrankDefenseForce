@@ -4,6 +4,7 @@ enum EnemyType {
 	case rocket
 	case fastRocket
 	case bigUfo
+	case smallUfo
 	case none
 }
 
@@ -24,8 +25,9 @@ class EnemyCoordinator: BaseEntity {
 //			baseSpawnInterval: 1.25, // previous hardest
 //			baseSpawnInterval: 0.5, // too many!
 			spawnWeights: [
-				.rocket: 90,
-				.bigUfo: 10
+				.rocket: 0,
+				.bigUfo: 0,
+				.smallUfo: 1,
 			]
 		),
 	]
@@ -39,9 +41,13 @@ class EnemyCoordinator: BaseEntity {
 	private var started = false
 	
 	private var nextSpawnTime: Float = 0
-	
+
+	private var rockets: [Rocket] = []
+
 	private var bigUfo: BigUfo?
-	
+
+	private var smallUfos: [SmallUfo] = []
+
 	struct Config {
 		let entityStore: EntityStore
 		let city: City
@@ -52,6 +58,9 @@ class EnemyCoordinator: BaseEntity {
 		difficulty = Self.difficultyLevels[0]
 		
 		super.init(config.entityStore)
+
+		_ = Rocket.removeEmitter.on(handleRocketRemove)
+		_ = SmallUfo.removeEmitter.on(handleSmallUfoRemove)
 	}
 	
 	func start() {
@@ -77,7 +86,23 @@ class EnemyCoordinator: BaseEntity {
 			spawnAndSchedule()
 		}
 	}
-	
+
+	private func handleRocketRemove(payload: Rocket.RemoveEventPayload) {
+		rockets.removeAll { rocket in
+			let shouldRemove = rocket.id == payload.rocket.id
+
+			return shouldRemove
+		}
+	}
+
+	private func handleSmallUfoRemove(payload: SmallUfo.RemoveEventPayload) {
+		smallUfos.removeAll { smallUfo in
+			let shouldRemove = smallUfo.id == payload.smallUfo.id
+
+			return shouldRemove
+		}
+	}
+
 	private func spawnAndSchedule() {
 		spawnEnemy()
 		
@@ -111,6 +136,8 @@ class EnemyCoordinator: BaseEntity {
 			spawnFastRocket()
 		case .bigUfo:
 			spawnBigUfo()
+		case .smallUfo:
+			spawnSmallUfo()
 		case .none:
 			break
 		}
@@ -130,13 +157,15 @@ class EnemyCoordinator: BaseEntity {
 		let vecToTarget = Vector2(x: buildingPos.x - pos.x, y: buildingPos.y - pos.y).normalized()
 		let angleToTarget = down.angle(with: vecToTarget).toDegrees()
 				
-		let _ = Rocket(Rocket.Config(
+		let rocket = Rocket(Rocket.Config(
 			position: pos,
 			angle: angleToTarget,
 			thrust: 10,
 			entityStore: entityStore,
 			owner: .cpu
 		))
+
+		rockets.append(rocket)
 	}
 	
 	private func spawnFastRocket() {
@@ -161,6 +190,22 @@ class EnemyCoordinator: BaseEntity {
 			position: pos,
 			hitPoints: 3
 		))
+	}
+
+	private func spawnSmallUfo() {
+		let facingLeft = Float.random(in: 0..<1) < 0.5
+		let pos = Point(
+			x: !facingLeft ? -30 : 400 + 30,
+			y: Float.random(in: 30..<150)
+		)
+
+		let smallUfo = SmallUfo(SmallUfo.Config(
+			entityStore: entityStore,
+			position: pos,
+			facingLeft: facingLeft,
+			speed: 20,
+		))
+		smallUfos.append(smallUfo)
 	}
 }
 
