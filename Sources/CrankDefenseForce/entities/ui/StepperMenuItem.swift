@@ -63,8 +63,8 @@ class StepperMenuItem: ConfigMenuItem {
 			}
 	
 			leftSprite.moveTo(Point(x: arrowFocusAnimator.currentValue - 12, y: leftSprite.position.y))
-			rightSprite.moveTo(Point(x: arrowFocusAnimator.currentValue + 205, y: rightSprite.position.y))
-			
+			rightSprite.moveTo(Point(x: arrowFocusAnimator.currentValue + 209, y: rightSprite.position.y))
+
 			if arrowFocusAnimator.ended {
 				self.arrowFocusAnimator = nil
 				
