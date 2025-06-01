@@ -24,7 +24,6 @@ let package = Package(
 			name: "CrankDefenseForce",
 			dependencies: [
 				.product(name: "PlaydateKit", package: "PlaydateKit"),
-				"SwiftStubs",
 			],
 			exclude: [
 				"Resources",
@@ -41,11 +40,6 @@ let package = Package(
 				]),
 			]
 		),
-		
-		.target(
-			name: "SwiftStubs",
-			path: "Sources/SwiftStubs"
-		)
 	],
 	swiftLanguageModes: [.v6]
 )
