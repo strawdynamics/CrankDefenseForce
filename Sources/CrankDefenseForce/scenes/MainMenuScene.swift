@@ -187,12 +187,21 @@ class MainMenuScene: BaseScene {
 	
 	override func update() {
 		let pushed = System.buttonState.pushed
-		
+
 		if !exiting {
 			if pushed.contains(.down) {
 				menu?.next()
 			} else if (pushed.contains(.up)) {
 				menu?.prev()
+			}
+
+			let ticks = System.getCrankTicks(6)
+			if ticks != 0 {
+				if ticks == 1 {
+					menu?.next()
+				} else {
+					menu?.prev()
+				}
 			}
 		}
 		
@@ -209,7 +218,6 @@ class MainMenuScene: BaseScene {
 				yScale: 1.0
 			)
 		}
-		
 		
 		if !exiting && pushed.contains(.a) {
 			menu?.menuItems[menu!.selectedItemIndex].action()

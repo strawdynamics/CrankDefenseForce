@@ -59,6 +59,15 @@ class ConfigScene: BaseScene {
 		} else if pushed.contains(.down) {
 			configMenu?.selectNext()
 		}
+
+		let ticks = System.getCrankTicks(6)
+		if ticks != 0 {
+			if ticks == 1 {
+				configMenu?.selectNext()
+			} else {
+				configMenu?.selectPrev()
+			}
+		}
 	}
 	
 	override func enter() {

@@ -118,7 +118,7 @@ class GameSettings {
 			res = .unchanged
 			_sfxVolume = 0
 		}
-		
+
 		return res
 	}
 	
