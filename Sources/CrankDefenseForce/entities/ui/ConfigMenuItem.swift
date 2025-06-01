@@ -2,8 +2,8 @@ import PlaydateKit
 
 // abstract
 class ConfigMenuItem: BaseEntity {
-	static nonisolated(unsafe) let bgBitmapTable = try! Graphics.BitmapTable(path: "configMenuItemBg.png")
-	
+	static nonisolated(unsafe) let bgBitmapTable = try! Graphics.BitmapTable(path: "entities/ui/ConfigMenuItem/bg")
+
 	static let SELECTED_OFFSET_X: Float = 18
 	
 	static let SPRITE_WIDTH: Float = 192

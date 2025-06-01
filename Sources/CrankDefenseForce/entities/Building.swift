@@ -1,14 +1,14 @@
 import PlaydateKit
 
-nonisolated(unsafe) let building1BitmapTable = try! Graphics.BitmapTable(path: "building1.png")
+nonisolated(unsafe) let building1BitmapTable = try! Graphics.BitmapTable(path: "entities/Building/building1")
 
-nonisolated(unsafe) let building2BitmapTable = try! Graphics.BitmapTable(path: "building2.png")
+nonisolated(unsafe) let building2BitmapTable = try! Graphics.BitmapTable(path: "entities/Building/building2")
 
-nonisolated(unsafe) let building3BitmapTable = try! Graphics.BitmapTable(path: "building3.png")
+nonisolated(unsafe) let building3BitmapTable = try! Graphics.BitmapTable(path: "entities/Building/building3")
 
-nonisolated(unsafe) let building4BitmapTable = try! Graphics.BitmapTable(path: "building4.png")
+nonisolated(unsafe) let building4BitmapTable = try! Graphics.BitmapTable(path: "entities/Building/building4")
 
-nonisolated(unsafe) let building5BitmapTable = try! Graphics.BitmapTable(path: "building5.png")
+nonisolated(unsafe) let building5BitmapTable = try! Graphics.BitmapTable(path: "entities/Building/building5")
 
 class Building: BaseEntity {
 	enum BuildingType {

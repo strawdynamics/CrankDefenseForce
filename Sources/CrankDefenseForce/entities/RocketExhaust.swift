@@ -3,7 +3,7 @@ import PlaydateKit
 
 // ./bin/spriterot --rotations=24 --columns=1 --keep-size --output=4.png ~/Downloads/rot/4.png
 class RocketExhaust : BaseEntity {
-	nonisolated(unsafe) static let rocketExhaustBitmapTable = try! Graphics.BitmapTable(path: "rocketExhaust.png")
+	nonisolated(unsafe) static let rocketExhaustBitmapTable = try! Graphics.BitmapTable(path: "entities/RocketExhaust/rocketExhaust")
 	
 	nonisolated(unsafe) static let engineSfx = RocketEngineSfx()
 	

@@ -2,8 +2,8 @@
 import PlaydateKit
 
 class CheckmarkMenuItem: ConfigMenuItem {
-	static nonisolated(unsafe) let checkmarkBitmapTable = try! Graphics.BitmapTable(path: "configMenuItemCheckmark.png")
-	
+	static nonisolated(unsafe) let checkmarkBitmapTable = try! Graphics.BitmapTable(path: "entities/ui/CheckmarkMenuItem/checkmark")
+
 	struct Config {
 		let title: String
 		let offsetX: Float

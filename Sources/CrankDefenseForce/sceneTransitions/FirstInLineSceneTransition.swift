@@ -3,7 +3,7 @@ import PlaydateKit
 class FirstInLineSceneTransition: BaseSceneTransition {
 	let FRAME_DURATION: Float = 0.07
 	let MAX_FRAME_INDEX = 22
-	nonisolated(unsafe) let CURTAINS_BITMAP_TABLE: Graphics.BitmapTable = try! Graphics.BitmapTable.init(path: "firstInLineCurtains.gif")
+	nonisolated(unsafe) let CURTAINS_BITMAP_TABLE: Graphics.BitmapTable = try! Graphics.BitmapTable.init(path: "sceneTransitions/firstInLineCurtains.gif")
 	
 	private var frame = 0
 	private var currentFrameTime: Float = 0.0

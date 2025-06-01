@@ -1,8 +1,8 @@
 import PlaydateKit
 
-nonisolated(unsafe) let groundBitmap = try! Graphics.Bitmap(path: "ground.png")
-
 class GameRunner {
+	nonisolated(unsafe) static let groundBitmap = try! Graphics.Bitmap(path: "ground")
+
 	let entityStore = EntityStore()
 	
 	let enemyCoordinator: EnemyCoordinator
@@ -49,7 +49,7 @@ class GameRunner {
 		}
 		
 		let ground = StaticCollider(StaticCollider.Config(
-			bitmap: groundBitmap,
+			bitmap: Self.groundBitmap,
 			entityStore: entityStore,
 			zIndex: 150
 		))

@@ -6,7 +6,7 @@ class Rocket: BaseEntity, PowerUpDropper {
 		.pauseEnemies: 1
 	]
 	
-	nonisolated(unsafe) static let rocketBitmapTable = try! Graphics.BitmapTable(path: "rocket.png")
+	nonisolated(unsafe) static let rocketBitmapTable = try! Graphics.BitmapTable(path: "entities/Rocket/rocket")
 		
 	struct RemoveEventPayload {
 		var rocket: Rocket

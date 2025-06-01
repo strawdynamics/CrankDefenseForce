@@ -9,10 +9,10 @@ class BigUfo: BaseEntity, PowerUpDropper {
 		return sprite.position
 	}
 	
-	nonisolated(unsafe) static let bigUfoBitmapTable = try! Graphics.BitmapTable(path: "bigUfo.png")
-	
-	nonisolated(unsafe) static let laserBitmap = try! Graphics.Bitmap(path: "bigUfoLaser.png")
-	
+	nonisolated(unsafe) static let bigUfoBitmapTable = try! Graphics.BitmapTable(path: "entities/BigUfo/bigUfo")
+
+	nonisolated(unsafe) static let laserBitmap = try! Graphics.Bitmap(path: "entities/BigUfo/laser")
+
 	static let moveToBuildingFrame: Int = 0
 	
 	static let chargeLaserFrames = 1...9

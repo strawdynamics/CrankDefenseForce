@@ -1,8 +1,8 @@
 import PlaydateKit
 
 class BigUfoBeam: BaseEntity {
-	nonisolated(unsafe) static let bitmap = try! Graphics.Bitmap(path: "bigUfoBeam.png")
-	
+	nonisolated(unsafe) static let bitmap = try! Graphics.Bitmap(path: "entities/BigUfoBeam/beam")
+
 	private var selfDestructTimer: TimedCallback?
 	
 	struct Config {

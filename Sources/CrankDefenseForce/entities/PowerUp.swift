@@ -1,7 +1,7 @@
 import PlaydateKit
 
 class PowerUp: BaseEntity {
-	nonisolated(unsafe) static let powerUpsBitmapTable = try! Graphics.BitmapTable(path: "powerUps.png")
+	nonisolated(unsafe) static let powerUpsBitmapTable = try! Graphics.BitmapTable(path: "powerUps")
 	
 	enum PowerUpType {
 		case none

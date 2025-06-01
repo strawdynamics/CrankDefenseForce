@@ -4,16 +4,16 @@ import PlaydateKit
 class RocketSilo: BaseEntity {
 	static let DEFAULT_THRUST: Float = 42.0;
 	
-	nonisolated(unsafe) static let siloBBitmap = try! Graphics.Bitmap(path: "siloB.png")
+	nonisolated(unsafe) static let siloBBitmap = try! Graphics.Bitmap(path: "entities/RocketSilo/siloB")
 
-	nonisolated(unsafe) static let siloABitmap = try! Graphics.Bitmap(path: "siloA.png")
-	
-	nonisolated(unsafe) static let siloBNightBitmap = try! Graphics.Bitmap(path: "siloBNight.png")
+	nonisolated(unsafe) static let siloABitmap = try! Graphics.Bitmap(path: "entities/RocketSilo/siloA")
 
-	nonisolated(unsafe) static let siloANightBitmap = try! Graphics.Bitmap(path: "siloANight.png")
-	
-	nonisolated(unsafe) static let siloIconsBitmapTable = try! Graphics.BitmapTable(path: "siloIcons")
-	
+	nonisolated(unsafe) static let siloBNightBitmap = try! Graphics.Bitmap(path: "entities/RocketSilo/siloBNight")
+
+	nonisolated(unsafe) static let siloANightBitmap = try! Graphics.Bitmap(path: "entities/RocketSilo/siloANight")
+
+	nonisolated(unsafe) static let siloIconsBitmapTable = try! Graphics.BitmapTable(path: "entities/RocketSilo/siloIcons")
+
 	struct LaunchEventPayload {
 		var rocket: Rocket
 	}

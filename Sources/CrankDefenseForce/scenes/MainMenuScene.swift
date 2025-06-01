@@ -127,7 +127,7 @@ class Menu {
 }
 
 class MainMenuScene: BaseScene {
-	static nonisolated(unsafe) let colonelBitmap = try! Graphics.Bitmap(path: "colonel.png")
+	static nonisolated(unsafe) let colonelBitmap = try! Graphics.Bitmap(path: "scenes/MainMenuScene/colonel")
 	
 	let entityStore = EntityStore()
 	

@@ -7,8 +7,8 @@ enum ImageBackgroundType {
 }
 
 class ImageBackground: BaseEntity {
-	static nonisolated(unsafe) let cityBackgroundBitmap = try! Graphics.Bitmap(path: "cityBackground.png")
-	static nonisolated(unsafe) let configCityBitmap = try! Graphics.Bitmap(path: "configCity.png")
+	static nonisolated(unsafe) let cityBackgroundBitmap = try! Graphics.Bitmap(path: "entities/ImageBackground/cityBackground")
+	static nonisolated(unsafe) let configCityBitmap = try! Graphics.Bitmap(path: "entities/ImageBackground/configCity")
 	static nonisolated(unsafe) let crtBackgroundBitmap = CrtTransitionDetails.CRT_ZOOM_BITMAP_TABLE[0]
 	
 	let sprite: Sprite.Sprite
