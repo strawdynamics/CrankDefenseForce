@@ -1,12 +1,15 @@
 import PlaydateKit
 
 final class Game: PlaydateGame {
-	var scenePresenter: ScenePresenter
-	
+	let scenePresenter: ScenePresenter
+
+	let debugOverlay: DebugOverlay
+
 	init() {
 		Display.refreshRate = 40.0
 		Sprite.setAlwaysRedraw(true)
 		self.scenePresenter = ScenePresenter(firstScene: MainMenuScene())
+		self.debugOverlay = DebugOverlay()
 	}
 	
 	func update() -> Bool {
@@ -15,11 +18,9 @@ final class Game: PlaydateGame {
 		Sprite.updateAndDrawDisplayListSprites()
 		
 		self.scenePresenter.update()
-		
-		if GameSettings.showFps {
-			System.drawFPS()
-		}
-		
+
+		debugOverlay.update()
+
 		return true
 	}
 

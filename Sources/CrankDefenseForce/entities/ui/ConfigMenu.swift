@@ -24,10 +24,18 @@ class ConfigMenu: BaseEntity {
 				offsetX: offsetX,
 				entityStore: config.entityStore
 			)),
-			TimeOfDayMenuItem(TimeOfDayMenuItem.Config(
-				title: "Time of day",
+			EnumMenuItem(EnumMenuItem.Config(
 				offsetX: offsetX,
-				entityStore: config.entityStore
+				entityStore: config.entityStore,
+				getValue: {
+					return GameSettings.timeOfDay.title
+				},
+				prevHandler: {
+					GameSettings.timeOfDay = GameSettings.timeOfDay.prev
+				},
+				nextHandler: {
+					GameSettings.timeOfDay = GameSettings.timeOfDay.next
+				}
 			)),
 			VolumeMenuItem(VolumeMenuItem.Config(
 				title: "Music",
@@ -41,15 +49,17 @@ class ConfigMenu: BaseEntity {
 				volumeType: VolumeMenuItem.VolumeType.sfx,
 				entityStore: config.entityStore
 			)),
-			CheckmarkMenuItem(CheckmarkMenuItem.Config(
-				title: "Show FPS",
+			EnumMenuItem(EnumMenuItem.Config(
 				offsetX: offsetX,
 				entityStore: config.entityStore,
-				getChecked: { () -> Bool in
-					return GameSettings.showFps
+				getValue: {
+					return GameSettings.debugMode.title
 				},
-				toggleHandler: {() -> Void in
-					GameSettings.showFps = !GameSettings.showFps
+				prevHandler: {
+					GameSettings.debugMode = GameSettings.debugMode.prev
+				},
+				nextHandler: {
+					GameSettings.debugMode = GameSettings.debugMode.next
 				}
 			)),
 		]

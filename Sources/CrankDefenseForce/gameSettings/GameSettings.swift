@@ -21,8 +21,8 @@ class GameSettings {
 	
 	private static nonisolated(unsafe) var _timeOfDay: TimeOfDay = .night
 	
-	private static nonisolated(unsafe) var _showFps = false
-	
+	private static nonisolated(unsafe) var _debugMode: DebugMode = .disabled
+
 	static var timeOfDay: TimeOfDay {
 		get {
 			return _timeOfDay
@@ -43,16 +43,16 @@ class GameSettings {
 		}
 	}
 	
-	static var showFps: Bool {
+	static var debugMode: DebugMode {
 		get {
-			return _showFps
+			return _debugMode
 		}
-		
+
 		set(newValue) {
-			_showFps = newValue
+			_debugMode = newValue
 		}
 	}
-	
+
 	static var musicVolume: Int {
 		get {
 			return _musicVolume
@@ -123,10 +123,10 @@ class GameSettings {
 	}
 	
 	private static func readFromDisk() {
-		GameSettingsReader.read()
+		_ = GameSettingsReader.read()
 	}
 	
 	public static func writeToDisk() {
-		GameSettingsWriter.write()
+		_ = GameSettingsWriter.write()
 	}
 }

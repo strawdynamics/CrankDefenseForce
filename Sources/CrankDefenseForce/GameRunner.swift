@@ -66,8 +66,6 @@ class GameRunner {
 		updateInputs()
 		
 		entityStore.lateUpdate()
-		
-		Graphics.drawText("somanyents \(entityStore.entityCount)", at: Point.zero)
 	}
 	
 	func exit() {

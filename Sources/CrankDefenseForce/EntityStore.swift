@@ -1,6 +1,12 @@
 class EntityStore {
+	public static nonisolated(unsafe) var instance: EntityStore? = nil
+
 	private var entities: [BaseEntity] = []
-	
+
+	init() {
+		Self.instance = self
+	}
+
 	var entityCount: Int {
 		return entities.count
 	}
@@ -32,6 +38,4 @@ class EntityStore {
 			$0.id == entityId
 		}
 	}
-	
-	// TODO: iterate entities?
 }

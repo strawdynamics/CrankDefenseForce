@@ -27,9 +27,9 @@ struct GameSettingsWriter {
 		encoder.addTableMember(&encoder, "controlScheme", 13)
 		encoder.writeString(&encoder, GameSettings.controlScheme.stringValue, Int32(GameSettings.controlScheme.stringValue.utf8.count))
 
-		encoder.addTableMember(&encoder, "showFps", 7)
-		GameSettings.showFps ? encoder.writeTrue(&encoder) : encoder.writeFalse(&encoder)
-		
+		encoder.addTableMember(&encoder, "debugMode", 9)
+		encoder.writeString(&encoder, GameSettings.debugMode.stringValue, Int32(GameSettings.debugMode.stringValue.utf8.count))
+
 		encoder.addTableMember(&encoder, "musicVolume", 11)
 		encoder.writeInt(&encoder, Int32(GameSettings.musicVolume))
 		

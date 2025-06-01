@@ -45,15 +45,15 @@ struct GameSettingsReader {
 			let valueType = JsonValueType(rawValue: value.type)
 			
 			if valueType == .string && keyString == "controlScheme".utf8 {
-				GameSettings.controlScheme = ControlScheme.fromString(String(cString: value.data.stringval))!
+				GameSettings.controlScheme = ControlScheme.fromString(String(cString: value.data.stringval)) ?? .standard
 			} else if valueType == .integer && keyString == "musicVolume".utf8 {
 				GameSettings.musicVolume = Int(value.data.intval)
 			} else if valueType == .integer && keyString == "sfxVolume".utf8 {
 				GameSettings.sfxVolume = Int(value.data.intval)
-			} else if (valueType == .trueValue || valueType == .falseValue) && keyString == "showFps".utf8 {
-				GameSettings.showFps = valueType == .trueValue
+			} else if valueType == .string && keyString == "debugMode".utf8 {
+				GameSettings.debugMode = DebugMode.fromString(String(cString: value.data.stringval)) ?? .disabled
 			} else if valueType == .string && keyString == "timeOfDay".utf8 {
-				GameSettings.timeOfDay = TimeOfDay.fromString(String(cString: value.data.stringval))!
+				GameSettings.timeOfDay = TimeOfDay.fromString(String(cString: value.data.stringval)) ?? .night
 			}
 		} else {
 			print("Unexpected nil key in GameSettingsDecoder!")
