@@ -3,7 +3,11 @@ import PlaydateKit
 struct Vector2 {
 	var x: Float
 	var y: Float
-	
+
+	public static var zero: Vector2 {
+		return Vector2(x: 0, y: 0)
+	}
+
 	func normalized() -> Vector2 {
 		let length = sqrtf(x * x + y * y)
 		return length == 0 ? Vector2(x: 0, y: 0) : Vector2(x: x / length, y: y / length)

@@ -41,6 +41,10 @@ class SmallUfo: BaseEntity, PowerUpDropper {
 
 	private let speed: Float
 
+	private var life: Float = 0
+
+	private var nextExhaustTime: Float = 0
+
 	init(_ config: Config) {
 		facingLeft = config.facingLeft
 		speed = config.speed
@@ -70,12 +74,15 @@ class SmallUfo: BaseEntity, PowerUpDropper {
 
 		super.init(config.entityStore)
 
+		scheduleExhaust()
+
 		sprite.smallUfoId = id
 	}
 
 	override func update() {
 		updateOob()
 		sprite.moveBy(dx: Time.deltaTime * speed * (facingLeft ? -1 : 1), dy: 0)
+		updateExhaust()
 		updateBob()
 	}
 
@@ -83,6 +90,18 @@ class SmallUfo: BaseEntity, PowerUpDropper {
 		let pos = position
 		if pos.x < -40 || pos.x > 440 {
 			destroy()
+		}
+	}
+
+	private func scheduleExhaust() {
+		nextExhaustTime += Float.random(in: 0.3..<0.7)
+	}
+
+	private func updateExhaust() {
+		life += Time.deltaTime
+		if life >= nextExhaustTime {
+			spawnExhaust()
+			scheduleExhaust()
 		}
 	}
 
@@ -99,6 +118,23 @@ class SmallUfo: BaseEntity, PowerUpDropper {
 		sprite.moveTo(Point(
 			x: sprite.position.x.rounded(),
 			y: yAnim.currentValue.rounded()
+		))
+	}
+
+	private func spawnExhaust() {
+		_ = ExhaustParticle(ExhaustParticle.Config(
+			position: position + Point(
+				x: facingLeft ? 8 : -8,
+				y: 0
+			),
+			maxRadius: Float.random(in: 1.5..<3),
+			entityStore: entityStore,
+			duration: Float.random(in: 0.4..<0.9),
+			inPercentage: 0.8,
+			velocity: Vector2(
+				x: Float.random(in: 2..<10) * (facingLeft ? 1 : -1),
+				y: -4
+			)
 		))
 	}
 }

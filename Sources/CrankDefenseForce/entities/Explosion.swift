@@ -9,7 +9,7 @@ class Explosion: BaseEntity {
 		let entityStore: EntityStore
 		var duration: Float = 1.8
 		var inPercentage: Float = 0.35
-		var outPercentage: Float = 0.65
+		var collides: Bool = true
 	}
 	
 	class ExplosionSprite: Sprite.Sprite {
@@ -61,8 +61,8 @@ class Explosion: BaseEntity {
 		self.duration = config.duration
 		
 		self.inPercentage = config.inPercentage
-		self.outPercentage = config.outPercentage
-		
+		self.outPercentage = 1 - config.inPercentage
+
 		self.sizeAnimator = Animator(Animator.Config(
 			duration: self.duration * inPercentage,
 			startValue: Explosion.STARTING_RADIUS,
@@ -84,7 +84,9 @@ class Explosion: BaseEntity {
 		sprite.zIndex = 180
 		sprite.position = config.position
 		sprite.setSize(width: maxRadius * 2, height: size)
-		sprite.collideRect = Rect(x: 0, y: 0, width: size, height: size)
+		if config.collides {
+			sprite.collideRect = Rect(x: 0, y: 0, width: size, height: size)
+		}
 		sprite.addToDisplayList()
 	}
 	
