@@ -30,6 +30,7 @@ class Rocket: BaseEntity, PowerUpDropper {
 		var thrust: Float = 0.0
 		var entityStore: EntityStore
 		var owner: Owner
+		var exhaustType: RocketExhaust.ExhaustType = .normal
 	}
 	
 	var sprite = RocketSprite()
@@ -86,7 +87,8 @@ class Rocket: BaseEntity, PowerUpDropper {
 		
 		exhaust = RocketExhaust(RocketExhaust.Config(
 			rocket: self,
-			entityStore: config.entityStore
+			entityStore: config.entityStore,
+			type: config.exhaustType
 		))
 		
 		sprite.rocketId = id
