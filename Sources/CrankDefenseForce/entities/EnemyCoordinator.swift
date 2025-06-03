@@ -169,24 +169,41 @@ class EnemyCoordinator: BaseEntity {
 	}
 	
 	private func spawnFastRocket() {
-		// TODO: warning first
-
-		let pos = Point(x: Float.random(in: 20...380), y: -20)
-
 		guard let targetBuilding = city.buildings.filter({
 			return !$0.destroyed
 		}).randomElement() else {
 			return
 		}
+
+		let pos = Point(x: Float.random(in: 20...380), y: -100)
+
 		let buildingPos = targetBuilding.sprite.position
 
 		let down = Vector2(x: 0, y: -1)
 		let vecToTarget = Vector2(x: buildingPos.x - pos.x, y: buildingPos.y - pos.y).normalized()
-		let angleToTarget = down.angle(with: vecToTarget).toDegrees()
+		let angleToTarget = down.angle(with: vecToTarget)
+		let degAngleToTarget = angleToTarget.toDegrees()
+
+		let adjacent: Float = -pos.y + 15
+		let warningDist: Float = adjacent / fabsf(cosf(angleToTarget)) // hypotenuse
+		let warningPos = Point(
+			x: pos.x + (warningDist * cosf(angleToTarget - Float.pi * 0.5)),
+//			y: pos.y + (warningDist * sinf(angleToTarget - Float.pi * 0.5)),
+			// FIXME: Workaround for some inputs giving different y outputs.
+			y: pos.y + adjacent,
+		)
+
+		let _ = Warning(Warning.Config(
+			position: warningPos,
+			entityStore: entityStore,
+			duration: 2.4,
+			inPercentage: 0.3,
+			outPercentage: 0.3
+		))
 
 		let rocket = Rocket(Rocket.Config(
 			position: pos,
-			angle: angleToTarget,
+			angle: degAngleToTarget,
 			thrust: 36,
 			entityStore: entityStore,
 			owner: .cpu,
