@@ -169,8 +169,31 @@ class EnemyCoordinator: BaseEntity {
 	}
 	
 	private func spawnFastRocket() {
-		// warning first
-		// 30 thrust?
+		// TODO: warning first
+
+		let pos = Point(x: Float.random(in: 20...380), y: -20)
+
+		guard let targetBuilding = city.buildings.filter({
+			return !$0.destroyed
+		}).randomElement() else {
+			return
+		}
+		let buildingPos = targetBuilding.sprite.position
+
+		let down = Vector2(x: 0, y: -1)
+		let vecToTarget = Vector2(x: buildingPos.x - pos.x, y: buildingPos.y - pos.y).normalized()
+		let angleToTarget = down.angle(with: vecToTarget).toDegrees()
+
+		let rocket = Rocket(Rocket.Config(
+			position: pos,
+			angle: angleToTarget,
+			thrust: 36,
+			entityStore: entityStore,
+			owner: .cpu,
+			exhaustType: .big
+		))
+
+		rockets.append(rocket)
 	}
 	
 	private func spawnBigUfo() {

@@ -15,7 +15,7 @@ class RocketExhaust : BaseEntity {
 
 	static let normalDistance: Float = 9
 
-	static let bigDistance: Float = 15
+	static let bigDistance: Float = 22
 
 	var sprite = Sprite.Sprite()
 	
@@ -42,7 +42,7 @@ class RocketExhaust : BaseEntity {
 		type = config.type
 
 		frameAnimator = Animator(Animator.Config(
-			duration: 0.4,
+			duration: type == .normal ? 0.4 : 0.5,
 			startValue: 0.0,
 			endValue: 4.0,
 			easingFn: EasingFn.basic(Ease.linear),
