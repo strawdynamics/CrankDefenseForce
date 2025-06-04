@@ -23,5 +23,9 @@ class BaseEntity {
 	func lateUpdate() {
 		
 	}
+
+	func beforeRemove() {
+
+	}
 }
  

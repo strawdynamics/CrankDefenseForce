@@ -89,7 +89,7 @@ class SmallUfo: BaseEntity, PowerUpDropper {
 	func updateOob() {
 		let pos = position
 		if pos.x < -40 || pos.x > 440 {
-			destroy()
+			remove()
 		}
 	}
 
@@ -105,7 +105,7 @@ class SmallUfo: BaseEntity, PowerUpDropper {
 		}
 	}
 
-	func destroy() {
+	func remove() {
 		Self.removeEmitter.emit(RemoveEventPayload(
 			smallUfo: self,
 		))

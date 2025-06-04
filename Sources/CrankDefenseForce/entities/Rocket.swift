@@ -2,7 +2,7 @@ import PlaydateKit
 
 class Rocket: BaseEntity, PowerUpDropper {
 	static let powerUpDropTable: [PowerUp.PowerUpType: Float] = [
-		.none: 1,
+//		.none: 1,
 		.pauseEnemies: 1
 	]
 	
@@ -210,6 +210,14 @@ class Rocket: BaseEntity, PowerUpDropper {
 		if owner == .cpu && otherRocket.owner == .cpu {
 			// noop, CPU rockets don't collide with each other
 		} else {
+			if owner == .cpu {
+				dropPowerUp()
+			}
+
+			if otherRocket.owner == .cpu {
+				otherRocket.dropPowerUp()
+			}
+
 			explode()
 			otherRocket.remove()
 		}
@@ -232,7 +240,7 @@ class Rocket: BaseEntity, PowerUpDropper {
 		guard let building = entityStore.get(buildingSprite.buildingId) as? Building else { return }
 		
 		explode()
-		building.attemptDestroy()
+		_ = building.attemptDestroy()
 	}
 	
 	func handleCollisionWith(bigUfoSprite: BigUfo.BigUfoSprite) {
@@ -254,11 +262,10 @@ class Rocket: BaseEntity, PowerUpDropper {
 		guard let smallUfo = entityStore.get(smallUfoSprite.smallUfoId) as? SmallUfo else { return }
 
 		explode()
-		smallUfo.destroy()
+		smallUfo.remove()
 	}
 
 	func remove() {
-		sprite.removeFromDisplayList()
 		if let e = exhaust {
 			e.deactivate()
 			entityStore.remove(e)

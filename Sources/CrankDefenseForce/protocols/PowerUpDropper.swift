@@ -1,25 +1,24 @@
 import PlaydateKit
 
-protocol PowerUpDropper: AnyObject {
+protocol PowerUpDropper: BaseEntity {
 	static var powerUpDropTable: [PowerUp.PowerUpType: Float] { get }
 	
 	var position: Point { get }
 }
 
 extension PowerUpDropper {
-	private func dropPowerUp() {
+	func dropPowerUp() {
 		let type = pickPowerUp()
-		
-		switch type {
-		case .none:
-			break
-		case .pauseEnemies:
-			break
-		case .repairCity:
-			break
-		case .destroyEnemies:
-			break
+
+		if type == .none {
+			return
 		}
+
+		_ = PowerUp(PowerUp.Config(
+			position: position,
+			type: type,
+			entityStore: entityStore
+		))
 	}
 	
 	private func pickPowerUp() -> PowerUp.PowerUpType {

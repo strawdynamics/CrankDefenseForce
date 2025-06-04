@@ -7,6 +7,12 @@ class EntityStore {
 		Self.instance = self
 	}
 
+	deinit {
+		self.entities.forEach {
+			$0.beforeRemove()
+		}
+	}
+
 	var entityCount: Int {
 		return entities.count
 	}
@@ -29,7 +35,13 @@ class EntityStore {
 	
 	func remove(_ entity: BaseEntity) {
 		self.entities.removeAll {
-			$0.id == entity.id
+			let shouldRemove = $0.id == entity.id
+
+			if shouldRemove {
+				$0.beforeRemove()
+			}
+
+			return shouldRemove
 		}
 	}
 	

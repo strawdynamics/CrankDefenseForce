@@ -1,7 +1,7 @@
 import PlaydateKit
 
 class PowerUp: BaseEntity {
-	nonisolated(unsafe) static let powerUpsBitmapTable = try! Graphics.BitmapTable(path: "powerUps")
+	nonisolated(unsafe) static let pauseEnemiesBitmapTable = try! Graphics.BitmapTable(path: "entities/PowerUp/pauseEnemies")
 	
 	enum PowerUpType {
 		case none
@@ -29,15 +29,20 @@ class PowerUp: BaseEntity {
 			onCollect?()
 		}
 	}
-	
+
 	struct CollectEventPayload {
 		var type: PowerUpType
+		var position: Point
 	}
 	struct CollectEvent: EventProtocol {
 		typealias Payload = CollectEventPayload
 	}
 	nonisolated(unsafe) static var collectEmitter = EventEmitter<CollectEvent>()
-	
+
+	private var frameAnimator: Animator<Float>
+
+	private var collected = false
+
 	let type: PowerUpType
 	
 	let sprite: PowerUpSprite
@@ -46,23 +51,51 @@ class PowerUp: BaseEntity {
 		type = config.type
 		
 		sprite = PowerUpSprite(type: type)
-		
+
+		frameAnimator = Animator(Animator.Config(
+			duration: 1.2,
+			startValue: 0.0,
+			endValue: 10.0,
+			easingFn: EasingFn.basic(Ease.linear),
+			loopMode: .loop,
+		))
+
 		super.init(config.entityStore)
 		
 		sprite.onCollect = collect
 		
-		let size: Float = 16
-		
+		let size: Float = 18
+
 		sprite.zIndex = 90
 		sprite.position = config.position
 		sprite.setSize(width: size, height: size)
 		sprite.collideRect = Rect(x: 0, y: 0, width: size, height: size)
-		// TODO: Set image based on type
+		sprite.image = Self.pauseEnemiesBitmapTable[0]!
 		sprite.addToDisplayList()
 	}
-	
+
+	override func update() {
+		frameAnimator.update()
+		let animFrame = Int(frameAnimator.currentValue.rounded().truncatingRemainder(dividingBy: 10))
+		sprite.image = Self.pauseEnemiesBitmapTable[animFrame]
+	}
+
 	func collect() {
-		Self.collectEmitter.emit(CollectEventPayload(type: type))
+		if collected {
+			return
+		}
+		collected = true
+
+		Self.collectEmitter.emit(CollectEventPayload(
+			type: type,
+			position: sprite.position
+		))
+
 		entityStore.remove(self)
+	}
+
+	override func beforeRemove() {
+		// Free parent after collect (no `weak`!)
+		sprite.onCollect = nil
 	}
 }
