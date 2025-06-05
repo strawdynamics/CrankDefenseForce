@@ -4,7 +4,7 @@ class Menu {
 	static let width = 120
 	static let height = 120
 	static let fadeDuration: Float = 0.2
-	
+
 	var isFadingIn = false
 	var isFadingOut = false
 	var fadeTime: Float = 0.0
@@ -264,7 +264,6 @@ class MainMenuScene: BaseScene {
 //			print("notes \(trackProps.notes.map { $0.description }.joined(separator: ", "))")
 //			print("polyphony \(trackProps.polyphony)")
 //		}
-//		
 		mp!.play()
 	
 		menu!.fadeIn()

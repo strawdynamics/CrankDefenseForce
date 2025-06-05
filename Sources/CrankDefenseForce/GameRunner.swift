@@ -27,7 +27,13 @@ class GameRunner {
 			entityStore: entityStore,
 			city: city
 		))
-		
+
+		PowerUpCollectHandler(PowerUpCollectHandler.Config(
+			entityStore: entityStore,
+			city: city,
+			enemyCoordinator: enemyCoordinator
+		))
+
 		siloB = RocketSilo(RocketSilo.Config(
 			siloType: .b,
 			entityStore: entityStore

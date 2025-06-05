@@ -9,7 +9,7 @@ class BaseEntity {
 		return unsafeBitCast(entityStorePtr, to: EntityStore.self)
 	}
 	
-	init(_ entityStore: EntityStore) {
+	@discardableResult init(_ entityStore: EntityStore) {
 		self.entityStorePtr = unsafeBitCast(entityStore, to: Int.self)
 		self.id = nextEntityId
 		nextEntityId += 1
