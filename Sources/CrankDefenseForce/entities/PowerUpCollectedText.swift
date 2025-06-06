@@ -1,12 +1,54 @@
 import PlaydateKit
 
 class PowerUpCollectedText: BaseEntity {
+	private static func createBitmap(text: String, timeOfDay: TimeOfDay) -> Graphics.Bitmap {
+		let textBitmap = Graphics.Bitmap(
+			strokedText: text,
+			strokeWidth: 1,
+			textColor: timeOfDay == .day ? .fillWhite : .fillBlack,
+			strokeColor: timeOfDay == .day ? .fillBlack : .fillWhite,
+			align: .center,
+			font: CdfFont.NicoPups16
+		)
+		return textBitmap
+
+		// FIXME: Dither flashing!
+//		let (textWidth, textHeight, _) = textBitmap.getData(mask: nil, data: nil)
+//		let outWidth = textWidth + 4
+//		let outHeight = textHeight + 4
+//
+//		let outBitmap = Graphics.Bitmap(
+//			width: outWidth,
+//			height: outHeight
+//		)
+//
+//		Graphics.pushContext(outBitmap)
+//		Graphics.fillRoundRect(
+//			Rect(
+//				x: 0,
+//				y: 0,
+//				width: outWidth,
+//				height: outHeight,
+//			),
+//			radius: outHeight / 2,
+//			color: Graphics.Color.getBayer4x4FadeColor(
+//				foreground: timeOfDay == .day ? 1 : 0,
+//				alpha: 0.1
+//			)
+//		)
+//		Graphics.drawMode = .copy
+//		Graphics.drawBitmap(textBitmap, at: Point(x: 2, y: 2))
+//		Graphics.popContext()
+//
+//		return outBitmap
+	}
+
 	static nonisolated(unsafe) let dayBitmaps: [PowerUp.PowerUpType: Graphics.Bitmap] = [
-		.pauseEnemies: Graphics.Bitmap(strokedText: "ASSAULT\nPAUSED", strokeWidth: 1, textColor: .fillWhite, strokeColor: .fillBlack, align: .center, font: CdfFont.NicoPups16)
+		.pauseEnemies: PowerUpCollectedText.createBitmap(text: "ASSAULT PAUSED", timeOfDay: .day),
 	]
 
 	static nonisolated(unsafe) let nightBitmaps: [PowerUp.PowerUpType: Graphics.Bitmap] = [
-		.pauseEnemies: Graphics.Bitmap(strokedText: "ASSAULT\nPAUSED", strokeWidth: 1, textColor: .fillBlack, strokeColor: .fillWhite, align: .center, font: CdfFont.NicoPups16)
+		.pauseEnemies: PowerUpCollectedText.createBitmap(text: "ASSAULT PAUSED", timeOfDay: .night),
 	]
 
 
