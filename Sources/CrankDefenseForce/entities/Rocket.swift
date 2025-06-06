@@ -218,7 +218,7 @@ class Rocket: BaseEntity, PowerUpDropper {
 				otherRocket.dropPowerUp()
 			}
 
-			explode()
+			explode(at: Point.lerp(from: position, to: otherRocket.position, percent: 0.5))
 			otherRocket.remove()
 		}
 	}
@@ -280,16 +280,20 @@ class Rocket: BaseEntity, PowerUpDropper {
 	}
 	
 	func explode() {
-		let _ = Explosion(Explosion.Config(
-			position: sprite.position,
+		explode(at: position)
+	}
+
+	func explode(at position: Point) {
+		_ = Explosion(Explosion.Config(
+			position: position,
 			maxRadius: 32,
 			entityStore: entityStore,
 			duration: 2,
 		))
-		
+
 		remove()
 	}
-	
+
 	func setThrust(newThrust: Float) {
 		thrust = newThrust
 	}

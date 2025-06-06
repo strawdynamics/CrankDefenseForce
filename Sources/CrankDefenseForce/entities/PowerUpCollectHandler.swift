@@ -21,8 +21,6 @@ class PowerUpCollectHandler: BaseEntity {
 	}
 	
 	func handlePowerUpCollect(_ e: PowerUp.CollectEvent.Payload) {
-		print("Hey collected \(e.type)")
-
 		PowerUpCollectedText(PowerUpCollectedText.Config(
 			entityStore: entityStore,
 			powerUpType: e.type,
