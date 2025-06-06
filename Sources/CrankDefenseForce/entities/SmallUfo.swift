@@ -2,7 +2,10 @@ import PlaydateKit
 
 class SmallUfo: BaseEntity, PowerUpDropper {
 	static let powerUpDropTable: [PowerUp.PowerUpType: Float] = [
-		.none: 1
+		.none: 50,
+		.pauseEnemies: 25,
+		.repairBuilding: 10,
+		.destroyEnemies: 15,
 	]
 
 	struct RemoveEventPayload {

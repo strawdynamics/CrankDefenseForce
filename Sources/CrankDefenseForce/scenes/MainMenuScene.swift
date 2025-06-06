@@ -246,7 +246,7 @@ class MainMenuScene: BaseScene {
 			Menu.MenuItem(key: "ABOUT", action: self.handleAboutPressed),
 		])
 		
-		mp = MasterPlayer(songPath: "songs/universe-map.mid")
+//		mp = MasterPlayer(songPath: "songs/universe-map.mid")
 //		
 //		var i = 0
 //		for trackProps in mp!.trackProps {
@@ -264,7 +264,7 @@ class MainMenuScene: BaseScene {
 //			print("notes \(trackProps.notes.map { $0.description }.joined(separator: ", "))")
 //			print("polyphony \(trackProps.polyphony)")
 //		}
-		mp!.play()
+//		mp!.play()
 	
 		menu!.fadeIn()
 	}

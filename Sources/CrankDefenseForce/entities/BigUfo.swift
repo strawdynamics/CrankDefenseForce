@@ -2,9 +2,12 @@ import PlaydateKit
 
 class BigUfo: BaseEntity, PowerUpDropper {
 	static let powerUpDropTable: [PowerUp.PowerUpType: Float] = [
-		.none: 1
+		.none: 50,
+		.pauseEnemies: 25,
+		.repairBuilding: 10,
+		.destroyEnemies: 15,
 	]
-	
+
 	var position: Point {
 		return sprite.position
 	}
@@ -180,7 +183,8 @@ class BigUfo: BaseEntity, PowerUpDropper {
 		damage()
 	}
 
-	func damage() {
+	/// Returns true if destroyed
+	@discardableResult func damage() -> Bool {
 		damagedTime = 0
 		damagedAnimator = Animator(Animator.Config(
 			duration: 0.15,
@@ -194,6 +198,9 @@ class BigUfo: BaseEntity, PowerUpDropper {
 		
 		if hitPoints <= 0 {
 			currentActivity = .destroyed
+			return true
+		} else {
+			return false
 		}
 	}
 	

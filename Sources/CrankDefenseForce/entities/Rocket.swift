@@ -2,9 +2,10 @@ import PlaydateKit
 
 class Rocket: BaseEntity, PowerUpDropper {
 	static let powerUpDropTable: [PowerUp.PowerUpType: Float] = [
-//		.none: 1,
-//		.pauseEnemies: 1
-		.repairBuilding: 1
+		.none: 17,
+		.pauseEnemies: 1,
+		.repairBuilding: 1,
+		.destroyEnemies: 1,
 	]
 	
 	nonisolated(unsafe) static let rocketBitmapTable = try! Graphics.BitmapTable(path: "entities/Rocket/rocket")
@@ -252,7 +253,11 @@ class Rocket: BaseEntity, PowerUpDropper {
 		guard let bigUfo = entityStore.get(bigUfoSprite.bigUfoId) as? BigUfo else { return }
 		
 		explode()
-		bigUfo.damage()
+		let destroyed = bigUfo.damage()
+
+		if destroyed {
+			bigUfo.dropPowerUp()
+		}
 	}
 
 	func handleCollisionWith(smallUfoSprite: SmallUfo.SmallUfoSprite) {
@@ -263,6 +268,7 @@ class Rocket: BaseEntity, PowerUpDropper {
 		guard let smallUfo = entityStore.get(smallUfoSprite.smallUfoId) as? SmallUfo else { return }
 
 		explode()
+		smallUfo.dropPowerUp()
 		smallUfo.remove()
 	}
 
