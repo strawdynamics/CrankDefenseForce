@@ -2,11 +2,11 @@ import PlaydateKit
 
 class PowerUpCollectedText: BaseEntity {
 	static nonisolated(unsafe) let dayBitmaps: [PowerUp.PowerUpType: Graphics.Bitmap] = [
-		.pauseEnemies: Graphics.Bitmap(strokedText: "ASSAULT PAUSED", strokeWidth: 1, textColor: .fillWhite, strokeColor: .fillBlack, align: .right, font: CdfFont.NicoPups16)
+		.pauseEnemies: Graphics.Bitmap(strokedText: "ASSAULT\nPAUSED", strokeWidth: 1, textColor: .fillWhite, strokeColor: .fillBlack, align: .center, font: CdfFont.NicoPups16)
 	]
 
 	static nonisolated(unsafe) let nightBitmaps: [PowerUp.PowerUpType: Graphics.Bitmap] = [
-		.pauseEnemies: Graphics.Bitmap(strokedText: "ASSAULT PAUSED", strokeWidth: 1, textColor: .fillBlack, strokeColor: .fillWhite, align: .right, font: CdfFont.NicoPups16)
+		.pauseEnemies: Graphics.Bitmap(strokedText: "ASSAULT\nPAUSED", strokeWidth: 1, textColor: .fillBlack, strokeColor: .fillWhite, align: .center, font: CdfFont.NicoPups16)
 	]
 
 
@@ -47,8 +47,8 @@ class PowerUpCollectedText: BaseEntity {
 		yAnimator = Animator(Animator.Config(
 			duration: duration,
 			startValue: position.y,
-			endValue: position.y - 12,
-			easingFn: EasingFn.basic(Ease.inOutQuad)
+			endValue: position.y - 10,
+			easingFn: EasingFn.basic(Ease.outQuad)
 		))
 
 		alphaAnimator = Animator(Animator.Config(
