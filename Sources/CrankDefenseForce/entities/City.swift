@@ -32,4 +32,8 @@ class City: BaseEntity {
 			)))
 		}
 	}
+
+	func repairBuilding() {
+		buildings.filter { $0.destroyed }.randomElement()?.repair()
+	}
 }

@@ -1,12 +1,14 @@
 import PlaydateKit
 
 class PowerUp: BaseEntity {
+	nonisolated(unsafe) static let noneBitmapTable = try! Graphics.BitmapTable(path: "entities/PowerUp/none")
 	nonisolated(unsafe) static let pauseEnemiesBitmapTable = try! Graphics.BitmapTable(path: "entities/PowerUp/pauseEnemies")
-	
+	nonisolated(unsafe) static let repairBuildingBitmapTable = try! Graphics.BitmapTable(path: "entities/PowerUp/repairBuilding")
+
 	enum PowerUpType {
 		case none
 		case pauseEnemies
-		case repairCity
+		case repairBuilding
 		case destroyEnemies
 	}
 	
@@ -43,6 +45,8 @@ class PowerUp: BaseEntity {
 
 	private var collected = false
 
+	private var bitmapTable: Graphics.BitmapTable
+
 	let type: PowerUpType
 	
 	let sprite: PowerUpSprite
@@ -60,6 +64,15 @@ class PowerUp: BaseEntity {
 			loopMode: .loop,
 		))
 
+		switch type {
+		case .pauseEnemies:
+			bitmapTable = Self.pauseEnemiesBitmapTable
+		case .repairBuilding:
+			bitmapTable = Self.repairBuildingBitmapTable
+		default:
+			bitmapTable = Self.noneBitmapTable
+		}
+
 		super.init(config.entityStore)
 		
 		sprite.onCollect = collect
@@ -67,17 +80,16 @@ class PowerUp: BaseEntity {
 		let size: Float = 18
 
 		sprite.zIndex = 90
-		sprite.position = config.position
-		sprite.setSize(width: size, height: size)
+		sprite.image = bitmapTable[0]!
+		sprite.moveTo(config.position)
 		sprite.collideRect = Rect(x: 0, y: 0, width: size, height: size)
-		sprite.image = Self.pauseEnemiesBitmapTable[0]!
 		sprite.addToDisplayList()
 	}
 
 	override func update() {
 		frameAnimator.update()
 		let animFrame = Int(frameAnimator.currentValue.rounded().truncatingRemainder(dividingBy: 10))
-		sprite.image = Self.pauseEnemiesBitmapTable[animFrame]
+		sprite.image = bitmapTable[animFrame]
 	}
 
 	func collect() {

@@ -37,15 +37,16 @@ class Building: BaseEntity {
 	
 	private(set) var destroyed = false
 	private var destructionComplete = false
-	
+
+	let bitmapTable: Graphics.BitmapTable
+
 	var position: Point {
 		return sprite.position
 	}
 	
 	init(_ config: Config) {
 		buildingType = config.buildingType
-		
-		let bitmapTable: Graphics.BitmapTable
+
 		switch buildingType {
 		case .one:
 			bitmapTable = building1BitmapTable
@@ -108,7 +109,20 @@ class Building: BaseEntity {
 		
 		return true
 	}
-	
+
+	func repair() {
+		if !destroyed {
+			return
+		}
+
+		destroyed = false
+		destructionComplete = false
+		destroyAnimation.stop()
+
+		sprite.collisionsEnabled = true
+		sprite.image = bitmapTable[0]
+	}
+
 	override func update() {
 		if destroyed && !destructionComplete {
 			destroyAnimation.update()

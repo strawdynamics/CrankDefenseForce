@@ -12,7 +12,7 @@ class PowerUpCollectedText: BaseEntity {
 		)
 		return textBitmap
 
-		// FIXME: Dither flashing!
+		// FIXME: Dither flashing! Maybe only animate y during in/out like opacity?
 //		let (textWidth, textHeight, _) = textBitmap.getData(mask: nil, data: nil)
 //		let outWidth = textWidth + 4
 //		let outHeight = textHeight + 4
@@ -45,10 +45,12 @@ class PowerUpCollectedText: BaseEntity {
 
 	static nonisolated(unsafe) let dayBitmaps: [PowerUp.PowerUpType: Graphics.Bitmap] = [
 		.pauseEnemies: PowerUpCollectedText.createBitmap(text: "ASSAULT PAUSED", timeOfDay: .day),
+		.repairBuilding: PowerUpCollectedText.createBitmap(text: "BUILDING REPAIRED", timeOfDay: .day),
 	]
 
 	static nonisolated(unsafe) let nightBitmaps: [PowerUp.PowerUpType: Graphics.Bitmap] = [
 		.pauseEnemies: PowerUpCollectedText.createBitmap(text: "ASSAULT PAUSED", timeOfDay: .night),
+		.repairBuilding: PowerUpCollectedText.createBitmap(text: "BUILDING REPAIRED", timeOfDay: .night),
 	]
 
 

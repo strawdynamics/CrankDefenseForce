@@ -30,6 +30,8 @@ class PowerUpCollectHandler: BaseEntity {
 		switch e.type {
 		case .pauseEnemies:
 			handleCollectedPauseEnemies(e)
+		case .repairBuilding:
+			handleCollectedRepairBuilding(e)
 		default:
 			break
 		}
@@ -37,5 +39,9 @@ class PowerUpCollectHandler: BaseEntity {
 
 	private func handleCollectedPauseEnemies(_ e: PowerUp.CollectEvent.Payload) {
 		enemyCoordinator.pause(for: 10)
+	}
+
+	private func handleCollectedRepairBuilding(_ e: PowerUp.CollectEvent.Payload) {
+		city.repairBuilding()
 	}
 }
