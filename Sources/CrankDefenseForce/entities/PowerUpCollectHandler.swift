@@ -32,6 +32,8 @@ class PowerUpCollectHandler: BaseEntity {
 			handleCollectedPauseEnemies(e)
 		case .repairBuilding:
 			handleCollectedRepairBuilding(e)
+		case .destroyEnemies:
+			handleCollectedDestroyEnemies(e)
 		default:
 			break
 		}
@@ -43,5 +45,9 @@ class PowerUpCollectHandler: BaseEntity {
 
 	private func handleCollectedRepairBuilding(_ e: PowerUp.CollectEvent.Payload) {
 		city.repairBuilding()
+	}
+
+	private func handleCollectedDestroyEnemies(_ e: PowerUp.CollectEvent.Payload) {
+		enemyCoordinator.destroyAll()
 	}
 }

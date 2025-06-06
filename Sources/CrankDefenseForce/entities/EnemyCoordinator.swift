@@ -75,6 +75,20 @@ class EnemyCoordinator: BaseEntity {
 		pausedUntil = uptime + pauseDuration
 	}
 
+	func destroyAll() {
+		for rocket in rockets {
+			rocket.explode()
+		}
+
+		for smallUfo in smallUfos {
+			smallUfo.explode()
+		}
+
+		if let bigUfo {
+			bigUfo.explode()
+		}
+	}
+
 	override func update() {
 		if !started {
 			return

@@ -105,6 +105,17 @@ class SmallUfo: BaseEntity, PowerUpDropper {
 		}
 	}
 
+	func explode() {
+		_ = Explosion(Explosion.Config(
+			position: position,
+			maxRadius: 32,
+			entityStore: entityStore,
+			duration: 2,
+		))
+
+		remove()
+	}
+
 	func remove() {
 		Self.removeEmitter.emit(RemoveEventPayload(
 			smallUfo: self,

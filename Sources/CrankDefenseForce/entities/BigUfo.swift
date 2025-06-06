@@ -174,7 +174,12 @@ class BigUfo: BaseEntity, PowerUpDropper {
 		updatePendingExplosions()
 		updateDamaged()
 	}
-	
+
+	func explode() {
+		hitPoints = 1
+		damage()
+	}
+
 	func damage() {
 		damagedTime = 0
 		damagedAnimator = Animator(Animator.Config(

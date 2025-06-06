@@ -46,11 +46,13 @@ class PowerUpCollectedText: BaseEntity {
 	static nonisolated(unsafe) let dayBitmaps: [PowerUp.PowerUpType: Graphics.Bitmap] = [
 		.pauseEnemies: PowerUpCollectedText.createBitmap(text: "ASSAULT PAUSED", timeOfDay: .day),
 		.repairBuilding: PowerUpCollectedText.createBitmap(text: "BUILDING REPAIRED", timeOfDay: .day),
+		.destroyEnemies: PowerUpCollectedText.createBitmap(text: "BOOM", timeOfDay: .day),
 	]
 
 	static nonisolated(unsafe) let nightBitmaps: [PowerUp.PowerUpType: Graphics.Bitmap] = [
 		.pauseEnemies: PowerUpCollectedText.createBitmap(text: "ASSAULT PAUSED", timeOfDay: .night),
 		.repairBuilding: PowerUpCollectedText.createBitmap(text: "BUILDING REPAIRED", timeOfDay: .night),
+		.destroyEnemies: PowerUpCollectedText.createBitmap(text: "BOOM", timeOfDay: .night),
 	]
 
 

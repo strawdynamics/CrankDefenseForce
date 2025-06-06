@@ -4,6 +4,7 @@ class PowerUp: BaseEntity {
 	nonisolated(unsafe) static let noneBitmapTable = try! Graphics.BitmapTable(path: "entities/PowerUp/none")
 	nonisolated(unsafe) static let pauseEnemiesBitmapTable = try! Graphics.BitmapTable(path: "entities/PowerUp/pauseEnemies")
 	nonisolated(unsafe) static let repairBuildingBitmapTable = try! Graphics.BitmapTable(path: "entities/PowerUp/repairBuilding")
+	nonisolated(unsafe) static let destroyEnemiesBitmapTable = try! Graphics.BitmapTable(path: "entities/PowerUp/destroyEnemies")
 
 	enum PowerUpType {
 		case none
@@ -69,6 +70,8 @@ class PowerUp: BaseEntity {
 			bitmapTable = Self.pauseEnemiesBitmapTable
 		case .repairBuilding:
 			bitmapTable = Self.repairBuildingBitmapTable
+		case .destroyEnemies:
+			bitmapTable = Self.destroyEnemiesBitmapTable
 		default:
 			bitmapTable = Self.noneBitmapTable
 		}
