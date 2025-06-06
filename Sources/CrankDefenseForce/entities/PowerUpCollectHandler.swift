@@ -26,5 +26,16 @@ class PowerUpCollectHandler: BaseEntity {
 			powerUpType: e.type,
 			position: e.position
 		))
+
+		switch e.type {
+		case .pauseEnemies:
+			handleCollectedPauseEnemies(e)
+		default:
+			break
+		}
+	}
+
+	private func handleCollectedPauseEnemies(_ e: PowerUp.CollectEvent.Payload) {
+		enemyCoordinator.pause(for: 10)
 	}
 }

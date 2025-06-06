@@ -48,6 +48,8 @@ class EnemyCoordinator: BaseEntity {
 
 	private var smallUfos: [SmallUfo] = []
 
+	private var pausedUntil: Float? = nil
+
 	struct Config {
 		let entityStore: EntityStore
 		let city: City
@@ -68,7 +70,11 @@ class EnemyCoordinator: BaseEntity {
 		
 		spawnAndSchedule()
 	}
-	
+
+	func pause(for pauseDuration: Float) {
+		pausedUntil = uptime + pauseDuration
+	}
+
 	override func update() {
 		if !started {
 			return
@@ -81,9 +87,15 @@ class EnemyCoordinator: BaseEntity {
 		}
 		
 		uptime += Time.deltaTime
-		
-		if uptime >= nextSpawnTime {
-			spawnAndSchedule()
+
+		if let pausedUntil {
+			if uptime >= pausedUntil {
+				self.pausedUntil = nil
+			}
+		} else {
+			if uptime >= nextSpawnTime {
+				spawnAndSchedule()
+			}
 		}
 	}
 
