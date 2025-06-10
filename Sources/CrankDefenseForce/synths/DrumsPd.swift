@@ -1,12 +1,13 @@
 import PlaydateKit
+import PDKMasterPlayer
 
 enum DrumsPd {
 	private static let pathBase = "synths/drumsPd"
 
-	private typealias NoteProps = MasterPlayer.SynthInstrument.NoteProps
+	private typealias NoteProps = SampleInstrument.NoteProps
 
 	static func register() {
-		MasterPlayer.SynthInstrument.add(
+		SampleInstrument.register(
 			id: "com.ninovanhooff.masterplayer.drums-pd",
 			notes: [
 				MIDINote(35): NoteProps(path: "\(Self.pathBase)/kick"),

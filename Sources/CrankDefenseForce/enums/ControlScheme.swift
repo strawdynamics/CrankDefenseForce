@@ -1,3 +1,5 @@
+import UTF8ViewExtensions
+
 enum ControlScheme {
 	case standard
 	case leftyLauncher

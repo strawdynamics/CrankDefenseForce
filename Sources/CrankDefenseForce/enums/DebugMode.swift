@@ -1,3 +1,5 @@
+import UTF8ViewExtensions
+
 enum DebugMode {
 	case disabled
 	case fpsOnly

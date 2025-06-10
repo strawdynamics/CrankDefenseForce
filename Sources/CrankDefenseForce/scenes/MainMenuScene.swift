@@ -1,4 +1,6 @@
 import PlaydateKit
+import PDKMasterPlayer
+import PDKPdfxr
 
 class Menu {
 	static let width = 120
@@ -136,7 +138,9 @@ class MainMenuScene: BaseScene {
 	var exiting = false
 	
 	var mp: MasterPlayer?
-	
+
+	let fx = try! Pdfxr(effectPath: "sfx/weird")
+
 	class ColonelSprite: PlaydateKit.Sprite.Sprite {
 		static let startOffX: Float = -160
 		static let endOffX: Float = -16
@@ -195,6 +199,10 @@ class MainMenuScene: BaseScene {
 				menu?.prev()
 			}
 
+			if pushed.contains(.b) {
+				fx.play()
+			}
+
 			let ticks = System.getCrankTicks(6)
 			if ticks != 0 {
 				if ticks == 1 {
@@ -246,7 +254,7 @@ class MainMenuScene: BaseScene {
 			Menu.MenuItem(key: "ABOUT", action: self.handleAboutPressed),
 		])
 		
-//		mp = MasterPlayer(songPath: "songs/universe-map.mid")
+		mp = MasterPlayer(songPath: "songs/universe-map.mid")
 //		
 //		var i = 0
 //		for trackProps in mp!.trackProps {
@@ -264,7 +272,7 @@ class MainMenuScene: BaseScene {
 //			print("notes \(trackProps.notes.map { $0.description }.joined(separator: ", "))")
 //			print("polyphony \(trackProps.polyphony)")
 //		}
-//		mp!.play()
+		mp!.play()
 	
 		menu!.fadeIn()
 	}

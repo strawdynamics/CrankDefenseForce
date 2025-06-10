@@ -15,15 +15,20 @@ let package = Package(
 		.library(name: "CrankDefenseForce", type: xcode ? nil : .dynamic, targets: ["CrankDefenseForce"]),
 	],
 	dependencies: [
-		.package(url: "https://github.com/finnvoor/PlaydateKit.git", branch: "main")
-//		.package(url: "https://github.com/finnvoor/PlaydateKit.git", revision: "87c8b0c")
-//		.package(path: "../PlaydateKit")
+		.package(url: "https://github.com/finnvoor/PlaydateKit.git", branch: "main"),
+		.package(url: "https://github.com/strawdynamics/UTF8ViewExtensions.git", branch: "main"),
+//		.package(path: "../PlaydateKit"),
+		.package(url: "https://github.com/strawdynamics/PDKMasterPlayer.git", branch: "main"),
+		.package(url: "https://github.com/strawdynamics/PDKPdfxr.git", branch: "main"),
 	],
 	targets: [
 		.target(
 			name: "CrankDefenseForce",
 			dependencies: [
 				.product(name: "PlaydateKit", package: "PlaydateKit"),
+				.product(name: "PDKMasterPlayer", package: "PDKMasterPlayer"),
+				.product(name: "PDKPdfxr", package: "PDKPdfxr"),
+				.product(name: "UTF8ViewExtensions", package: "UTF8ViewExtensions"),
 			],
 			exclude: [
 				"Resources",

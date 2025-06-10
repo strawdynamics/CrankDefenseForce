@@ -42,17 +42,17 @@ struct GameSettingsReader {
 	static nonisolated(unsafe) var didDecodeTableValue: @convention(c) (UnsafeMutablePointer<json_decoder>?, UnsafePointer<CChar>?, json_value) -> Void = { decoder, key, value in
 		if let key = key {
 			let keyString = String(cString: key).utf8
-			let valueType = JsonValueType(rawValue: value.type)
-			
-			if valueType == .string && keyString == "controlScheme".utf8 {
+			let valueType = json_value_type(rawValue: numericCast(value.type))
+
+			if valueType == json_value_type.string && keyString == "controlScheme".utf8 {
 				GameSettings.controlScheme = ControlScheme.fromString(String(cString: value.data.stringval)) ?? .standard
-			} else if valueType == .integer && keyString == "musicVolume".utf8 {
+			} else if valueType == json_value_type.integer && keyString == "musicVolume".utf8 {
 				GameSettings.musicVolume = Int(value.data.intval)
-			} else if valueType == .integer && keyString == "sfxVolume".utf8 {
+			} else if valueType == json_value_type.integer && keyString == "sfxVolume".utf8 {
 				GameSettings.sfxVolume = Int(value.data.intval)
-			} else if valueType == .string && keyString == "debugMode".utf8 {
+			} else if valueType == json_value_type.string && keyString == "debugMode".utf8 {
 				GameSettings.debugMode = DebugMode.fromString(String(cString: value.data.stringval)) ?? .disabled
-			} else if valueType == .string && keyString == "timeOfDay".utf8 {
+			} else if valueType == json_value_type.string && keyString == "timeOfDay".utf8 {
 				GameSettings.timeOfDay = TimeOfDay.fromString(String(cString: value.data.stringval)) ?? .night
 			}
 		} else {

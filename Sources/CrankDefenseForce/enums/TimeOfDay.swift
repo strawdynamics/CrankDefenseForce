@@ -1,3 +1,5 @@
+import UTF8ViewExtensions
+
 enum TimeOfDay {
 	case day
 	case night
