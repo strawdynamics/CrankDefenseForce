@@ -1,0 +1,62 @@
+import CPlaydate
+import PlaydateKit
+
+struct GameSettingsReader {
+	static func read() -> Bool {
+		let stat = try? PlaydateKit.File.stat(path: "gameSettings.json")
+		
+		if stat == nil {
+			return false
+		}
+		
+		let file = try! PlaydateKit.File.open(path: "gameSettings.json", mode: File.Options.readData)
+		
+		let fileBuffer = UnsafeMutableRawPointer.allocate(byteCount: Int(stat!.size), alignment: 1)
+		
+		let bytesRead = try! file.read(buffer: fileBuffer, length: stat!.size)
+		
+		let uint8Buffer = UnsafeBufferPointer<UInt8>(start: fileBuffer.assumingMemoryBound(to: UInt8.self), count: bytesRead)
+		let jsonString = String(decoding: uint8Buffer, as: Unicode.UTF8.self)
+		
+		var decoder = JSON.Decoder()
+		decoder.decodeError = GameSettingsReader.decodeError
+		decoder.didDecodeTableValue = GameSettingsReader.didDecodeTableValue
+		
+		var value = JSON.Value()
+		
+		let result = JSON.decodeString(using: &decoder, jsonString: jsonString, value: &value)
+		
+		return result != 0
+	}
+	
+	static nonisolated(unsafe) var decodeError: @convention(c) (UnsafeMutablePointer<json_decoder>?, UnsafePointer<CChar>?, Int32) -> Void = { decoder, error, lineNumber in
+		if let error = error {
+			let message = String(cString: error)
+			print("Decode error at line \(lineNumber): \(message)")
+		} else {
+			print("Unknown decode error at line \(lineNumber)")
+		}
+	}
+
+//	 void (*didDecodeTableValue)(json_decoder* decoder, const char* key, json_value value);
+	static nonisolated(unsafe) var didDecodeTableValue: @convention(c) (UnsafeMutablePointer<json_decoder>?, UnsafePointer<CChar>?, json_value) -> Void = { decoder, key, value in
+		if let key = key {
+			let keyString = String(cString: key).utf8
+			let valueType = json_value_type(rawValue: numericCast(value.type))
+
+			if valueType == json_value_type.string && keyString == "controlScheme".utf8 {
+				GameSettings.controlScheme = ControlScheme.fromString(String(cString: value.data.stringval)) ?? .standard
+			} else if valueType == json_value_type.integer && keyString == "musicVolume".utf8 {
+				GameSettings.musicVolume = Int(value.data.intval)
+			} else if valueType == json_value_type.integer && keyString == "sfxVolume".utf8 {
+				GameSettings.sfxVolume = Int(value.data.intval)
+			} else if valueType == json_value_type.string && keyString == "debugMode".utf8 {
+				GameSettings.debugMode = DebugMode.fromString(String(cString: value.data.stringval)) ?? .disabled
+			} else if valueType == json_value_type.string && keyString == "timeOfDay".utf8 {
+				GameSettings.timeOfDay = TimeOfDay.fromString(String(cString: value.data.stringval)) ?? .night
+			}
+		} else {
+			print("Unexpected nil key in GameSettingsDecoder!")
+		}
+	}
+}
