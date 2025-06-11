@@ -21,13 +21,19 @@ class EnemyCoordinator: BaseEntity {
 	private static let difficultyLevels: [DifficultyLevel] = [
 		DifficultyLevel(
 //			baseSpawnInterval: 15.0, // slow for testing
-			baseSpawnInterval: 5.0, // previous easiest
+//			baseSpawnInterval: 5.0, // previous easiest
 //			baseSpawnInterval: 1.25, // previous hardest
 //			baseSpawnInterval: 0.5, // too many!
+			baseSpawnInterval: 4, // Test with Charlene 2025/06/06
 			spawnWeights: [
-				.rocket: 0,
-				.bigUfo: 0,
-				.smallUfo: 1,
+				.rocket: 75,
+				.fastRocket: 5,
+				.bigUfo: 10,
+				.smallUfo: 10,
+//				.rocket: 85,
+//				.bigUfo: 5,
+//				.smallUfo: 5,
+//				.fastRocket: 5,
 			]
 		),
 	]
