@@ -1,5 +1,9 @@
 # Crank Defense Force
 
+TODO: Note about how this won't run because missing assets, Catalog CTA.
+
+## Running locally
+
 ```
 ./build-and-run.sh
 
