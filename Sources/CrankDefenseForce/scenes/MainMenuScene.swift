@@ -136,10 +136,8 @@ class MainMenuScene: BaseScene {
 	var menu: Menu?
 	
 	var exiting = false
-	
-	var mp: MasterPlayer?
 
-	let fx = try! Pdfxr(effectPath: "sfx/weird")
+//	let fx = try! Pdfxr(effectPath: "sfx/weird")
 
 	class ColonelSprite: PlaydateKit.Sprite.Sprite {
 		static let startOffX: Float = -160
@@ -199,9 +197,9 @@ class MainMenuScene: BaseScene {
 				menu?.prev()
 			}
 
-			if pushed.contains(.b) {
-				fx.play()
-			}
+//			if pushed.contains(.b) {
+//				fx.play()
+//			}
 
 			let ticks = System.getCrankTicks(6)
 			if ticks != 0 {
@@ -247,33 +245,15 @@ class MainMenuScene: BaseScene {
 	}
 	
 	override func start() {
+		Soundtrack.instance.playUnlessActive(song: .sendHelp)
+
 		menu = Menu(menuItems: [
 			Menu.MenuItem(key: "LAUNCH!", action: self.handlePlayPressed),
 			Menu.MenuItem(key: "CONFIG", action: self.handleConfigPressed),
 			Menu.MenuItem(key: "MANUAL", action: self.handleAboutPressed),
 			Menu.MenuItem(key: "ABOUT", action: self.handleAboutPressed),
 		])
-		
-		mp = MasterPlayer(songPath: "songs/universe-map.mid")
-//		
-//		var i = 0
-//		for trackProps in mp!.trackProps {
-//			print(i)
-//			i += 1
-//			print("isMuted \(trackProps.isMuted)")
-//			print("isSolo \(trackProps.isSolo)")
-//			print("attack \(trackProps.attack)")
-//			print("decay \(trackProps.decay)")
-//			print("release \(trackProps.release)")
-//			print("sustain \(trackProps.sustain)")
-//			print("volume \(trackProps.volume)")
-//			print("inst \(trackProps.instrument)")
-//			print("notesCount \(trackProps.notes.count)")
-//			print("notes \(trackProps.notes.map { $0.description }.joined(separator: ", "))")
-//			print("polyphony \(trackProps.polyphony)")
-//		}
-		mp!.play()
-	
+
 		menu!.fadeIn()
 	}
 	
