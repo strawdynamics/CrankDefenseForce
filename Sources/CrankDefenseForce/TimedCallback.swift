@@ -1,5 +1,5 @@
 struct TimedCallback {
-	private var animator: Animator<Float>
+	public var animator: Animator<Float>
 	private let callback: () -> Void
 	private var triggered = false
 

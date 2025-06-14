@@ -15,6 +15,8 @@ final class Game: PlaydateGame {
 	func update() -> Bool {
 		Time.updateDeltaTime()
 		
+		Soundtrack.instance.update()
+
 		Sprite.updateAndDrawDisplayListSprites()
 		
 		self.scenePresenter.update()

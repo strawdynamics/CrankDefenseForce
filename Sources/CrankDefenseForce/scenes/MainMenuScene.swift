@@ -273,6 +273,9 @@ class MainMenuScene: BaseScene {
 			)
 		})
 		
+
+		Soundtrack.instance.fadeOut(duration: 0.2)
+
 		colonelSprite.animateOut()
 		exiting = true
 	}

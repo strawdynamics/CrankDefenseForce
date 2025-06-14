@@ -63,7 +63,11 @@ class GameSettings {
 			_musicVolume = newValue
 		}
 	}
-	
+
+	static var musicVolumePercent: Float {
+		return Float(Self.musicVolume) / Float(Self.MAX_VOLUME)
+	}
+
 	static var sfxVolume: Int {
 		get {
 			return _sfxVolume
@@ -84,7 +88,9 @@ class GameSettings {
 			res = .unchanged
 			_musicVolume = MAX_VOLUME
 		}
-		
+
+		Soundtrack.instance.volume = musicVolumePercent
+
 		return res
 	}
 	
@@ -96,7 +102,9 @@ class GameSettings {
 			res = .unchanged
 			_musicVolume = 0
 		}
-		
+
+		Soundtrack.instance.volume = musicVolumePercent
+
 		return res
 	}
 	
