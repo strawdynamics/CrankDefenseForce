@@ -13,6 +13,7 @@ class PowerUpCollectedText: BaseEntity {
 		return textBitmap
 
 		// FIXME: Dither flashing! Maybe only animate y during in/out like opacity?
+		// Or screen space dither?
 //		let (textWidth, textHeight, _) = textBitmap.getData(mask: nil, data: nil)
 //		let outWidth = textWidth + 4
 //		let outHeight = textHeight + 4
@@ -81,11 +82,30 @@ class PowerUpCollectedText: BaseEntity {
 	}
 
 	@discardableResult init(_ config: Config) {
-		position = config.position + Point(x: 0, y: -10)
 		powerUpType = config.powerUpType
 		duration = config.duration
 
-		sprite.image = GameSettings.timeOfDay == .day ? Self.dayBitmaps[powerUpType]! : Self.nightBitmaps[powerUpType]!
+		var pos = config.position + Point(x: 0, y: -10)
+
+		let image = GameSettings.timeOfDay == .day ? Self.dayBitmaps[powerUpType]! : Self.nightBitmaps[powerUpType]!
+		let (imgWidth, imgHeight, _) = image.getData(mask: nil, data: nil)
+		let halfImgWidth = Float(imgWidth / 2)
+		let halfImgHeight = Float(imgHeight / 2)
+
+		if pos.x < halfImgWidth {
+			pos.x = halfImgWidth
+		} else if pos.x > 400.0 - halfImgWidth {
+			pos.x = 400.0 - halfImgWidth
+		}
+
+		let minY = 10 + halfImgHeight
+		if pos.y < minY {
+			pos.y = minY
+		}
+
+		position = pos
+
+		sprite.image = image
 		sprite.zIndex = 200
 		sprite.moveTo(position)
 		sprite.addToDisplayList()
