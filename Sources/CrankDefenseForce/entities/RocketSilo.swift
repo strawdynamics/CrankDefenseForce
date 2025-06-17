@@ -77,7 +77,7 @@ class RocketSilo: BaseEntity {
 		sprite.zIndex = 110
 		sprite.addToDisplayList()
 		
-		iconSprite.zIndex = 110
+		iconSprite.zIndex = 160
 		iconSprite.addToDisplayList()
 		
 		self.spawnInitialRocket()
