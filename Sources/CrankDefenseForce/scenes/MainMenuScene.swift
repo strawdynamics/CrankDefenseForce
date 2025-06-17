@@ -137,8 +137,6 @@ class MainMenuScene: BaseScene {
 	
 	var exiting = false
 
-//	let fx = try! Pdfxr(effectPath: "sfx/weird")
-
 	class ColonelSprite: PlaydateKit.Sprite.Sprite {
 		static let startOffX: Float = -160
 		static let endOffX: Float = -16
@@ -197,9 +195,9 @@ class MainMenuScene: BaseScene {
 				menu?.prev()
 			}
 
-//			if pushed.contains(.b) {
-//				fx.play()
-//			}
+			if pushed.contains(.b) {
+				Sfx.instance.playWithRandomOffset(.fazer)
+			}
 
 			let ticks = System.getCrankTicks(6)
 			if ticks != 0 {

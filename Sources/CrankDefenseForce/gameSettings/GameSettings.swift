@@ -78,7 +78,11 @@ class GameSettings {
 			_sfxVolume = newValue
 		}
 	}
-	
+
+	static var sfxVolumePercent: Float {
+		return Float(Self.sfxVolume) / Float(Self.MAX_VOLUME)
+	}
+
 	static let MAX_VOLUME: Int = 10
 	
 	static func increaseMusicVolume() -> VolumeChangeResult {
