@@ -1,7 +1,7 @@
 import PlaydateKit
 
 final class Time: Sendable {
-	nonisolated(unsafe) static var previousElapsedTime: Float = 0.0
+	nonisolated(unsafe) static var previousElapsedTime: Float = System.elapsedTime
 	
 	nonisolated(unsafe) static var _deltaTime: Float = 0.0
 	
@@ -11,7 +11,7 @@ final class Time: Sendable {
 	
 	static func updateDeltaTime() {
 		let newElapsedTime = System.elapsedTime
-		
+
 		self._deltaTime = newElapsedTime - self.previousElapsedTime
 		self.previousElapsedTime = newElapsedTime
 	}
