@@ -76,23 +76,39 @@ class VolumeMenuItem: StepperMenuItem {
 	
 	override func prev() {
 		super.prev()
-		
+
+		let res: GameSettings.VolumeChangeResult
 		switch volumeType {
 		case .music:
-			GameSettings.decreaseMusicVolume()
+			res = GameSettings.decreaseMusicVolume()
 		case .sfx:
-			GameSettings.decreaseSfxVolume()
+			res = GameSettings.decreaseSfxVolume()
+		}
+
+		switch res {
+		case .decremented:
+			Sfx.instance.play(.stepperPrev)
+		default:
+			Sfx.instance.play(.stepperNo)
 		}
 	}
 	
 	override func next() {
 		super.next()
-		
+
+		let res: GameSettings.VolumeChangeResult
 		switch volumeType {
 		case .music:
-			GameSettings.increaseMusicVolume()
+			res = GameSettings.increaseMusicVolume()
 		case .sfx:
-			GameSettings.increaseSfxVolume()
+			res = GameSettings.increaseSfxVolume()
+		}
+
+		switch res {
+		case .incremented:
+			Sfx.instance.play(.stepperNext)
+		default:
+			Sfx.instance.play(.stepperNo)
 		}
 	}
 	
@@ -110,10 +126,11 @@ class VolumeMenuItem: StepperMenuItem {
 		
 		displaySprite.addToDisplayList()
 		
-		super.init(ConfigMenuItem.Config(
+		super.init(StepperMenuItem.Config(
 			title: config.title,
 			offsetX: config.offsetX,
 			entityStore: config.entityStore,
+			playSounds: false,
 		))
 	}
 	

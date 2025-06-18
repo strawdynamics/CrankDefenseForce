@@ -50,7 +50,7 @@ class ControlsMenuItem: StepperMenuItem {
 	init(_ config: Config) {
 		titleSprite.addToDisplayList()
 		
-		super.init(ConfigMenuItem.Config(
+		super.init(StepperMenuItem.Config(
 			title: config.title,
 			offsetX: config.offsetX,
 			entityStore: config.entityStore,

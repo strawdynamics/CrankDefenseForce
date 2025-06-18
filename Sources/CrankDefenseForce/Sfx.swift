@@ -3,10 +3,12 @@ import PDKPdfxr
 
 class Sfx {
 	enum EffectName {
-		case weird
-		case up
-		case boppp
-		case fazer
+		case menuEnter
+		case menuExit
+		case menuNavigate
+		case stepperNext
+		case stepperNo
+		case stepperPrev
 	}
 
 	class Effect {
@@ -48,10 +50,12 @@ class Sfx {
 	}
 
 	static nonisolated(unsafe) let instance = Sfx(effects: [
-		.weird: Effect(.weird, path: "sfx/weird", polyphony: 1),
-		.up: Effect(.up, path: "sfx/up", polyphony: 2),
-		.boppp: Effect(.boppp, path: "sfx/boppp", polyphony: 2),
-		.fazer: Effect(.fazer, path: "sfx/fazer", polyphony: 3),
+		.menuEnter: Effect(.menuEnter, path: "sfx/menuEnter"),
+		.menuExit: Effect(.menuExit, path: "sfx/menuExit"),
+		.menuNavigate: Effect(.menuNavigate, path: "sfx/menuNavigate"),
+		.stepperNext: Effect(.stepperNext, path: "sfx/stepperNext"),
+		.stepperNo: Effect(.stepperNo, path: "sfx/stepperNo"),
+		.stepperPrev: Effect(.stepperPrev, path: "sfx/stepperPrev"),
 	])
 
 	let effects: [EffectName: Effect]

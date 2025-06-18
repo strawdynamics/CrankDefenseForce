@@ -96,7 +96,9 @@ class ConfigMenu: BaseEntity {
 		}
 		
 		menuItems[selectedItemIndex].focus()
-		
+
+		Sfx.instance.play(.menuNavigate)
+
 		animateY(oldIndex: oldIndex, newIndex: selectedItemIndex)
 	}
 	
@@ -110,7 +112,9 @@ class ConfigMenu: BaseEntity {
 		}
 		
 		menuItems[selectedItemIndex].focus()
-		
+
+		Sfx.instance.play(.menuNavigate, offset: -2)
+
 		animateY(oldIndex: oldIndex, newIndex: selectedItemIndex)
 	}
 	

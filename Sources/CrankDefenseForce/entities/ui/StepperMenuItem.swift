@@ -3,7 +3,14 @@ import PlaydateKit
 // abstract
 class StepperMenuItem: ConfigMenuItem {
 	static nonisolated(unsafe) let arrowsBitmapTable = try! Graphics.BitmapTable(path: "entities/ui/StepperMenuItem/arrows")
-	
+
+	struct Config {
+		let title: String
+		let offsetX: Float
+		let entityStore: EntityStore
+		var playSounds = true
+	}
+
 	let leftSprite = PlaydateKit.Sprite.Sprite()
 	
 	var leftSpriteYAnimator: Animator<Float>?
@@ -13,10 +20,18 @@ class StepperMenuItem: ConfigMenuItem {
 	var rightSpriteYAnimator: Animator<Float>?
 	
 	var arrowFocusAnimator: Animator<Float>?
-	
-	override init(_ config: ConfigMenuItem.Config) {
-		super.init(config)
-		
+
+	let playSounds: Bool
+
+	init(_ config: Config) {
+		playSounds = config.playSounds
+
+		super.init(ConfigMenuItem.Config(
+			title: config.title,
+			offsetX: config.offsetX,
+			entityStore: config.entityStore,
+		))
+
 		leftSprite.image = Self.arrowsBitmapTable[0]
 		leftSprite.isVisible = false
 		leftSprite.addToDisplayList()
@@ -150,6 +165,10 @@ class StepperMenuItem: ConfigMenuItem {
 			endValue: 0,
 			easingFn: EasingFn.basic(Ease.outQuad),
 		))
+
+		if playSounds {
+			Sfx.instance.play(.stepperPrev)
+		}
 	}
 	
 	func next() {
@@ -159,5 +178,9 @@ class StepperMenuItem: ConfigMenuItem {
 			endValue: 0,
 			easingFn: EasingFn.basic(Ease.outQuad),
 		))
+
+		if playSounds {
+			Sfx.instance.play(.stepperNext)
+		}
 	}
 }

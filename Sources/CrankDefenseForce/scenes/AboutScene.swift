@@ -9,6 +9,7 @@ class AboutScene: BaseScene {
 		let pushed = System.buttonState.pushed
 		
 		if pushed.contains(.b) {
+			Sfx.instance.play(.menuExit)
 			game.scenePresenter.changeScene(
 				newScene: MainMenuScene(),
 				transition: CrtOutSceneTransition()

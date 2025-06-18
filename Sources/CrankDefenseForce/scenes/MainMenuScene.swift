@@ -37,6 +37,7 @@ class Menu {
 	func next() {
 		selectedItemIndex = (selectedItemIndex + 1) % menuItems.count
 		GameSettings.lastMainMenuSelectedItemIndex = selectedItemIndex
+		Sfx.instance.play(.menuNavigate)
 		draw()
 	}
 	
@@ -46,6 +47,7 @@ class Menu {
 			selectedItemIndex = menuItems.count - 1
 		}
 		GameSettings.lastMainMenuSelectedItemIndex = selectedItemIndex
+		Sfx.instance.play(.menuNavigate, offset: -2)
 		draw()
 	}
 	
@@ -195,10 +197,6 @@ class MainMenuScene: BaseScene {
 				menu?.prev()
 			}
 
-			if pushed.contains(.b) {
-				Sfx.instance.playWithRandomOffset(.fazer)
-			}
-
 			let ticks = System.getCrankTicks(6)
 			if ticks != 0 {
 				if ticks == 1 {
@@ -224,6 +222,7 @@ class MainMenuScene: BaseScene {
 		}
 		
 		if !exiting && pushed.contains(.a) {
+			Sfx.instance.play(.menuEnter)
 			menu?.menuItems[menu!.selectedItemIndex].action()
 		}
 	}
