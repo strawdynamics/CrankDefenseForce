@@ -366,6 +366,8 @@ class BigUfo: BaseEntity, PowerUpDropper {
 						y: Float.random(in: -25...25) * s
 					),
 					maxRadius: Float.random(in: 20...35) * s,
+					// Player owns explosions created by destroying BigUFO
+					owner: .player,
 					entityStore: self.entityStore,
 					duration: Float.random(in: 1.5...2.2)
 				))
@@ -498,6 +500,8 @@ class BigUfo: BaseEntity, PowerUpDropper {
 						y: Float.random(in: -30...0),
 					),
 					maxRadius: Float.random(in: 20...35),
+					// CPU owns explosions created by destroying cities
+					owner: .cpu,
 					entityStore: self.entityStore,
 					duration: Float.random(in: 1.5...2.2),
 				))

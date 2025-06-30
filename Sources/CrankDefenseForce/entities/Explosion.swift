@@ -6,6 +6,7 @@ class Explosion: BaseEntity {
 	struct Config {
 		let position: Point
 		let maxRadius: Float
+		let owner: Owner
 		let entityStore: EntityStore
 		var duration: Float = 1.8
 		var inPercentage: Float = 0.35
@@ -15,7 +16,13 @@ class Explosion: BaseEntity {
 	class ExplosionSprite: Sprite.Sprite {
 		var radius: Float = 0
 		var alpha: Float = 0
-		
+
+		let owner: Owner
+
+		init(owner: Owner) {
+			self.owner = owner
+		}
+
 		override func draw(bounds _: Rect, drawRect _: Rect) {
 			Graphics.fillEllipse(
 				in: Rect(
@@ -39,12 +46,12 @@ class Explosion: BaseEntity {
 		case collapsing
 	}
 	
-	let sprite = ExplosionSprite()
-	
+	let sprite: ExplosionSprite
+
 	let maxRadius: Float
 	
 	let duration: Float
-	
+
 	var currentRadius: Float = Explosion.STARTING_RADIUS
 
 	var sizeAnimator: Animator<Float>
@@ -57,30 +64,32 @@ class Explosion: BaseEntity {
 	let outPercentage: Float
 	
 	init(_ config: Config) {
-		self.maxRadius = config.maxRadius
-		self.duration = config.duration
-		
-		self.inPercentage = config.inPercentage
-		self.outPercentage = 1 - config.inPercentage
+		maxRadius = config.maxRadius
+		duration = config.duration
 
-		self.sizeAnimator = Animator(Animator.Config(
-			duration: self.duration * inPercentage,
+		inPercentage = config.inPercentage
+		outPercentage = 1 - inPercentage
+
+		sizeAnimator = Animator(Animator.Config(
+			duration: duration * inPercentage,
 			startValue: Explosion.STARTING_RADIUS,
-			endValue: self.maxRadius,
+			endValue: maxRadius,
 			easingFn: EasingFn.basic(Ease.outQuad),
 		))
 		
-		self.alphaAnimator = Animator(Animator.Config(
-			duration: self.duration * inPercentage,
+		alphaAnimator = Animator(Animator.Config(
+			duration: duration * inPercentage,
 			startValue: 0.7,
 			endValue: 0.4,
 			easingFn: EasingFn.basic(Ease.inBounce),
 		))
-		
+
+		sprite = ExplosionSprite(owner: config.owner)
+
 		super.init(config.entityStore)
 		
 		let size = maxRadius * 2
-		
+
 		sprite.zIndex = 180
 		sprite.position = config.position
 		sprite.setSize(width: maxRadius * 2, height: size)
@@ -101,15 +110,15 @@ class Explosion: BaseEntity {
 			if state == .expanding {
 				state = .collapsing
 				
-				self.sizeAnimator = Animator(Animator.Config(
-					duration: self.duration * outPercentage,
-					startValue: self.maxRadius,
+				sizeAnimator = Animator(Animator.Config(
+					duration: duration * outPercentage,
+					startValue: maxRadius,
 					endValue: 0,
 					easingFn: EasingFn.basic(Ease.inQuad),
 				))
 				
-				self.alphaAnimator = Animator(Animator.Config(
-					duration: self.duration * outPercentage,
+				alphaAnimator = Animator(Animator.Config(
+					duration: duration * outPercentage,
 					startValue: 0.4,
 					endValue: 0,
 					easingFn: EasingFn.basic(Ease.inOutQuad),

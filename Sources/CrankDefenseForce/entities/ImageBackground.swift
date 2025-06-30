@@ -27,7 +27,6 @@ class ImageBackground: BaseEntity {
 		sprite.center = Point.zero
 		sprite.moveTo(Point.zero)
 		sprite.zIndex = -32768
-		sprite.setIgnoresDrawOffset(true)
 		sprite.updatesEnabled = false
 		sprite.addToDisplayList()
 		self.sprite = sprite

@@ -228,6 +228,7 @@ class MainMenuScene: BaseScene {
 	}
 	
 	override func enter() {
+		Graphics.setDrawOffset(dx: 0, dy: 0)
 		let _ = BasicBackground(
 			entityStore: entityStore,
 			color: .black

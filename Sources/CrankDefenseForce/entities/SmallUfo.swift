@@ -112,6 +112,7 @@ class SmallUfo: BaseEntity, PowerUpDropper {
 		_ = Explosion(Explosion.Config(
 			position: position,
 			maxRadius: 32,
+			owner: .player,
 			entityStore: entityStore,
 			duration: 2,
 		))
@@ -142,6 +143,7 @@ class SmallUfo: BaseEntity, PowerUpDropper {
 				y: 0
 			),
 			maxRadius: Float.random(in: 1.5..<3),
+			owner: .cpu,
 			entityStore: entityStore,
 			duration: Float.random(in: 0.4..<0.9),
 			inPercentage: 0.8,

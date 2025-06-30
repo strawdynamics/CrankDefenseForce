@@ -48,6 +48,6 @@ struct GameSettingsWriter {
 		
 		let buffer = UnsafeRawBufferPointer(start: str!, count: Int(len))
 		
-		try! file.write(buffer: buffer)
+		_ = try! file.write(buffer: buffer)
 	}
 }

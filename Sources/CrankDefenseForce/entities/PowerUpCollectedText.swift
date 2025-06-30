@@ -94,8 +94,8 @@ class PowerUpCollectedText: BaseEntity {
 
 		if pos.x < halfImgWidth {
 			pos.x = halfImgWidth
-		} else if pos.x > 400.0 - halfImgWidth {
-			pos.x = 400.0 - halfImgWidth
+		} else if pos.x > Float(Display.width) - halfImgWidth {
+			pos.x = Float(Display.width) - halfImgWidth
 		}
 
 		let minY = 10 + halfImgHeight
@@ -179,4 +179,3 @@ class PowerUpCollectedText: BaseEntity {
 		}
 	}
 }
-

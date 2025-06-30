@@ -4,6 +4,7 @@ class ExhaustParticle: Explosion {
 	struct Config {
 		let position: Point
 		let maxRadius: Float
+		let owner: Owner
 		let entityStore: EntityStore
 		var duration: Float = 1.8
 		var inPercentage: Float = 0.35
@@ -18,6 +19,7 @@ class ExhaustParticle: Explosion {
 		super.init(Explosion.Config(
 			position: config.position,
 			maxRadius: config.maxRadius,
+			owner: config.owner,
 			entityStore: config.entityStore,
 			duration: config.duration,
 			inPercentage: config.inPercentage,
