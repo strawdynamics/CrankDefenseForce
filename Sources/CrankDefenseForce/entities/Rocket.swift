@@ -176,6 +176,12 @@ class Rocket: BaseEntity, PowerUpDropper {
 
 				if dist <= overlappingExplosionSprite.radius {
 					explode(explosionOwner: overlappingExplosionSprite.owner)
+
+					if owner == .cpu && overlappingExplosionSprite.owner == .player {
+						Self.statsEmitter.emit(StatsEventPayload(
+							eventType: isFast ? .cpuFastRocketDestroyed : .cpuRocketDestroyed
+						))
+					}
 				}
 
 				continue
@@ -243,10 +249,7 @@ class Rocket: BaseEntity, PowerUpDropper {
 			// CPU rockets don't collect power-ups
 			return
 		}
-
-		Self.statsEmitter.emit(StatsEventPayload(
-			eventType: .powerUpCollected(powerUpSprite.type)
-		))
+		
 		powerUpSprite.collect()
 	}
 

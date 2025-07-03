@@ -3,7 +3,6 @@ enum StatsEventType {
 	case cpuFastRocketDestroyed
 	case cpuSmallUfoDestroyed
 	case cpuBigUfoDestroyed
-	case powerUpCollected(PowerUp.PowerUpType)
 }
 
 struct StatsEventPayload {
