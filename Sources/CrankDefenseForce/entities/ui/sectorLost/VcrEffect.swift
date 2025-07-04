@@ -1,6 +1,6 @@
 import PlaydateKit
 
-class VhsEffect: BaseEntity {
+class VcrEffect: BaseEntity {
 	// MARK: Lifecycle
 
 	override init(_ entityStore: EntityStore) {
@@ -19,15 +19,15 @@ class VhsEffect: BaseEntity {
 	override func lateUpdate() {
 		let framePtr = Graphics.getFrame().unsafelyUnwrapped
 
-		let rowsToVhs = min(max(0, Display.height + offY), Display.height)
+		let rowsToVcr = min(max(0, Display.height + offY), Display.height)
 
-		if rowsToVhs > 0 {
-			for y in 0..<rowsToVhs {
+		if rowsToVcr > 0 {
+			for y in 0..<rowsToVcr {
 				let shiftAmount = Int.random(in: -4...4)
 				shiftRow(in: framePtr, at: y, by: shiftAmount)
 			}
 
-			Graphics.markUpdatedRows(start: 0, end: rowsToVhs - 1)
+			Graphics.markUpdatedRows(start: 0, end: rowsToVcr - 1)
 		}
 	}
 

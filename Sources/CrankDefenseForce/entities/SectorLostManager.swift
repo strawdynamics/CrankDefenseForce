@@ -5,9 +5,9 @@ class SectorLostManager: BaseEntity {
 
 	init(_ config: Config) {
 		matchStatsTracker = config.matchStatsTracker
-		vhsEffect = VhsEffect(config.entityStore)
-		
-		// Init after VhsEffect so lateUpdate runs after!
+		vcrEffect = VcrEffect(config.entityStore)
+
+		// Init after VcrEffect so lateUpdate runs after!
 		sectorLostText = SectorLostText(config.entityStore)
 
 		super.init(config.entityStore)
@@ -22,12 +22,12 @@ class SectorLostManager: BaseEntity {
 
 	let matchStatsTracker: MatchStatsTracker
 
-	let vhsEffect: VhsEffect
+	let vcrEffect: VcrEffect
 
 	let sectorLostText: SectorLostText
 
 	override func update() {
-		vhsEffect.offY = offY
+		vcrEffect.offY = offY
 
 		updateInput()
 
