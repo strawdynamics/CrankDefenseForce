@@ -4,20 +4,23 @@ class SectorLostText: BaseEntity {
 	// MARK: Lifecycle
 
 	override init(_ entityStore: EntityStore) {
+		bitmap = GameSettings.timeOfDay == .day ? SectorLostText.dayBitmap : SectorLostText.nightBitmap
+		let (w, _, _) = bitmap.getData(mask: nil, data: nil)
+		bitmapWidth = w
+
 		super.init(entityStore)
 
-		sprite.image = GameSettings.timeOfDay == .day ? SectorLostText.dayBitmap : SectorLostText.nightBitmap
-		sprite.zIndex = 900
-		move()
-		sprite.addToDisplayList()
+		draw()
 	}
 
 	// MARK: Internal
 
 	override func update() {
 		yAnim.update()
+	}
 
-		move()
+	override func lateUpdate() {
+		draw()
 	}
 
 	// MARK: Private
@@ -42,7 +45,9 @@ class SectorLostText: BaseEntity {
 
 	private static let endY: Float = Float(Display.height / 2)
 
-	private let sprite: Sprite.Sprite = Sprite.Sprite()
+	private let bitmap: Graphics.Bitmap
+
+	private let bitmapWidth: Int
 
 	private let yAnim: Animator<Float> = Animator(Animator.Config(
 		duration: 4,
@@ -51,9 +56,10 @@ class SectorLostText: BaseEntity {
 		easingFn: EasingFn.basic(Ease.outBounce),
 	))
 
-	private func move() {
-		sprite.moveTo(Point(
-			x: Float(Display.width / 2),
+	private func draw() {
+		Graphics.drawMode = .copy
+		Graphics.drawBitmap(bitmap, at: Point(
+			x: Float((Display.width - bitmapWidth) / 2),
 			y: yAnim.currentValue,
 		))
 	}

@@ -23,7 +23,7 @@ class VhsEffect: BaseEntity {
 
 		if rowsToVhs > 0 {
 			for y in 0..<rowsToVhs {
-				let shiftAmount = Int.random(in: -16...(-12))
+				let shiftAmount = Int.random(in: -4...4)
 				shiftRow(in: framePtr, at: y, by: shiftAmount)
 			}
 

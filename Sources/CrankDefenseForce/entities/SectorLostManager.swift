@@ -5,8 +5,10 @@ class SectorLostManager: BaseEntity {
 
 	init(_ config: Config) {
 		matchStatsTracker = config.matchStatsTracker
-		sectorLostText = SectorLostText(config.entityStore)
 		vhsEffect = VhsEffect(config.entityStore)
+		
+		// Init after VhsEffect so lateUpdate runs after!
+		sectorLostText = SectorLostText(config.entityStore)
 
 		super.init(config.entityStore)
 	}
