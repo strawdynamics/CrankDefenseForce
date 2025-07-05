@@ -146,7 +146,14 @@ class EntityCell: SectorLostCell {
 
 	let textSprite = Sprite.Sprite()
 
+	let entityType: EntityType
+
+	let entity: Movable
+
 	init(_ config: Config) {
+		entityType = config.entityType
+		entity = Self.spawnEntity(config)
+
 		let bitmap = Graphics.Bitmap(
 			width: Self.contentWidth,
 			height: CdfFont.NicoClean16.height,
@@ -173,10 +180,40 @@ class EntityCell: SectorLostCell {
 		return CdfFont.NicoClean16.height + SectorLostCellPadding * 2
 	}
 
-	func moveTo(topLeft: PlaydateKit.Point) {
+	func moveTo(topLeft: Point) {
 		textSprite.moveTo(topLeft + Point(
 			x: SectorLostCellPadding,
 			y: (height - Int(textSprite.bounds.height)) / 2,
 		))
+
+		moveEntity(topLeft: topLeft)
+	}
+
+	private func moveEntity(topLeft: Point) {
+		switch entityType {
+		default:
+			entity.moveTo(position: topLeft + Point(
+				x: 14,
+				y: 9,
+			))
+		}
+	}
+
+	static func spawnEntity(_ config: Config) -> Movable {
+		switch config.entityType {
+		default:
+			let rocket = Rocket(Rocket.Config(
+				position: Point.zero,
+				angle: 30,
+				entityStore: config.entityStore,
+				owner: .cpu,
+				alwaysExhaust: true
+			))
+
+			rocket.sprite.zIndex = 700
+			rocket.exhaust?.sprite.zIndex = 700
+
+			return rocket
+		}
 	}
 }

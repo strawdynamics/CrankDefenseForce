@@ -1,6 +1,6 @@
 import PlaydateKit
 
-class Rocket: BaseEntity, PowerUpDropper {
+class Rocket: BaseEntity, PowerUpDropper, Movable {
 	static let powerUpDropTable: [PowerUp.PowerUpType: Float] = [
 		.none: 17,
 		.pauseEnemies: 1,
@@ -38,7 +38,7 @@ class Rocket: BaseEntity, PowerUpDropper {
 		var alwaysExhaust: Bool = false
 	}
 
-	var sprite = RocketSprite()
+	let sprite = RocketSprite()
 
 	var exhaust: RocketExhaust?
 
