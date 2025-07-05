@@ -165,23 +165,27 @@ class SectorLostDisplay {
 
 	private static func positionRows(_ rows: [[SectorLostCell]]) -> Int {
 		let offY = Float(Display.height)
-		var totalRowHeight = 0
+		var positionedRowsHeight = 0
 
 		for row in rows {
 			let cellCount = row.count
 			let cellWidth = Display.width / cellCount
+//			let totalCellsWidth = row.reduce(0) { $0 + $1.width }
+			var positionedCellsWidth = 0
 
 			for (cellIndex, cell) in row.enumerated() {
 				cell.moveTo(topLeft: Point(
-					x: Float(cellIndex * cellWidth),
-					y: offY + Float(totalRowHeight),
+					x: Float(positionedCellsWidth),
+					y: offY + Float(positionedRowsHeight),
 				))
+
+				positionedCellsWidth += cell.width
 			}
 
 			// All cells for a row must be the same height
-			totalRowHeight += row[0].height
+			positionedRowsHeight += row[0].height
 		}
 
-		return totalRowHeight
+		return positionedRowsHeight
 	}
 }

@@ -1,6 +1,6 @@
 import PlaydateKit
 
-class PowerUp: BaseEntity {
+class PowerUp: BaseEntity, Movable {
 	nonisolated(unsafe) static let noneBitmapTable = try! Graphics.BitmapTable(path: "entities/PowerUp/none")
 	nonisolated(unsafe) static let pauseEnemiesBitmapTable = try! Graphics.BitmapTable(path: "entities/PowerUp/pauseEnemies")
 	nonisolated(unsafe) static let repairBuildingBitmapTable = try! Graphics.BitmapTable(path: "entities/PowerUp/repairBuilding")
@@ -87,6 +87,10 @@ class PowerUp: BaseEntity {
 		sprite.moveTo(config.position)
 		sprite.collideRect = Rect(x: 0, y: 0, width: size, height: size)
 		sprite.addToDisplayList()
+	}
+
+	func moveTo(position: PlaydateKit.Point) {
+		sprite.moveTo(position)
 	}
 
 	override func update() {

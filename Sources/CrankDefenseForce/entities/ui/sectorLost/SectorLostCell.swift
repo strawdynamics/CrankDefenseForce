@@ -5,6 +5,8 @@ let SectorLostCellPadding = 6
 protocol SectorLostCell: AnyObject {
 	var height: Int { get }
 
+	var width: Int { get }
+
 	func moveTo(topLeft: Point)
 }
 
@@ -49,6 +51,10 @@ class KeyValueSectorLostCell: SectorLostCell {
 		return Int(sprite.bounds.height)
 	}
 
+	var width: Int {
+		return Display.width / 2
+	}
+
 	func moveTo(topLeft: Point) {
 		sprite.moveTo(topLeft)
 	}
@@ -74,6 +80,10 @@ class HrCell: SectorLostCell {
 
 	var height: Int {
 		return 1
+	}
+
+	var width: Int {
+		return Display.width
 	}
 
 	func moveTo(topLeft: Point) {
@@ -116,6 +126,10 @@ class TextCell: SectorLostCell {
 		return CdfFont.NicoPups16.height + SectorLostCellPadding * 2
 	}
 
+	var width: Int {
+		return Display.width
+	}
+
 	func moveTo(topLeft: Point) {
 		sprite.moveTo(topLeft + Point(
 			x: SectorLostCellPadding,
@@ -142,8 +156,6 @@ class EntityCell: SectorLostCell {
 		let entityStore: EntityStore
 	}
 
-	static let contentWidth = 80
-
 	let textSprite = Sprite.Sprite()
 
 	let entityType: EntityType
@@ -155,19 +167,14 @@ class EntityCell: SectorLostCell {
 		entity = Self.spawnEntity(config)
 
 		let bitmap = Graphics.Bitmap(
-			width: Self.contentWidth,
+			width: CdfFont.NicoClean16.getTextWidth(for: config.text, tracking: 0),
 			height: CdfFont.NicoClean16.height,
 		)
 
 		Graphics.pushContext(bitmap)
 		Graphics.drawMode = .fillWhite
 		Graphics.setFont(CdfFont.NicoClean16)
-		Graphics.drawTextInRect(config.text, in: Rect(
-			x: 0,
-			y: 0,
-			width: Self.contentWidth,
-			height: height
-		), aligned: .right)
+		Graphics.drawText(config.text, at: Point.zero)
 		Graphics.popContext()
 
 		textSprite.image = bitmap
@@ -180,9 +187,30 @@ class EntityCell: SectorLostCell {
 		return CdfFont.NicoClean16.height + SectorLostCellPadding * 2
 	}
 
+	var width: Int {
+		return entityWidth + textWidth + SectorLostCellPadding * 4
+	}
+
+	private var entityWidth: Int {
+		switch entityType {
+		case .rocket, .fastRocket:
+			return 24
+		case .smallUfo:
+			return 30
+		case .pauseEnemies, .repairBuilding, .destroyEnemies:
+			return 26
+		default:
+			return 50
+		}
+	}
+
+	private var textWidth: Int {
+		return Int(textSprite.bounds.width)
+	}
+
 	func moveTo(topLeft: Point) {
 		textSprite.moveTo(topLeft + Point(
-			x: SectorLostCellPadding,
+			x: entityWidth + SectorLostCellPadding,
 			y: (height - Int(textSprite.bounds.height)) / 2,
 		))
 
@@ -191,6 +219,21 @@ class EntityCell: SectorLostCell {
 
 	private func moveEntity(topLeft: Point) {
 		switch entityType {
+		case .rocket, .fastRocket:
+			entity.moveTo(position: topLeft + Point(
+				x: 14,
+				y: 9,
+			))
+		case .smallUfo:
+			entity.moveTo(position: topLeft + Point(
+				x: 16,
+				y: 12,
+			))
+		case .pauseEnemies, .repairBuilding, .destroyEnemies:
+			entity.moveTo(position: topLeft + Point(
+				x: 14,
+				y: 12,
+			))
 		default:
 			entity.moveTo(position: topLeft + Point(
 				x: 14,
@@ -201,13 +244,60 @@ class EntityCell: SectorLostCell {
 
 	static func spawnEntity(_ config: Config) -> Movable {
 		switch config.entityType {
+		case .rocket, .fastRocket:
+			let rocket = Rocket(Rocket.Config(
+				position: Point.zero,
+				angle: 30,
+				entityStore: config.entityStore,
+				owner: .cpu,
+				exhaustType: config.entityType == .fastRocket ? .big : .normal,
+				alwaysExhaust: true,
+			))
+
+			rocket.sprite.zIndex = 700
+			rocket.exhaust?.sprite.zIndex = 700
+
+			return rocket
+		case .smallUfo:
+			let ufo = SmallUfo(SmallUfo.Config(
+				entityStore: config.entityStore,
+				position: Point.zero,
+				facingLeft: true,
+				speed: 0,
+				exhaustZIndex: 650
+			))
+
+			ufo.sprite.zIndex = 700
+
+			return ufo
+		case .pauseEnemies, .repairBuilding, .destroyEnemies:
+			let type: PowerUp.PowerUpType = switch config.entityType {
+			case .pauseEnemies:
+				.pauseEnemies
+			case .repairBuilding:
+				.repairBuilding
+			case .destroyEnemies:
+				.destroyEnemies
+			default:
+				.none
+			}
+
+			let powerUp = PowerUp(PowerUp.Config(
+				position: Point.zero,
+				type: type,
+				entityStore: config.entityStore,
+			))
+
+			powerUp.sprite.zIndex = 700
+
+			return powerUp
 		default:
 			let rocket = Rocket(Rocket.Config(
 				position: Point.zero,
 				angle: 30,
 				entityStore: config.entityStore,
 				owner: .cpu,
-				alwaysExhaust: true
+				alwaysExhaust: true,
 			))
 
 			rocket.sprite.zIndex = 700

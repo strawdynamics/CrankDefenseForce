@@ -1,6 +1,6 @@
 import PlaydateKit
 
-class SmallUfo: BaseEntity, PowerUpDropper {
+class SmallUfo: BaseEntity, PowerUpDropper, Movable {
 	static let powerUpDropTable: [PowerUp.PowerUpType: Float] = [
 		.none: 50,
 		.pauseEnemies: 25,
@@ -22,7 +22,6 @@ class SmallUfo: BaseEntity, PowerUpDropper {
 
 	nonisolated(unsafe) static let smallUfoBitmapTable = try! Graphics.BitmapTable(path: "entities/SmallUfo/smallUfo")
 
-
 	class SmallUfoSprite: Sprite.Sprite {
 		var smallUfoId: Int = -1
 	}
@@ -32,6 +31,7 @@ class SmallUfo: BaseEntity, PowerUpDropper {
 		var position: Point
 		var facingLeft: Bool
 		var speed: Float
+		var exhaustZIndex: Int16 = 50
 	}
 
 	var sprite = SmallUfoSprite()
@@ -48,9 +48,12 @@ class SmallUfo: BaseEntity, PowerUpDropper {
 
 	private var nextExhaustTime: Float = 0
 
+	private let exhaustZIndex: Int16
+
 	init(_ config: Config) {
 		facingLeft = config.facingLeft
 		speed = config.speed
+		exhaustZIndex = config.exhaustZIndex
 
 		let bitmap = Self.smallUfoBitmapTable[facingLeft ? 0 : 1]!
 		let (bitmapWidth, bitmapHeight, _) = bitmap.getData(mask: nil, data: nil)
@@ -80,6 +83,12 @@ class SmallUfo: BaseEntity, PowerUpDropper {
 		scheduleExhaust()
 
 		sprite.smallUfoId = id
+	}
+
+	func moveTo(position: Point) {
+		sprite.moveTo(position)
+		bobYAnimator?.startValue = position.y
+		bobYAnimator?.endValue = position.y + 1
 	}
 
 	override func update() {
@@ -150,7 +159,8 @@ class SmallUfo: BaseEntity, PowerUpDropper {
 			velocity: Vector2(
 				x: Float.random(in: 2..<10) * (facingLeft ? 1 : -1),
 				y: -4
-			)
+			),
+			zIndex: exhaustZIndex,
 		))
 	}
 }

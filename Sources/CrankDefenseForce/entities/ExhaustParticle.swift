@@ -9,6 +9,7 @@ class ExhaustParticle: Explosion {
 		var duration: Float = 1.8
 		var inPercentage: Float = 0.35
 		var velocity: Vector2 = Vector2.zero
+		var zIndex: Int16 = 50
 	}
 
 	var velocity: Vector2
@@ -26,7 +27,7 @@ class ExhaustParticle: Explosion {
 			collides: false,
 		))
 
-		sprite.zIndex = 50
+		sprite.zIndex = config.zIndex
 	}
 
 	override func update() {
