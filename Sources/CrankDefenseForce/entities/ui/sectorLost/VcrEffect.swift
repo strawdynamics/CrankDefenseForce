@@ -16,6 +16,14 @@ class VcrEffect: BaseEntity {
 
 	var offY = 0
 
+	override func update() {
+		uptime += Time.deltaTime
+
+		if uptime >= nextIntensityUpdate {
+			updateIntensity()
+		}
+	}
+
 	override func lateUpdate() {
 		let framePtr = Graphics.getFrame().unsafelyUnwrapped
 
@@ -23,7 +31,7 @@ class VcrEffect: BaseEntity {
 
 		if rowsToVcr > 0 {
 			for y in 0..<rowsToVcr {
-				let shiftAmount = Int.random(in: -2...2)
+				let shiftAmount = Int.random(in: minIntensity...maxIntensity)
 				shiftRow(in: framePtr, at: y, by: shiftAmount)
 			}
 
@@ -34,6 +42,19 @@ class VcrEffect: BaseEntity {
 	// MARK: Private
 
 	private let rowBytes: Int
+
+	private var uptime: Float = 0
+
+	private var minIntensity: Int = 0
+	private var maxIntensity: Int = 0
+
+	private var nextIntensityUpdate: Float = 0
+
+	private func updateIntensity() {
+		minIntensity = Int.random(in: -3...(-1))
+		maxIntensity = Int.random(in: 1...3)
+		nextIntensityUpdate = uptime + Float.random(in: 0.1...0.3)
+	}
 
 	private func shiftRow(in dataPtr: UnsafeMutablePointer<UInt8>, at row: Int, by pixelShift: Int) {
 		let offset = pixelShift % Display.width
