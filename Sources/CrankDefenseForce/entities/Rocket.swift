@@ -35,13 +35,26 @@ class Rocket: BaseEntity, PowerUpDropper {
 		var entityStore: EntityStore
 		var owner: Owner
 		var exhaustType: RocketExhaust.ExhaustType = .normal
+		var alwaysExhaust: Bool = false
 	}
 
 	var sprite = RocketSprite()
 
 	var exhaust: RocketExhaust?
 
-	private(set) var thrust: Float = 0.0
+	let alwaysExhaust: Bool
+
+	private(set) var thrust: Float = 0.0 {
+		didSet {
+			if !alwaysExhaust {
+				if thrust == 0.0 {
+					exhaust?.deactivate()
+				} else {
+					exhaust?.activate()
+				}
+			}
+		}
+	}
 
 	var angle: Float
 
@@ -89,6 +102,7 @@ class Rocket: BaseEntity, PowerUpDropper {
 		angle = config.angle
 		roundedAngle = config.angle.roundToNearest(15.0)
 		thrust = config.thrust
+		alwaysExhaust = config.alwaysExhaust
 
 		super.init(config.entityStore)
 
@@ -97,6 +111,10 @@ class Rocket: BaseEntity, PowerUpDropper {
 			entityStore: config.entityStore,
 			type: config.exhaustType
 		))
+
+		if alwaysExhaust {
+			exhaust?.activate()
+		}
 
 		sprite.rocketId = id
 		sprite.zIndex = 100
@@ -108,11 +126,7 @@ class Rocket: BaseEntity, PowerUpDropper {
 	override func update() {
 		super.update()
 
-		if thrust == 0.0 {
-			exhaust?.deactivate()
-		} else {
-			exhaust?.activate()
-
+		if thrust != 0 {
 			let deltaX = thrust * Time.deltaTime * cos
 			let deltaY = thrust * Time.deltaTime * sin
 

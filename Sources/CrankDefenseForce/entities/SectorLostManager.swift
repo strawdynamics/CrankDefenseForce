@@ -5,6 +5,10 @@ class SectorLostManager: BaseEntity {
 
 	init(_ config: Config) {
 		matchStatsTracker = config.matchStatsTracker
+		sectorLostDisplay = SectorLostDisplay(SectorLostDisplay.Config(
+			matchStatsTracker: config.matchStatsTracker,
+			entityStore: config.entityStore,
+		))
 		vcrEffect = VcrEffect(config.entityStore)
 
 		// Init after VcrEffect so lateUpdate runs after!
@@ -26,10 +30,10 @@ class SectorLostManager: BaseEntity {
 
 	let sectorLostText: SectorLostText
 
+	let sectorLostDisplay: SectorLostDisplay
+
 	override func update() {
 		vcrEffect.offY = offY
-
-		updateInput()
 
 		switch state {
 		case .textEntering:
@@ -39,6 +43,11 @@ class SectorLostManager: BaseEntity {
 		case .running:
 			updateRunning()
 		}
+	}
+
+	override func lateUpdate() {
+		// lateUpdate input to avoid SectorLostText position offset while scrolling
+		updateInput()
 	}
 
 	// MARK: Private
@@ -54,8 +63,6 @@ class SectorLostManager: BaseEntity {
 	private var offY = 0
 
 	private func updateInput() {
-		offY = min(offY - Int(System.crankChange), 0)
-
 		let current = System.buttonState.current
 
 		if current.contains(.up) {
@@ -63,6 +70,8 @@ class SectorLostManager: BaseEntity {
 		} else if current.contains(.down) {
 			offY -= 4
 		}
+
+		offY = max(min(offY - Int(System.crankChange), 0), -sectorLostDisplay.totalHeight)
 
 		Graphics.setDrawOffset(dx: 0, dy: offY)
 	}

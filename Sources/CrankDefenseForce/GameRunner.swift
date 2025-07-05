@@ -24,6 +24,8 @@ class GameRunner {
 
 	var state: State = .active
 
+	var uptime: Float = 0
+
 	init() {
 		playerController = PlayerController(entityStore)
 		matchStatsTracker = MatchStatsTracker()
@@ -77,6 +79,7 @@ class GameRunner {
 	}
 
 	func update() {
+		uptime += Time.deltaTime
 		entityStore.update()
 
 		switch state {
@@ -114,7 +117,7 @@ class GameRunner {
 
 	func lose() {
 		state = .sectorLost
-		matchStatsTracker.stop()
+		matchStatsTracker.stop(finalUptime: uptime)
 		
 		_ = SectorLostManager(SectorLostManager.Config(
 			matchStatsTracker: matchStatsTracker,

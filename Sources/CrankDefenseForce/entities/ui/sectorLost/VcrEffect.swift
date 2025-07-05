@@ -23,7 +23,7 @@ class VcrEffect: BaseEntity {
 
 		if rowsToVcr > 0 {
 			for y in 0..<rowsToVcr {
-				let shiftAmount = Int.random(in: -4...4)
+				let shiftAmount = Int.random(in: -2...2)
 				shiftRow(in: framePtr, at: y, by: shiftAmount)
 			}
 
