@@ -51,7 +51,7 @@ class SectorLostText: BaseEntity {
 	private let bitmapWidth: Int
 
 	private let yAnim: Animator<Float> = Animator(Animator.Config(
-		duration: 4,
+		duration: 3,
 		startValue: SectorLostText.startY,
 		endValue: SectorLostText.endY,
 		easingFn: EasingFn.basic(Ease.outBounce),

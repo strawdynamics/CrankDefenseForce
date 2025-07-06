@@ -14,6 +14,13 @@ class SectorLostManager: BaseEntity {
 		// Init after VcrEffect so lateUpdate runs after!
 		sectorLostText = SectorLostText(config.entityStore)
 
+		yAnimator = Animator(Animator.Config(
+			duration: 2,
+			startValue: 0,
+			endValue: -Float(sectorLostDisplay.totalHeight),
+			easingFn: EasingFn.basic(Ease.inOutQuad)
+		))
+
 		super.init(config.entityStore)
 	}
 
@@ -33,12 +40,14 @@ class SectorLostManager: BaseEntity {
 	let sectorLostDisplay: SectorLostDisplay
 
 	override func update() {
+		uptime += Time.deltaTime
+
 		vcrEffect.offY = offY
 
 		switch state {
 		case .textEntering:
 			updateTextEntering()
-		case .updateScrollEntering:
+		case .scrollEntering:
 			updateScrollEntering()
 		case .running:
 			updateRunning()
@@ -52,15 +61,21 @@ class SectorLostManager: BaseEntity {
 
 	// MARK: Private
 
+	private static let textEnteringDuration: Float = 1
+
 	private enum State {
 		case textEntering
-		case updateScrollEntering
+		case scrollEntering
 		case running
 	}
 
 	private var state: State = .textEntering
 
 	private var offY = 0
+
+	private var uptime: Float = 0
+
+	private let yAnimator: Animator<Float>
 
 	private func updateInput() {
 		let current = System.buttonState.current
@@ -77,14 +92,23 @@ class SectorLostManager: BaseEntity {
 	}
 
 	private func updateTextEntering() {
-
+		if uptime >= Self.textEnteringDuration {
+			state = .scrollEntering
+		}
 	}
 
 	private func updateScrollEntering() {
+		yAnimator.update()
+		offY = Int(yAnimator.currentValue)
 
+		Graphics.setDrawOffset(dx: 0, dy: offY)
+
+		if yAnimator.ended {
+			state = .running
+		}
 	}
 
 	private func updateRunning() {
-
+		updateInput()
 	}
 }
