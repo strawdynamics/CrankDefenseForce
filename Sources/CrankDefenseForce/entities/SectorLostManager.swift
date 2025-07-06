@@ -55,8 +55,10 @@ class SectorLostManager: BaseEntity {
 	}
 
 	override func lateUpdate() {
-		// lateUpdate input to avoid SectorLostText position offset while scrolling
-		updateInput()
+		if state == .running {
+			// lateUpdate input to avoid SectorLostText position offset while scrolling
+			updateInput()
+		}
 	}
 
 	// MARK: Private
@@ -109,6 +111,6 @@ class SectorLostManager: BaseEntity {
 	}
 
 	private func updateRunning() {
-		updateInput()
+
 	}
 }

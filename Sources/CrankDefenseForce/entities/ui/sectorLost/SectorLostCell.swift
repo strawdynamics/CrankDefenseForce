@@ -197,10 +197,10 @@ class EntityCell: SectorLostCell {
 			return 24
 		case .smallUfo:
 			return 30
+		case .bigUfo:
+			return 74
 		case .pauseEnemies, .repairBuilding, .destroyEnemies:
 			return 26
-		default:
-			return 50
 		}
 	}
 
@@ -229,15 +229,15 @@ class EntityCell: SectorLostCell {
 				x: 16,
 				y: 12,
 			))
+		case .bigUfo:
+			entity.moveTo(position: topLeft + Point(
+				x: 38,
+				y: 10,
+			))
 		case .pauseEnemies, .repairBuilding, .destroyEnemies:
 			entity.moveTo(position: topLeft + Point(
 				x: 14,
 				y: 12,
-			))
-		default:
-			entity.moveTo(position: topLeft + Point(
-				x: 14,
-				y: 9,
 			))
 		}
 	}
@@ -270,6 +270,14 @@ class EntityCell: SectorLostCell {
 			ufo.sprite.zIndex = 700
 
 			return ufo
+		case .bigUfo:
+			let ufoEyes = BigUfoEyes(BigUfoEyes.Config(
+				entityStore: config.entityStore,
+			))
+
+			ufoEyes.sprite.zIndex = 700
+
+			return ufoEyes
 		case .pauseEnemies, .repairBuilding, .destroyEnemies:
 			let type: PowerUp.PowerUpType = switch config.entityType {
 			case .pauseEnemies:
