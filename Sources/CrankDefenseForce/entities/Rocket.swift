@@ -262,7 +262,8 @@ class Rocket: BaseEntity, PowerUpDropper, Movable {
 
 		explode(
 			explosionOwner: .player,
-			at: Point.lerp(from: position, to: otherRocket.position, percent: 0.5))
+			at: position.lerp(toward: otherRocket.position, percent: 0.5)
+		)
 		otherRocket.remove()
 	}
 

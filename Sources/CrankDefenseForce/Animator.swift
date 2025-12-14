@@ -76,6 +76,6 @@ class Animator<T: Lerpable> {
 
 	private func updateValue() {
 		let easedPercent = easingFn.ease(currentTime, 0, 1, duration)
-		currentValue = T.lerp(from: startValue, to: endValue, percent: easedPercent)
+		currentValue = startValue.lerp(toward: endValue, percent: easedPercent)
 	}
 }
