@@ -9,21 +9,21 @@ class MatchStatsTracker {
 
 	// MARK: Internal
 
-	private(set) var rocketsLaunched = 42
+	private(set) var rocketsLaunched = 0
 
-	private(set) var cpuRocketsDestroyed = 2
+	private(set) var cpuRocketsDestroyed = 0
 
-	private(set) var cpuFastRocketsDestroyed = 5
+	private(set) var cpuFastRocketsDestroyed = 0
 
-	private(set) var cpuSmallUfosDestroyed = 12
+	private(set) var cpuSmallUfosDestroyed = 0
 
-	private(set) var cpuBigUfosDestroyed = 5
+	private(set) var cpuBigUfosDestroyed = 0
 
-	private(set) var pauseEnemiesPowerUpsCollected = 1
+	private(set) var pauseEnemiesPowerUpsCollected = 0
 
-	private(set) var repairBuildingPowerUpsCollected = 2
+	private(set) var repairBuildingPowerUpsCollected = 0
 
-	private(set) var destroyEnemiesPowerUpsCollected = 3
+	private(set) var destroyEnemiesPowerUpsCollected = 0
 
 	private(set) var finalUptime: Float = 0
 
