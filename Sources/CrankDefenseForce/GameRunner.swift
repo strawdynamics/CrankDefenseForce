@@ -106,8 +106,8 @@ class GameRunner {
 
 	func updateActive() {
 		let pushed = System.buttonState.pushed
-//		if city.buildings.allSatisfy({ $0.destroyed }) {
-		if pushed.contains(.b) {
+		if city.buildings.allSatisfy({ $0.destroyed }) {
+		// if pushed.contains(.b) {
 			lose()
 			return
 		}
@@ -118,7 +118,7 @@ class GameRunner {
 	func lose() {
 		state = .sectorLost
 		matchStatsTracker.stop(finalUptime: uptime)
-		
+
 		_ = SectorLostManager(SectorLostManager.Config(
 			matchStatsTracker: matchStatsTracker,
 			entityStore: entityStore,
