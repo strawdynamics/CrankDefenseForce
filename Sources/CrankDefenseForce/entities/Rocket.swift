@@ -8,7 +8,8 @@ class Rocket: BaseEntity, PowerUpDropper, Movable {
 		.destroyEnemies: 1,
 	]
 
-	nonisolated(unsafe) static let rocketBitmapTable = try! Graphics.BitmapTable(path: "entities/Rocket/rocket")
+	nonisolated(unsafe) static let rocketBitmapTable = try! Graphics.BitmapTable(
+		path: "entities/Rocket/rocket")
 
 	struct RemoveEventPayload {
 		var rocket: Rocket
@@ -106,11 +107,12 @@ class Rocket: BaseEntity, PowerUpDropper, Movable {
 
 		super.init(config.entityStore)
 
-		exhaust = RocketExhaust(RocketExhaust.Config(
-			rocket: self,
-			entityStore: config.entityStore,
-			type: config.exhaustType
-		))
+		exhaust = RocketExhaust(
+			RocketExhaust.Config(
+				rocket: self,
+				entityStore: config.entityStore,
+				type: config.exhaustType
+			))
 
 		if alwaysExhaust {
 			exhaust?.activate()
@@ -192,9 +194,10 @@ class Rocket: BaseEntity, PowerUpDropper, Movable {
 					explode(explosionOwner: overlappingExplosionSprite.owner)
 
 					if owner == .cpu && overlappingExplosionSprite.owner == .player {
-						Self.statsEmitter.emit(StatsEventPayload(
-							eventType: isFast ? .cpuFastRocketDestroyed : .cpuRocketDestroyed
-						))
+						Self.statsEmitter.emit(
+							StatsEventPayload(
+								eventType: isFast ? .cpuFastRocketDestroyed : .cpuRocketDestroyed
+							))
 					}
 				}
 
@@ -208,10 +211,11 @@ class Rocket: BaseEntity, PowerUpDropper, Movable {
 				bitmap2: overlappingSprite.image!,
 				point2: overlappingSprite.bounds.origin,
 				flip2: overlappingSprite.imageFlip,
-				rect: Rect.init(origin: Point.zero, width: Float(Display.width), height: Float(Display.height))
+				rect: Rect.init(
+					origin: Point.zero, width: Float(Display.width), height: Float(Display.height))
 			)
 
-			if (!alphaCollided) {
+			if !alphaCollided {
 				continue
 			}
 
@@ -242,19 +246,23 @@ class Rocket: BaseEntity, PowerUpDropper, Movable {
 		if owner == .cpu {
 			dropPowerUp()
 
-			Self.statsEmitter.emit(StatsEventPayload(
-				eventType: isFast ? .cpuFastRocketDestroyed : .cpuRocketDestroyed
-			))
+			Self.statsEmitter.emit(
+				StatsEventPayload(
+					eventType: isFast ? .cpuFastRocketDestroyed : .cpuRocketDestroyed
+				))
 		}
 
 		if otherRocket.owner == .cpu {
 			otherRocket.dropPowerUp()
-			Self.statsEmitter.emit(StatsEventPayload(
-				eventType: otherRocket.isFast ? .cpuFastRocketDestroyed : .cpuRocketDestroyed
-			))
+			Self.statsEmitter.emit(
+				StatsEventPayload(
+					eventType: otherRocket.isFast ? .cpuFastRocketDestroyed : .cpuRocketDestroyed
+				))
 		}
 
-		explode(explosionOwner: .player, at: Point.lerp(from: position, to: otherRocket.position, percent: 0.5))
+		explode(
+			explosionOwner: .player,
+			at: Point.lerp(from: position, to: otherRocket.position, percent: 0.5))
 		otherRocket.remove()
 	}
 
@@ -263,7 +271,7 @@ class Rocket: BaseEntity, PowerUpDropper, Movable {
 			// CPU rockets don't collect power-ups
 			return
 		}
-		
+
 		powerUpSprite.collect()
 	}
 
@@ -289,9 +297,10 @@ class Rocket: BaseEntity, PowerUpDropper, Movable {
 		let destroyed = bigUfo.damage()
 
 		if destroyed {
-			Self.statsEmitter.emit(StatsEventPayload(
-				eventType: .cpuBigUfoDestroyed
-			))
+			Self.statsEmitter.emit(
+				StatsEventPayload(
+					eventType: .cpuBigUfoDestroyed
+				))
 
 			bigUfo.dropPowerUp()
 		}
@@ -305,9 +314,10 @@ class Rocket: BaseEntity, PowerUpDropper, Movable {
 		guard let smallUfo = entityStore.get(smallUfoSprite.smallUfoId) as? SmallUfo else { return }
 
 		explode(explosionOwner: .player)
-		Self.statsEmitter.emit(StatsEventPayload(
-			eventType: .cpuSmallUfoDestroyed
-		))
+		Self.statsEmitter.emit(
+			StatsEventPayload(
+				eventType: .cpuSmallUfoDestroyed
+			))
 		smallUfo.dropPowerUp()
 		smallUfo.remove()
 	}
@@ -319,9 +329,10 @@ class Rocket: BaseEntity, PowerUpDropper, Movable {
 			exhaust = nil
 		}
 
-		Self.removeEmitter.emit(RemoveEventPayload(
-			rocket: self,
-		))
+		Self.removeEmitter.emit(
+			RemoveEventPayload(
+				rocket: self,
+			))
 
 		entityStore.remove(self)
 	}
@@ -331,13 +342,14 @@ class Rocket: BaseEntity, PowerUpDropper, Movable {
 	}
 
 	func explode(explosionOwner: Owner, at position: Point) {
-		_ = Explosion(Explosion.Config(
-			position: position,
-			maxRadius: 32,
-			owner: explosionOwner,
-			entityStore: entityStore,
-			duration: 2,
-		))
+		_ = Explosion(
+			Explosion.Config(
+				position: position,
+				maxRadius: 32,
+				owner: explosionOwner,
+				entityStore: entityStore,
+				duration: 2,
+			))
 
 		remove()
 	}

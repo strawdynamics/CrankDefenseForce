@@ -1,5 +1,5 @@
-import PlaydateKit
 import PDKMasterPlayer
+import PlaydateKit
 
 enum DrumsPd {
 	private static let pathBase = "synths/drumsPd"

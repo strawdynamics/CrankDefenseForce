@@ -39,14 +39,15 @@
 import PlaydateKit
 
 typealias BasicEasingFn = (_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float
-typealias ElasticEasingFn = (_ t: Float, _ b: Float, _ c: Float, _ d: Float, _ a: Float, _ p: Float) -> Float;
+typealias ElasticEasingFn = (_ t: Float, _ b: Float, _ c: Float, _ d: Float, _ a: Float, _ p: Float)
+	-> Float
 typealias OvershootEasingFn = (_ t: Float, _ b: Float, _ c: Float, _ d: Float, _ s: Float) -> Float
 
 enum EasingFn {
 	case basic(BasicEasingFn)
 	case elastic(ElasticEasingFn)
 	case overshoot(OvershootEasingFn)
-	
+
 	func ez(_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float {
 		switch self {
 		case .basic(let fn):
@@ -57,8 +58,10 @@ enum EasingFn {
 			return fn(t, b, c, d, 1.70158)
 		}
 	}
-	
-	func ease(_ t: Float, _ b: Float, _ c: Float, _ d: Float, _ a_or_s: Float? = nil, _ p: Float? = nil) -> Float {
+
+	func ease(
+		_ t: Float, _ b: Float, _ c: Float, _ d: Float, _ a_or_s: Float? = nil, _ p: Float? = nil
+	) -> Float {
 		switch self {
 		case .basic(let fn):
 			return fn(t, b, c, d)
@@ -69,7 +72,7 @@ enum EasingFn {
 			return fn(t, b, c, d, amplitude, period)
 		case .overshoot(let fn):
 			let overshoot = a_or_s ?? 1.70158
-			
+
 			return fn(t, b, c, d, overshoot)
 		}
 	}
@@ -77,14 +80,14 @@ enum EasingFn {
 
 enum Ease {
 	// MARK: Basic
-	
+
 	static func linear(_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float {
 		c * t / d + b
 	}
 
 	static func inQuad(_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float {
-		let nt = t / d;
-		return c * powf(nt, 2) + b;
+		let nt = t / d
+		return c * powf(nt, 2) + b
 	}
 
 	static func outQuad(_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float {
@@ -103,7 +106,7 @@ enum Ease {
 
 	static func outInQuad(_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float {
 		if t < d / 2 {
-			return outQuad (t * 2, b, c / 2, d)
+			return outQuad(t * 2, b, c / 2, d)
 		} else {
 			return inQuad((t * 2) - d, b + c / 2, c / 2, d)
 		}
@@ -151,7 +154,7 @@ enum Ease {
 		var nt = t / d * 2
 		if nt < 1 {
 			return c / 2 * powf(nt, 4) + b
-		}else {
+		} else {
 			nt = nt - 2
 			return -c / 2 * (powf(nt, 4) - 2) + b
 		}
@@ -179,7 +182,7 @@ enum Ease {
 		var nt = t / d * 2
 		if nt < 1 {
 			return c / 2 * powf(nt, 5) + b
-		}else {
+		} else {
 			nt = nt - 2
 			return c / 2 * (powf(nt, 5) + 2) + b
 		}
@@ -192,36 +195,35 @@ enum Ease {
 			return inQuint((t * 2) - d, b + c / 2, c / 2, d)
 		}
 	}
-	
+
 	static func inSine(_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float {
 		return -c * cosf(t / d * (Float.pi / 2)) + c + b
 	}
-	
+
 	static func outSine(_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float {
 		return c * sinf(t / d * (Float.pi / 2)) + b
 	}
-	
-	
+
 	static func inOutSine(_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float {
 		return -c / 2 * (cosf(Float.pi * t / d) - 1) + b
 	}
-	
+
 	static func outInSine(_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float {
 		if t < d / 2 {
 			return outSine(t * 2, b, c / 2, d)
-		}else {
+		} else {
 			return inSine((t * 2) - d, b + c / 2, c / 2, d)
 		}
 	}
-	
+
 	static func inExpo(_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float {
 		if t == 0 {
 			return b
-		}else {
+		} else {
 			return c * powf(2, (10 * (t / d - 1))) + b - c * 0.001
 		}
 	}
-	
+
 	static func outExpo(_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float {
 		if t == d {
 			return b + c
@@ -229,7 +231,7 @@ enum Ease {
 			return c * 1.001 * (1 - powf(2, (-10 * t / d))) + b
 		}
 	}
-	
+
 	static func inOutExpo(_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float {
 		if t == 0 {
 			return b
@@ -247,7 +249,7 @@ enum Ease {
 			return c / 2 * 1.0005 * (2 - powf(2, (-10 * nt))) + b
 		}
 	}
-	
+
 	static func outInExpo(_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float {
 		if t < d / 2 {
 			return outExpo(t * 2, b, c / 2, d)
@@ -255,17 +257,17 @@ enum Ease {
 			return inExpo((t * 2) - d, b + c / 2, c / 2, d)
 		}
 	}
-	
+
 	static func inCirc(_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float {
 		let nt = t / d
-		return(-c * (sqrtf(1 - powf(nt, 2)) - 1) + b)
+		return (-c * (sqrtf(1 - powf(nt, 2)) - 1) + b)
 	}
-	
+
 	static func outCirc(_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float {
 		let nt = t / d - 1
-		return(c * sqrtf(1 - powf(nt, 2)) + b)
+		return (c * sqrtf(1 - powf(nt, 2)) + b)
 	}
-	
+
 	static func inOutCirc(_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float {
 		var nt = t / d * 2
 		if nt < 1 {
@@ -275,7 +277,7 @@ enum Ease {
 			return c / 2 * (sqrtf(1 - powf(nt, 2)) + 1) + b
 		}
 	}
-	
+
 	static func outInCirc(_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float {
 		if t < d / 2 {
 			return outCirc(t * 2, b, c / 2, d)
@@ -283,7 +285,7 @@ enum Ease {
 			return inCirc((t * 2) - d, b + c / 2, c / 2, d)
 		}
 	}
-	
+
 	static func outBounce(_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float {
 		var nt = t / d
 		if nt < 1 / 2.75 {
@@ -299,11 +301,11 @@ enum Ease {
 			return c * (7.5625 * nt * nt + 0.984375) + b
 		}
 	}
-	
+
 	static func inBounce(_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float {
 		return c - outBounce(d - t, 0, c, d) + b
 	}
-	
+
 	static func inOutBounce(_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float {
 		if t < d / 2 {
 			return inBounce(t * 2, 0, c, d) * 0.5 + b
@@ -311,7 +313,7 @@ enum Ease {
 			return outBounce(t * 2 - d, 0, c, d) * 0.5 + c * 0.5 + b
 		}
 	}
-	
+
 	static func outInBounce(_ t: Float, _ b: Float, _ c: Float, _ d: Float) -> Float {
 		if t < d / 2 {
 			return outBounce(t * 2, b, c / 2, d)
@@ -319,24 +321,26 @@ enum Ease {
 			return inBounce((t * 2) - d, b + c / 2, c / 2, d)
 		}
 	}
-	
+
 	// MARK: Elastic
-	
-	static func inElastic(_ t: Float, _ b: Float, _ c: Float, _ d: Float, _ a: Float, _ p: Float) -> Float {
+
+	static func inElastic(_ t: Float, _ b: Float, _ c: Float, _ d: Float, _ a: Float, _ p: Float)
+		-> Float
+	{
 		if t == 0 {
 			return b
 		}
-		
+
 		var nt = t / d
-		
+
 		if nt == 1 {
 			return b + c
 		}
-		
+
 		let s: Float
 		let na: Float
-		
-		if a < fabsf(c){
+
+		if a < fabsf(c) {
 			na = c
 			s = p / 4
 		} else {
@@ -348,46 +352,23 @@ enum Ease {
 
 		return -(na * powf(2, (10 * nt)) * sinf((nt * d - s) * (2 * Float.pi) / p)) + b
 	}
-	
-	static func outElastic(_ t: Float, _ b: Float, _ c: Float, _ d: Float, _ a: Float, _ p: Float) -> Float {
-		if t == 0  {
-			return b
-		}
-		
-		let nt = t / d
-		
-		if nt == 1  {
-			return b + c
-		}
-		
-		let s: Float
-		let na: Float
-		
-		if a < fabsf(c) {
-			na = c
-			s = p / 4
-		} else {
-			na = a
-			s = p / (2 * Float.pi) * asinf(c / a)
-		}
-		
-		return na * powf(2,(-10 * t)) * sinf((t * d - s) * (2 * Float.pi) / p) + c + b
-	}
-	
-	static func inOutElastic(_ t: Float, _ b: Float, _ c: Float, _ d: Float, _ a: Float, _ p: Float) -> Float {
+
+	static func outElastic(_ t: Float, _ b: Float, _ c: Float, _ d: Float, _ a: Float, _ p: Float)
+		-> Float
+	{
 		if t == 0 {
 			return b
 		}
-		
-		var nt = t / d * 2
-		
-		if nt == 2 {
+
+		let nt = t / d
+
+		if nt == 1 {
 			return b + c
 		}
-		
+
 		let s: Float
 		let na: Float
-		
+
 		if a < fabsf(c) {
 			na = c
 			s = p / 4
@@ -395,36 +376,65 @@ enum Ease {
 			na = a
 			s = p / (2 * Float.pi) * asinf(c / a)
 		}
-		
+
+		return na * powf(2, (-10 * t)) * sinf((t * d - s) * (2 * Float.pi) / p) + c + b
+	}
+
+	static func inOutElastic(_ t: Float, _ b: Float, _ c: Float, _ d: Float, _ a: Float, _ p: Float)
+		-> Float
+	{
+		if t == 0 {
+			return b
+		}
+
+		var nt = t / d * 2
+
+		if nt == 2 {
+			return b + c
+		}
+
+		let s: Float
+		let na: Float
+
+		if a < fabsf(c) {
+			na = c
+			s = p / 4
+		} else {
+			na = a
+			s = p / (2 * Float.pi) * asinf(c / a)
+		}
+
 		if nt < 1 {
 			nt = nt - 1
 			return -0.5 * (na * powf(2, (10 * nt)) * sinf((nt * d - s) * (2 * Float.pi) / p)) + b
 		} else {
 			nt = nt - 1
-			return na * powf(2, (-10 * nt)) * sinf((nt * d - s) * (2 * Float.pi) / p ) * 0.5 + c + b
+			return na * powf(2, (-10 * nt)) * sinf((nt * d - s) * (2 * Float.pi) / p) * 0.5 + c + b
 		}
 	}
-	
-	static func outInElastic(_ t: Float, _ b: Float, _ c: Float, _ d: Float, _ a: Float, _ p: Float) -> Float {
+
+	static func outInElastic(_ t: Float, _ b: Float, _ c: Float, _ d: Float, _ a: Float, _ p: Float)
+		-> Float
+	{
 		if t < d / 2 {
 			return outElastic(t * 2, b, c / 2, d, a, p)
 		} else {
 			return inElastic((t * 2) - d, b + c / 2, c / 2, d, a, p)
 		}
 	}
-	
+
 	// MARK: Overshoot
-	
+
 	static func inBack(_ t: Float, _ b: Float, _ c: Float, _ d: Float, _ s: Float) -> Float {
 		let nt = t / d
 		return c * nt * nt * ((s + 1) * nt - s) + b
 	}
-	
+
 	static func outBack(_ t: Float, _ b: Float, _ c: Float, _ d: Float, _ s: Float) -> Float {
 		let nt = t / d - 1
 		return c * (nt * nt * ((s + 1) * nt + s) + 1) + b
 	}
-	
+
 	static func inOutBack(_ t: Float, _ b: Float, _ c: Float, _ d: Float, _ s: Float) -> Float {
 		let ns = s * 1.525
 		var nt = t / d * 2
@@ -435,7 +445,7 @@ enum Ease {
 			return c / 2 * (nt * nt * ((ns + 1) * nt + ns) + 2) + b
 		}
 	}
-	
+
 	static func outInBack(_ t: Float, _ b: Float, _ c: Float, _ d: Float, _ s: Float) -> Float {
 		if t < d / 2 {
 			return outBack(t * 2, b, c / 2, d, s)

@@ -29,16 +29,20 @@ class KeyValueSectorLostCell: SectorLostCell {
 		Graphics.pushContext(bitmap)
 		Graphics.drawMode = .fillWhite
 		Graphics.setFont(CdfFont.NicoPups16)
-		Graphics.drawText(config.key, at: Point(
-			x: SectorLostCellPadding,
-			y: SectorLostCellPadding,
-		))
+		Graphics.drawText(
+			config.key,
+			at: Point(
+				x: SectorLostCellPadding,
+				y: SectorLostCellPadding,
+			))
 
 		Graphics.setFont(CdfFont.NicoClean16)
-		Graphics.drawText(config.value, at: Point(
-			x: SectorLostCellPadding,
-			y: CdfFont.NicoClean16.height + SectorLostCellPadding * 2,
-		))
+		Graphics.drawText(
+			config.value,
+			at: Point(
+				x: SectorLostCellPadding,
+				y: CdfFont.NicoClean16.height + SectorLostCellPadding * 2,
+			))
 		Graphics.popContext()
 
 		sprite.image = bitmap
@@ -87,13 +91,14 @@ class HrCell: SectorLostCell {
 	}
 
 	func moveTo(topLeft: Point) {
-		sprite.moveTo(topLeft + Point(
-			x: SectorLostCellPadding,
-			y: 0,
-		))
+		sprite.moveTo(
+			topLeft
+				+ Point(
+					x: SectorLostCellPadding,
+					y: 0,
+				))
 	}
 }
-
 
 //// Headers (# enemies, power-ups)
 class TextCell: SectorLostCell {
@@ -131,10 +136,12 @@ class TextCell: SectorLostCell {
 	}
 
 	func moveTo(topLeft: Point) {
-		sprite.moveTo(topLeft + Point(
-			x: SectorLostCellPadding,
-			y: SectorLostCellPadding,
-		))
+		sprite.moveTo(
+			topLeft
+				+ Point(
+					x: SectorLostCellPadding,
+					y: SectorLostCellPadding,
+				))
 	}
 }
 //
@@ -209,10 +216,12 @@ class EntityCell: SectorLostCell {
 	}
 
 	func moveTo(topLeft: Point) {
-		textSprite.moveTo(topLeft + Point(
-			x: entityWidth + SectorLostCellPadding,
-			y: (height - Int(textSprite.bounds.height)) / 2,
-		))
+		textSprite.moveTo(
+			topLeft
+				+ Point(
+					x: entityWidth + SectorLostCellPadding,
+					y: (height - Int(textSprite.bounds.height)) / 2,
+				))
 
 		moveEntity(topLeft: topLeft)
 	}
@@ -220,93 +229,107 @@ class EntityCell: SectorLostCell {
 	private func moveEntity(topLeft: Point) {
 		switch entityType {
 		case .rocket, .fastRocket:
-			entity.moveTo(position: topLeft + Point(
-				x: 14,
-				y: 9,
-			))
+			entity.moveTo(
+				position: topLeft
+					+ Point(
+						x: 14,
+						y: 9,
+					))
 		case .smallUfo:
-			entity.moveTo(position: topLeft + Point(
-				x: 16,
-				y: 12,
-			))
+			entity.moveTo(
+				position: topLeft
+					+ Point(
+						x: 16,
+						y: 12,
+					))
 		case .bigUfo:
-			entity.moveTo(position: topLeft + Point(
-				x: 38,
-				y: 10,
-			))
+			entity.moveTo(
+				position: topLeft
+					+ Point(
+						x: 38,
+						y: 10,
+					))
 		case .pauseEnemies, .repairBuilding, .destroyEnemies:
-			entity.moveTo(position: topLeft + Point(
-				x: 14,
-				y: 12,
-			))
+			entity.moveTo(
+				position: topLeft
+					+ Point(
+						x: 14,
+						y: 12,
+					))
 		}
 	}
 
 	static func spawnEntity(_ config: Config) -> Movable {
 		switch config.entityType {
 		case .rocket, .fastRocket:
-			let rocket = Rocket(Rocket.Config(
-				position: Point.zero,
-				angle: 30,
-				entityStore: config.entityStore,
-				owner: .cpu,
-				exhaustType: config.entityType == .fastRocket ? .big : .normal,
-				alwaysExhaust: true,
-			))
+			let rocket = Rocket(
+				Rocket.Config(
+					position: Point.zero,
+					angle: 30,
+					entityStore: config.entityStore,
+					owner: .cpu,
+					exhaustType: config.entityType == .fastRocket ? .big : .normal,
+					alwaysExhaust: true,
+				))
 
 			rocket.sprite.zIndex = 700
 			rocket.exhaust?.sprite.zIndex = 700
 
 			return rocket
 		case .smallUfo:
-			let ufo = SmallUfo(SmallUfo.Config(
-				entityStore: config.entityStore,
-				position: Point.zero,
-				facingLeft: true,
-				speed: 0,
-				exhaustZIndex: 650
-			))
+			let ufo = SmallUfo(
+				SmallUfo.Config(
+					entityStore: config.entityStore,
+					position: Point.zero,
+					facingLeft: true,
+					speed: 0,
+					exhaustZIndex: 650
+				))
 
 			ufo.sprite.zIndex = 700
 
 			return ufo
 		case .bigUfo:
-			let ufoEyes = BigUfoEyes(BigUfoEyes.Config(
-				entityStore: config.entityStore,
-			))
+			let ufoEyes = BigUfoEyes(
+				BigUfoEyes.Config(
+					entityStore: config.entityStore,
+				))
 
 			ufoEyes.sprite.zIndex = 700
 
 			return ufoEyes
 		case .pauseEnemies, .repairBuilding, .destroyEnemies:
-			let type: PowerUp.PowerUpType = switch config.entityType {
-			case .pauseEnemies:
-				.pauseEnemies
-			case .repairBuilding:
-				.repairBuilding
-			case .destroyEnemies:
-				.destroyEnemies
-			default:
-				.none
-			}
+			let type: PowerUp.PowerUpType =
+				switch config.entityType {
+				case .pauseEnemies:
+					.pauseEnemies
+				case .repairBuilding:
+					.repairBuilding
+				case .destroyEnemies:
+					.destroyEnemies
+				default:
+					.none
+				}
 
-			let powerUp = PowerUp(PowerUp.Config(
-				position: Point.zero,
-				type: type,
-				entityStore: config.entityStore,
-			))
+			let powerUp = PowerUp(
+				PowerUp.Config(
+					position: Point.zero,
+					type: type,
+					entityStore: config.entityStore,
+				))
 
 			powerUp.sprite.zIndex = 700
 
 			return powerUp
 		default:
-			let rocket = Rocket(Rocket.Config(
-				position: Point.zero,
-				angle: 30,
-				entityStore: config.entityStore,
-				owner: .cpu,
-				alwaysExhaust: true,
-			))
+			let rocket = Rocket(
+				Rocket.Config(
+					position: Point.zero,
+					angle: 30,
+					entityStore: config.entityStore,
+					owner: .cpu,
+					alwaysExhaust: true,
+				))
 
 			rocket.sprite.zIndex = 700
 			rocket.exhaust?.sprite.zIndex = 700

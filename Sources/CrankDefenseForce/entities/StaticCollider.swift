@@ -3,15 +3,15 @@ import PlaydateKit
 class StaticCollider: BaseEntity {
 	class StaticColliderSprite: Sprite.Sprite {
 	}
-	
+
 	struct Config {
 		var bitmap: Graphics.Bitmap
 		var entityStore: EntityStore
 		var zIndex: Int16 = 0
 	}
-	
+
 	var sprite: StaticColliderSprite
-	
+
 	init(_ config: Config) {
 		let sprite = StaticColliderSprite()
 		sprite.image = config.bitmap
@@ -20,7 +20,7 @@ class StaticCollider: BaseEntity {
 		sprite.zIndex = config.zIndex
 		sprite.addToDisplayList()
 		self.sprite = sprite
-		
+
 		super.init(config.entityStore)
 	}
 }

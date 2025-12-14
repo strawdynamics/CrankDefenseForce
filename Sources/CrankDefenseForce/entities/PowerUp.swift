@@ -1,10 +1,14 @@
 import PlaydateKit
 
 class PowerUp: BaseEntity, Movable {
-	nonisolated(unsafe) static let noneBitmapTable = try! Graphics.BitmapTable(path: "entities/PowerUp/none")
-	nonisolated(unsafe) static let pauseEnemiesBitmapTable = try! Graphics.BitmapTable(path: "entities/PowerUp/pauseEnemies")
-	nonisolated(unsafe) static let repairBuildingBitmapTable = try! Graphics.BitmapTable(path: "entities/PowerUp/repairBuilding")
-	nonisolated(unsafe) static let destroyEnemiesBitmapTable = try! Graphics.BitmapTable(path: "entities/PowerUp/destroyEnemies")
+	nonisolated(unsafe) static let noneBitmapTable = try! Graphics.BitmapTable(
+		path: "entities/PowerUp/none")
+	nonisolated(unsafe) static let pauseEnemiesBitmapTable = try! Graphics.BitmapTable(
+		path: "entities/PowerUp/pauseEnemies")
+	nonisolated(unsafe) static let repairBuildingBitmapTable = try! Graphics.BitmapTable(
+		path: "entities/PowerUp/repairBuilding")
+	nonisolated(unsafe) static let destroyEnemiesBitmapTable = try! Graphics.BitmapTable(
+		path: "entities/PowerUp/destroyEnemies")
 
 	enum PowerUpType {
 		case none
@@ -12,22 +16,22 @@ class PowerUp: BaseEntity, Movable {
 		case repairBuilding
 		case destroyEnemies
 	}
-	
+
 	struct Config {
 		let position: Point
 		let type: PowerUpType
 		let entityStore: EntityStore
 	}
-	
+
 	class PowerUpSprite: Sprite.Sprite {
 		let type: PowerUpType
-		
+
 		var onCollect: (() -> Void)?
-		
+
 		init(type: PowerUpType) {
 			self.type = type
 		}
-		
+
 		func collect() {
 			onCollect?()
 		}
@@ -49,21 +53,22 @@ class PowerUp: BaseEntity, Movable {
 	private var bitmapTable: Graphics.BitmapTable
 
 	let type: PowerUpType
-	
+
 	let sprite: PowerUpSprite
-	
+
 	init(_ config: Config) {
 		type = config.type
-		
+
 		sprite = PowerUpSprite(type: type)
 
-		frameAnimator = Animator(Animator.Config(
-			duration: 1.2,
-			startValue: 0.0,
-			endValue: 10.0,
-			easingFn: EasingFn.basic(Ease.linear),
-			loopMode: .loop,
-		))
+		frameAnimator = Animator(
+			Animator.Config(
+				duration: 1.2,
+				startValue: 0.0,
+				endValue: 10.0,
+				easingFn: EasingFn.basic(Ease.linear),
+				loopMode: .loop,
+			))
 
 		switch type {
 		case .pauseEnemies:
@@ -77,9 +82,9 @@ class PowerUp: BaseEntity, Movable {
 		}
 
 		super.init(config.entityStore)
-		
+
 		sprite.onCollect = collect
-		
+
 		let size: Float = 18
 
 		sprite.zIndex = 90
@@ -105,10 +110,11 @@ class PowerUp: BaseEntity, Movable {
 		}
 		collected = true
 
-		Self.collectEmitter.emit(CollectEventPayload(
-			type: type,
-			position: sprite.position
-		))
+		Self.collectEmitter.emit(
+			CollectEventPayload(
+				type: type,
+				position: sprite.position
+			))
 
 		entityStore.remove(self)
 	}

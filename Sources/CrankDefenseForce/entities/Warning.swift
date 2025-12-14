@@ -1,7 +1,8 @@
 import PlaydateKit
 
 class Warning: BaseEntity {
-	nonisolated(unsafe) static let warningBitmap = try! Graphics.Bitmap(path: "entities/Warning/warning")
+	nonisolated(unsafe) static let warningBitmap = try! Graphics.Bitmap(
+		path: "entities/Warning/warning")
 
 	struct Config {
 		let position: Point
@@ -30,12 +31,13 @@ class Warning: BaseEntity {
 		outPercentage = config.outPercentage
 		position = config.position
 
-		yAnimator = Animator(Animator.Config(
-			duration: duration * inPercentage,
-			startValue: -20,
-			endValue: 0,
-			easingFn: EasingFn.basic(Ease.outBounce),
-		))
+		yAnimator = Animator(
+			Animator.Config(
+				duration: duration * inPercentage,
+				startValue: -20,
+				endValue: 0,
+				easingFn: EasingFn.basic(Ease.outBounce),
+			))
 
 		super.init(config.entityStore)
 
@@ -61,12 +63,13 @@ class Warning: BaseEntity {
 		}
 
 		if lifetime / duration >= 1 - outPercentage && yAnimator == nil {
-			yAnimator = Animator(Animator.Config(
-				duration: duration * outPercentage,
-				startValue: 0,
-				endValue: -20,
-				easingFn: EasingFn.overshoot(Ease.inBack),
-			))
+			yAnimator = Animator(
+				Animator.Config(
+					duration: duration * outPercentage,
+					startValue: 0,
+					endValue: -20,
+					easingFn: EasingFn.overshoot(Ease.inBack),
+				))
 		}
 
 		if lifetime >= duration {

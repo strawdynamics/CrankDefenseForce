@@ -2,12 +2,12 @@ import PlaydateKit
 
 class AboutScene: BaseScene {
 	let entityStore = EntityStore()
-	
+
 	override func update() {
 		self.entityStore.update()
-		
+
 		let pushed = System.buttonState.pushed
-		
+
 		if pushed.contains(.b) {
 			Sfx.instance.play(.menuExit)
 			game.scenePresenter.changeScene(
@@ -16,7 +16,7 @@ class AboutScene: BaseScene {
 			)
 		}
 	}
-	
+
 	override func enter() {
 		let _ = BasicBackground(
 			entityStore: self.entityStore,

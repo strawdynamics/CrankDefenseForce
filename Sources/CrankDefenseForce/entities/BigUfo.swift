@@ -11,27 +11,27 @@ class BigUfo: BaseEntity, PowerUpDropper {
 	var position: Point {
 		return sprite.position
 	}
-	
+
 	nonisolated(unsafe) static let bigUfoBitmapTable = try! Graphics.BitmapTable(path: "entities/BigUfo/bigUfo")
 
 	nonisolated(unsafe) static let laserBitmap = try! Graphics.Bitmap(path: "entities/BigUfo/laser")
 
 	static let moveToBuildingFrame: Int = 0
-	
+
 	static let chargeLaserFrames = 1...9
-	
+
 	static let destroyedFrame: Int = 10
-	
+
 	static let moveToBuildingXPps: Float = 25
-	
+
 	private static let maxDestroyedLeavingZigZagCount = 5
-	
+
 	private static let maxDamagedTime: Float = 1.2
-	
+
 	class BigUfoSprite: Sprite.Sprite {
 		var bigUfoId: Int = -1
 	}
-	
+
 	private enum Activity {
 		case moveToBuilding
 		case chargeLaser
@@ -40,33 +40,33 @@ class BigUfo: BaseEntity, PowerUpDropper {
 		case destroyedLeaving
 		case idle
 	}
-	
+
 	struct Config {
 		var city: City
 		var entityStore: EntityStore
 		var position: Point
 		var hitPoints: Int
 	}
-	
+
 	var sprite = BigUfoSprite()
-	
+
 	var laserSprite = BigUfoSprite()
-	
+
 	var city: City
-	
+
 	var targetBuilding: Building?
-	
+
 	private var hitPoints: Int
-	
+
 	private var _currentActivity = Activity.moveToBuilding
-	
+
 	private(set) var destroyed = false
-	
+
 	private var laserYOffset: Float = 0
-	
+
 	private var laserYOffsetAnimator: Animator<Float>?
 	private var laserChargeAnimator: Animator<Float>?
-	
+
 	private var destroyedLeavingZigZagCount: Int = 0
 	private var destroyedLeavingPosAnimator: Animator<Point>?
 	private var destroyedLeavingMovingRight = Float.random(in: 0..<1) < 0.5
@@ -74,14 +74,14 @@ class BigUfo: BaseEntity, PowerUpDropper {
 	private var destroyedLeavingRotationAnimator: Animator<Float>?
 	private var destroyedLeavingCurrentAngle: Float = 0.0
 	private var destroyedLeavingTargetAngle: Float = 0.0
-	
+
 	private var pendingExplosions: [TimedCallback] = []
-	
+
 	private var currentActivity: Activity {
 		get {
 			return _currentActivity
 		}
-		
+
 		set(newActivity) {
 			if newActivity == .moveToBuilding {
 				enterMoveToBuilding()
@@ -94,24 +94,24 @@ class BigUfo: BaseEntity, PowerUpDropper {
 			} else if newActivity == .fireLaser {
 				enterFireLaser()
 			}
-			
+
 			_currentActivity = newActivity
 		}
 	}
-	
+
 	private var moveToBuildingXAnimator: Animator<Float>?
-	
+
 	private var bobYAnimator: Animator<Float>?
-	
+
 	private var damagedAnimator: Animator<Float>?
 	private var damagedTime: Float = 0
-	
+
 	init(_ config: Config) {
 		let bitmap = Self.bigUfoBitmapTable[0]!
 		let (bitmapWidth, bitmapHeight, _) = bitmap.getData(mask: nil, data: nil)
-		
+
 		hitPoints = config.hitPoints
-		
+
 		sprite.image = bitmap
 		sprite.moveTo(config.position)
 		sprite.collideRect = Rect.init(
@@ -121,7 +121,7 @@ class BigUfo: BaseEntity, PowerUpDropper {
 			height: bitmapHeight
 		)
 		sprite.zIndex = 60
-		
+
 		let laserBitmap = Self.laserBitmap
 		let (laserBitmapWidth, laserBitmapHeight, _) = laserBitmap.getData(mask: nil, data: nil)
 		laserSprite.image = laserBitmap
@@ -134,10 +134,10 @@ class BigUfo: BaseEntity, PowerUpDropper {
 			height: laserBitmapHeight
 		)
 		laserSprite.zIndex = 59
-		
+
 		laserSprite.addToDisplayList()
 		sprite.addToDisplayList()
-		
+
 		bobYAnimator = Animator(Animator.Config(
 			duration: 0.5,
 			startValue: config.position.y,
@@ -145,17 +145,17 @@ class BigUfo: BaseEntity, PowerUpDropper {
 			easingFn: EasingFn.basic(Ease.inOutQuad),
 			loopMode: .pingPong
 		))
-		
+
 		city = config.city
-		
+
 		super.init(config.entityStore)
-		
+
 		sprite.bigUfoId = id
 		laserSprite.bigUfoId = id
-		
+
 		pickTargetBuilding()
 	}
-	
+
 	override func update() {
 		switch currentActivity {
 		case .moveToBuilding:
@@ -171,7 +171,7 @@ class BigUfo: BaseEntity, PowerUpDropper {
 		case .idle:
 			break
 		}
-		
+
 		updateBob()
 		updateLaser()
 		updatePendingExplosions()
@@ -193,9 +193,9 @@ class BigUfo: BaseEntity, PowerUpDropper {
 			easingFn: EasingFn.basic(Ease.linear),
 			loopMode: .pingPong
 		))
-		
+
 		hitPoints -= 1
-		
+
 		if hitPoints <= 0 {
 			currentActivity = .destroyed
 			return true
@@ -203,79 +203,79 @@ class BigUfo: BaseEntity, PowerUpDropper {
 			return false
 		}
 	}
-	
+
 	private func updateMoveToBuilding() {
 		guard let target = targetBuilding else {
 			pickTargetBuilding()
 			return
 		}
-		
+
 		if target.destroyed {
 			pickTargetBuilding()
 			return
 		}
-		
+
 		guard let xAnim = moveToBuildingXAnimator else { return }
 		xAnim.update()
-		
+
 		sprite.moveTo(Point(
 			x: xAnim.currentValue,
 			y: sprite.position.y
 		))
-		
+
 		if xAnim.ended {
 			currentActivity = .chargeLaser
 		}
 	}
-	
+
 	private func updateChargeLaser() {
 		guard let target = targetBuilding else {
 			pickTargetBuilding()
 			return
 		}
-		
+
 		if target.destroyed {
 			pickTargetBuilding()
 			return
 		}
-		
+
 		if let laserYAnim = laserYOffsetAnimator {
 			laserYAnim.update()
-			
+
 			laserYOffset = laserYAnim.currentValue
-			
+
 			if laserYAnim.ended {
 				laserYOffsetAnimator = nil
 			}
 		}
-		
+
 		if let laserChargeAnim = laserChargeAnimator {
 			laserChargeAnim.update()
-			
+
 			sprite.image = Self.bigUfoBitmapTable[Int(laserChargeAnim.currentValue)]
-			
+
 			if laserChargeAnim.ended {
 				laserChargeAnimator = nil
-				
+
 				currentActivity = .fireLaser
 			}
 		}
 	}
-	
+
 	private func updateFireLaser() {
 		guard let tb = targetBuilding else {
 			pickTargetBuilding()
 			return
 		}
-		
+
 		destroyBuilding(tb)
 		pickTargetBuilding()
 	}
-	
+
 	private func updateDestroyed() {
 		currentActivity = .destroyedLeaving
 	}
-	
+
 	private func updateDestroyedLeaving() {
 		guard let posAnim = destroyedLeavingPosAnimator else { return }
 		guard let scaleAnim = destroyedLeavingScaleAnimator else { return }
@@ -283,29 +283,29 @@ class BigUfo: BaseEntity, PowerUpDropper {
 		posAnim.update()
 		scaleAnim.update()
 		rotAnim.update()
-		
+
 		let baseImg = Self.bigUfoBitmapTable[Self.destroyedFrame]!
 		let s = scaleAnim.currentValue
 		let r: Float = rotAnim.currentValue
 		sprite.image = baseImg.rotated(by: r, xScale: s, yScale: s).bitmap
 		sprite.moveTo(posAnim.currentValue)
 		laserSprite.image = Self.laserBitmap.rotated(by: r, xScale: s, yScale: s).bitmap
-		
+
 		if posAnim.ended {
 			zigZagDestroyedLeaving()
 		}
 	}
-	
+
 	private func enterMoveToBuilding() {
 		guard let target = targetBuilding else { return }
 		let buildingPos = target.position
-		
+
 		sprite.image = Self.bigUfoBitmapTable[Self.moveToBuildingFrame]
-		
+
 		let startX = sprite.position.x
 		let endX = buildingPos.x + Float.random(in: -5..<5)
 		let deltaX = fabsf(endX - startX)
-		
+
 		moveToBuildingXAnimator = Animator(Animator.Config(
 			duration: deltaX / Self.moveToBuildingXPps,
 			startValue: startX,
@@ -313,7 +313,7 @@ class BigUfo: BaseEntity, PowerUpDropper {
 			easingFn: EasingFn.basic(Ease.inOutQuad),
 		))
 	}
-	
+
 	private func enterChargeLaser() {
 		laserYOffsetAnimator = Animator(Animator.Config(
 			duration: 2.0,
@@ -321,7 +321,7 @@ class BigUfo: BaseEntity, PowerUpDropper {
 			endValue: 24,
 			easingFn: EasingFn.basic(Ease.outQuad),
 		))
-		
+
 		laserChargeAnimator = Animator(Animator.Config(
 			duration: 5.0,
 			startValue: Float(Self.chargeLaserFrames.lowerBound),
@@ -329,7 +329,7 @@ class BigUfo: BaseEntity, PowerUpDropper {
 			easingFn: EasingFn.basic(Ease.linear),
 		))
 	}
-	
+
 	private func enterFireLaser() {
 		let _ = BigUfoBeam(BigUfoBeam.Config(
 			entityStore: entityStore,
@@ -337,22 +337,22 @@ class BigUfo: BaseEntity, PowerUpDropper {
 			duration: 0.25,
 		))
 	}
-	
+
 	private func enterDestroyed() {
 		destroyed = true
-		
+
 		sprite.collisionsEnabled = false
 		laserSprite.collisionsEnabled = false
-		
+
 		sprite.image = Self.bigUfoBitmapTable[Self.destroyedFrame]
-		
+
 		scheduleDestroyedUfoExplosions()
 	}
-	
+
 	private func scheduleDestroyedUfoExplosions() {
 		let explosionCount = Int.random(in: 4...6)
 		var delay: Float = 0
-		
+
 		for _ in 0..<explosionCount {
 			delay += Float.random(in: 0.25...0.4)
 
@@ -376,7 +376,7 @@ class BigUfo: BaseEntity, PowerUpDropper {
 			pendingExplosions.append(callback)
 		}
 	}
-	
+
 	private func updatePendingExplosions() {
 		for i in (0..<pendingExplosions.count).reversed() {
 			if pendingExplosions[i].update() {
@@ -384,14 +384,14 @@ class BigUfo: BaseEntity, PowerUpDropper {
 			}
 		}
 	}
-	
+
 	private func enterDestroyedLeaving() {
 		zigZagDestroyedLeaving()
 	}
-	
+
 	private func zigZagDestroyedLeaving() {
 		let stepDur = Float.random(in: 0.5...0.8)
-		
+
 		let direction: Float = destroyedLeavingMovingRight ? 1 : -1
 
 		// Rotation
@@ -403,7 +403,7 @@ class BigUfo: BaseEntity, PowerUpDropper {
 			endValue: destroyedLeavingTargetAngle,
 			easingFn: EasingFn.basic(Ease.inOutQuad)
 		))
-		
+
 		// Position
 		destroyedLeavingPosAnimator = Animator(Animator.Config(
 			duration: stepDur,
@@ -414,7 +414,7 @@ class BigUfo: BaseEntity, PowerUpDropper {
 			),
 			easingFn: EasingFn.basic(Ease.inOutQuad),
 		))
-		
+
 		// Scale
 		let startScale = 1 - (Float(destroyedLeavingZigZagCount) * 0.2)
 		destroyedLeavingScaleAnimator = Animator(Animator.Config(
@@ -423,14 +423,14 @@ class BigUfo: BaseEntity, PowerUpDropper {
 			endValue: startScale - 0.2,
 			easingFn: EasingFn.basic(Ease.inOutQuad),
 		))
-		
+
 		destroyedLeavingMovingRight = !destroyedLeavingMovingRight
 		destroyedLeavingZigZagCount += 1
 		if destroyedLeavingZigZagCount > Self.maxDestroyedLeavingZigZagCount {
 			entityStore.remove(self)
 		}
 	}
-	
+
 	private func updateBob() {
 		guard currentActivity != .destroyedLeaving else { return }
 		guard let yAnim = bobYAnimator else { return }
@@ -440,13 +440,13 @@ class BigUfo: BaseEntity, PowerUpDropper {
 			y: yAnim.currentValue.rounded()
 		))
 	}
-	
+
 	private func updateLaser() {
 		var scale: Float = 1
 		if let scaleAnim = destroyedLeavingScaleAnimator {
 			scale = scaleAnim.currentValue
 		}
-		
+
 		var offset = Point(x: 0, y: laserYOffset * scale)
 
 		if currentActivity == .destroyedLeaving, let rotation = destroyedLeavingRotationAnimator?.currentValue {
@@ -459,15 +459,15 @@ class BigUfo: BaseEntity, PowerUpDropper {
 					y: offset.x * sinA + offset.y * cosA
 				)
 			}
-		
+
 		laserSprite.moveTo(sprite.position + offset)
 	}
-	
+
 	private func updateDamaged() {
 		guard let damAnim = damagedAnimator else { return }
 		damAnim.update()
 		damagedTime += Time.deltaTime
-		
+
 		if damagedTime > Self.maxDamagedTime {
 			damagedAnimator = nil
 			sprite.setDrawMode(.copy)
@@ -478,20 +478,20 @@ class BigUfo: BaseEntity, PowerUpDropper {
 			laserSprite.setDrawMode(dm)
 		}
 	}
-	
+
 	private func destroyBuilding(_ building: Building) {
 		let destroyed = building.attemptDestroy()
-		
+
 		if destroyed {
 			scheduleDestroyedBuildingExplosions(building)
 		}
 	}
-	
+
 	private func scheduleDestroyedBuildingExplosions(_ building: Building) {
 		let bPos = building.position
 		let explosionCount = Int.random(in: 3...4)
 		var delay: Float = 0
-		
+
 		for _ in 0..<explosionCount {
 			let callback = TimedCallback(duration: delay) {
 				let _ = Explosion(Explosion.Config(
@@ -508,16 +508,16 @@ class BigUfo: BaseEntity, PowerUpDropper {
 			}
 
 			pendingExplosions.append(callback)
-			
+
 			delay += Float.random(in: 0.05...0.2)
 		}
 	}
-	
+
 	private func pickTargetBuilding() {
 		targetBuilding = city.buildings.filter({
 			!$0.destroyed
 		}).randomElement()
-		
+
 		if targetBuilding == nil {
 			currentActivity = .idle
 		} else {

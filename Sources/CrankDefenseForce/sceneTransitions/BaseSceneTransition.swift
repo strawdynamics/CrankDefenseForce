@@ -10,15 +10,14 @@ enum SceneTransitionEnterResult {
 
 class BaseSceneTransition {
 	func begin() {
-		
+
 	}
-	
+
 	func updateExit() -> SceneTransitionExitResult {
 		fatalError("BaseSceneTransition updateExit must be overridden")
 	}
-	
+
 	func updateEnter() -> SceneTransitionEnterResult {
 		fatalError("BaseSceneTransition updateEnter must be overridden")
 	}
 }
-

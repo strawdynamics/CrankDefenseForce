@@ -38,9 +38,11 @@ class SectorLostText: BaseEntity {
 		return textBitmap
 	}
 
-	private static nonisolated(unsafe) let dayBitmap = createBitmap(text: "SECTOR LOST", timeOfDay: .day)
+	private static nonisolated(unsafe) let dayBitmap = createBitmap(
+		text: "SECTOR LOST", timeOfDay: .day)
 
-	private static nonisolated(unsafe) let nightBitmap = createBitmap(text: "SECTOR LOST", timeOfDay: .night)
+	private static nonisolated(unsafe) let nightBitmap = createBitmap(
+		text: "SECTOR LOST", timeOfDay: .night)
 
 	private static let startY: Float = -12
 
@@ -50,18 +52,21 @@ class SectorLostText: BaseEntity {
 
 	private let bitmapWidth: Int
 
-	private let yAnim: Animator<Float> = Animator(Animator.Config(
-		duration: 3,
-		startValue: SectorLostText.startY,
-		endValue: SectorLostText.endY,
-		easingFn: EasingFn.basic(Ease.outBounce),
-	))
+	private let yAnim: Animator<Float> = Animator(
+		Animator.Config(
+			duration: 3,
+			startValue: SectorLostText.startY,
+			endValue: SectorLostText.endY,
+			easingFn: EasingFn.basic(Ease.outBounce),
+		))
 
 	private func draw() {
 		Graphics.drawMode = .copy
-		Graphics.drawBitmap(bitmap, at: Point(
-			x: Float((Display.width - bitmapWidth) / 2),
-			y: yAnim.currentValue,
-		))
+		Graphics.drawBitmap(
+			bitmap,
+			at: Point(
+				x: Float((Display.width - bitmapWidth) / 2),
+				y: yAnim.currentValue,
+			))
 	}
 }

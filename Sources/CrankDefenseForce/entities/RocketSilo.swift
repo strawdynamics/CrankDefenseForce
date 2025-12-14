@@ -1,18 +1,22 @@
 import PlaydateKit
 
-
 class RocketSilo: BaseEntity {
-	static let DEFAULT_THRUST: Float = 42.0;
+	static let DEFAULT_THRUST: Float = 42.0
 
-	nonisolated(unsafe) static let siloBBitmap = try! Graphics.Bitmap(path: "entities/RocketSilo/siloB")
+	nonisolated(unsafe) static let siloBBitmap = try! Graphics.Bitmap(
+		path: "entities/RocketSilo/siloB")
 
-	nonisolated(unsafe) static let siloABitmap = try! Graphics.Bitmap(path: "entities/RocketSilo/siloA")
+	nonisolated(unsafe) static let siloABitmap = try! Graphics.Bitmap(
+		path: "entities/RocketSilo/siloA")
 
-	nonisolated(unsafe) static let siloBNightBitmap = try! Graphics.Bitmap(path: "entities/RocketSilo/siloBNight")
+	nonisolated(unsafe) static let siloBNightBitmap = try! Graphics.Bitmap(
+		path: "entities/RocketSilo/siloBNight")
 
-	nonisolated(unsafe) static let siloANightBitmap = try! Graphics.Bitmap(path: "entities/RocketSilo/siloANight")
+	nonisolated(unsafe) static let siloANightBitmap = try! Graphics.Bitmap(
+		path: "entities/RocketSilo/siloANight")
 
-	nonisolated(unsafe) static let siloIconsBitmapTable = try! Graphics.BitmapTable(path: "entities/RocketSilo/siloIcons")
+	nonisolated(unsafe) static let siloIconsBitmapTable = try! Graphics.BitmapTable(
+		path: "entities/RocketSilo/siloIcons")
 
 	struct LaunchEventPayload {
 		var rocket: Rocket
@@ -33,10 +37,10 @@ class RocketSilo: BaseEntity {
 	}
 
 	static let BASE_ROCKET_PREP_DURATION: Float = 2.5
-	static let SILO_SPAWN_Y: Float = 220;
-	static let SILO_SPAWN_MOVEMENT: Float = 16;
-	static let SILO_B_SPAWN_X: Float = 14;
-	static let SILO_A_SPAWN_X: Float = 386;
+	static let SILO_SPAWN_Y: Float = 220
+	static let SILO_SPAWN_MOVEMENT: Float = 16
+	static let SILO_B_SPAWN_X: Float = 14
+	static let SILO_A_SPAWN_X: Float = 386
 
 	let sprite = Sprite.Sprite()
 
@@ -63,14 +67,18 @@ class RocketSilo: BaseEntity {
 			sprite.center = Point(x: 0.0, y: 1.0)
 			sprite.moveTo(Point(x: 0, y: Display.height - 11))
 
-			iconSprite.image = GameSettings.controlScheme == .standard ? Self.siloIconsBitmapTable[0] : Self.siloIconsBitmapTable[2]
+			iconSprite.image =
+				GameSettings.controlScheme == .standard
+				? Self.siloIconsBitmapTable[0] : Self.siloIconsBitmapTable[2]
 			iconSprite.moveTo(Point(x: 14, y: Display.height))
 		case .a:
 			sprite.image = GameSettings.timeOfDay == .day ? Self.siloABitmap : Self.siloANightBitmap
 			sprite.center = Point(x: 1.0, y: 1.0)
 			sprite.moveTo(Point(x: Display.width, y: Display.height - 11))
 
-			iconSprite.image = GameSettings.controlScheme == .standard ? Self.siloIconsBitmapTable[1] : Self.siloIconsBitmapTable[3]
+			iconSprite.image =
+				GameSettings.controlScheme == .standard
+				? Self.siloIconsBitmapTable[1] : Self.siloIconsBitmapTable[3]
 			iconSprite.moveTo(Point(x: Display.width - 14, y: Display.height))
 		}
 
@@ -87,10 +95,11 @@ class RocketSilo: BaseEntity {
 		if let animator = rocketPrepAnimator {
 			animator.update()
 
-			self.rocket!.moveTo(position: Point(
-				x: self.rocket!.x,
-				y: animator.currentValue
-			))
+			self.rocket!.moveTo(
+				position: Point(
+					x: self.rocket!.x,
+					y: animator.currentValue
+				))
 
 			if animator.ended {
 				rocketPrepAnimator = nil
@@ -99,7 +108,7 @@ class RocketSilo: BaseEntity {
 		}
 	}
 
-	func attemptLaunch()-> Bool {
+	func attemptLaunch() -> Bool {
 		if readyForLaunch {
 			launch()
 			return true
@@ -140,28 +149,31 @@ class RocketSilo: BaseEntity {
 	private func prepareNextRocket() {
 		spawnRocket(at: Point(x: spawnX, y: RocketSilo.SILO_SPAWN_Y))
 
-		rocketPrepAnimator = Animator(Animator.Config(
-			duration: RocketSilo.BASE_ROCKET_PREP_DURATION,
-			startValue: RocketSilo.SILO_SPAWN_Y,
-			endValue: RocketSilo.SILO_SPAWN_Y - RocketSilo.SILO_SPAWN_MOVEMENT,
-			easingFn: EasingFn.overshoot(Ease.inBack)
-		))
+		rocketPrepAnimator = Animator(
+			Animator.Config(
+				duration: RocketSilo.BASE_ROCKET_PREP_DURATION,
+				startValue: RocketSilo.SILO_SPAWN_Y,
+				endValue: RocketSilo.SILO_SPAWN_Y - RocketSilo.SILO_SPAWN_MOVEMENT,
+				easingFn: EasingFn.overshoot(Ease.inBack)
+			))
 	}
 
 	private func spawnInitialRocket() {
-		spawnRocket(at: Point(
-			x: spawnX,
-			y: RocketSilo.SILO_SPAWN_Y - RocketSilo.SILO_SPAWN_MOVEMENT
-		))
+		spawnRocket(
+			at: Point(
+				x: spawnX,
+				y: RocketSilo.SILO_SPAWN_Y - RocketSilo.SILO_SPAWN_MOVEMENT
+			))
 	}
 
 	private func spawnRocket(at: Point) {
-		self.rocket = Rocket(Rocket.Config(
-			position: at,
-			angle: 0.0,
-			entityStore: self.entityStore,
-			owner: .player
-		))
+		self.rocket = Rocket(
+			Rocket.Config(
+				position: at,
+				angle: 0.0,
+				entityStore: self.entityStore,
+				owner: .player
+			))
 		self.rocket?.sprite.collisionsEnabled = false
 	}
 }

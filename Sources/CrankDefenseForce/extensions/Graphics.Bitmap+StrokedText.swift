@@ -25,7 +25,6 @@ extension Graphics.Bitmap {
 		let bitmapWidth = textWidth + strokeWidth * 2
 		let bitmapHeight = textHeight + strokeWidth * 2
 
-
 		self.init(width: bitmapWidth, height: bitmapHeight, bgColor: bgColor)
 
 		var offsets: [(Int, Int)] = []
@@ -44,21 +43,25 @@ extension Graphics.Bitmap {
 
 		offsets.forEach { x, y in
 			Graphics.drawMode = strokeColor
-			Graphics.drawTextInRect(strokedText, in: Rect(
-				x: strokeWidth + x,
-				y: strokeWidth + y,
-				width: textWidth,
-				height: textHeight
-			), wrap: wrap, aligned: align)
+			Graphics.drawTextInRect(
+				strokedText,
+				in: Rect(
+					x: strokeWidth + x,
+					y: strokeWidth + y,
+					width: textWidth,
+					height: textHeight
+				), wrap: wrap, aligned: align)
 		}
 
 		Graphics.drawMode = textColor
-		Graphics.drawTextInRect(strokedText, in: Rect(
-			x: strokeWidth,
-			y: strokeWidth,
-			width: textWidth,
-			height: textHeight
-		), wrap: wrap, aligned: align)
+		Graphics.drawTextInRect(
+			strokedText,
+			in: Rect(
+				x: strokeWidth,
+				y: strokeWidth,
+				width: textWidth,
+				height: textHeight
+			), wrap: wrap, aligned: align)
 
 		Graphics.popContext()
 	}

@@ -6,7 +6,8 @@ class BasicBackground: BaseEntity {
 	init(entityStore: EntityStore, color: Graphics.Color) {
 		let sprite = Sprite.Sprite()
 		sprite.setDrawMode(.copy)
-		sprite.image = Graphics.Bitmap.init(width: Display.width, height: Display.height, bgColor: color)
+		sprite.image = Graphics.Bitmap.init(
+			width: Display.width, height: Display.height, bgColor: color)
 		sprite.center = Point.zero
 		sprite.moveTo(Point.zero)
 		sprite.zIndex = -32768

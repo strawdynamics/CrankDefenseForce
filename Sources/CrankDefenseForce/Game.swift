@@ -11,14 +11,14 @@ final class Game: PlaydateGame {
 		self.scenePresenter = ScenePresenter(firstScene: MainMenuScene())
 		self.debugOverlay = DebugOverlay()
 	}
-	
+
 	func update() -> Bool {
 		Time.updateDeltaTime()
-		
+
 		Soundtrack.instance.update()
 
 		Sprite.updateAndDrawDisplayListSprites()
-		
+
 		self.scenePresenter.update()
 
 		debugOverlay.update()
@@ -30,4 +30,3 @@ final class Game: PlaydateGame {
 		print("Paused!")
 	}
 }
-

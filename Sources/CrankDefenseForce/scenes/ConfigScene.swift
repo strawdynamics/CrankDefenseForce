@@ -17,10 +17,13 @@ class ConfigScene: BaseScene {
 			Graphics.setFont(CdfFont.NicoPups16)
 			Graphics.drawMode = .fillWhite
 			let textWidth = CdfFont.NicoPups16.getTextWidth(for: version, tracking: 0)
-			Graphics.drawText(version, at: bounds.origin + Point(
-				x: bounds.width - (Float(textWidth) + 2),
-				y: 2
-			))
+			Graphics.drawText(
+				version,
+				at: bounds.origin
+					+ Point(
+						x: bounds.width - (Float(textWidth) + 2),
+						y: 2
+					))
 		}
 	}
 
@@ -32,7 +35,7 @@ class ConfigScene: BaseScene {
 
 	override init() {
 		let reader = PdxinfoReader(path: "pdxinfo")
-		let pdxinfo = try! reader.read();
+		let pdxinfo = try! reader.read()
 		versionSprite = VersionSprite(version: pdxinfo["version".utf8]!)
 	}
 
@@ -83,9 +86,10 @@ class ConfigScene: BaseScene {
 
 		versionSprite.addToDisplayList()
 
-		configMenu = ConfigMenu(ConfigMenu.Config(
-			entityStore: entityStore,
-		))
+		configMenu = ConfigMenu(
+			ConfigMenu.Config(
+				entityStore: entityStore,
+			))
 	}
 
 	override func exit() {

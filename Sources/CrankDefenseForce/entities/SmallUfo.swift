@@ -20,7 +20,8 @@ class SmallUfo: BaseEntity, PowerUpDropper, Movable {
 		return sprite.position
 	}
 
-	nonisolated(unsafe) static let smallUfoBitmapTable = try! Graphics.BitmapTable(path: "entities/SmallUfo/smallUfo")
+	nonisolated(unsafe) static let smallUfoBitmapTable = try! Graphics.BitmapTable(
+		path: "entities/SmallUfo/smallUfo")
 
 	class SmallUfoSprite: Sprite.Sprite {
 		var smallUfoId: Int = -1
@@ -70,13 +71,14 @@ class SmallUfo: BaseEntity, PowerUpDropper, Movable {
 
 		sprite.addToDisplayList()
 
-		bobYAnimator = Animator(Animator.Config(
-			duration: 0.5,
-			startValue: config.position.y,
-			endValue: config.position.y + 1,
-			easingFn: EasingFn.basic(Ease.inOutQuad),
-			loopMode: .pingPong
-		))
+		bobYAnimator = Animator(
+			Animator.Config(
+				duration: 0.5,
+				startValue: config.position.y,
+				endValue: config.position.y + 1,
+				easingFn: EasingFn.basic(Ease.inOutQuad),
+				loopMode: .pingPong
+			))
 
 		super.init(config.entityStore)
 
@@ -118,49 +120,54 @@ class SmallUfo: BaseEntity, PowerUpDropper, Movable {
 	}
 
 	func explode() {
-		_ = Explosion(Explosion.Config(
-			position: position,
-			maxRadius: 32,
-			owner: .player,
-			entityStore: entityStore,
-			duration: 2,
-		))
+		_ = Explosion(
+			Explosion.Config(
+				position: position,
+				maxRadius: 32,
+				owner: .player,
+				entityStore: entityStore,
+				duration: 2,
+			))
 
 		remove()
 	}
 
 	func remove() {
-		Self.removeEmitter.emit(RemoveEventPayload(
-			smallUfo: self,
-		))
+		Self.removeEmitter.emit(
+			RemoveEventPayload(
+				smallUfo: self,
+			))
 		entityStore.remove(self)
 	}
 
 	private func updateBob() {
 		guard let yAnim = bobYAnimator else { return }
 		yAnim.update()
-		sprite.moveTo(Point(
-			x: sprite.position.x.rounded(),
-			y: yAnim.currentValue.rounded()
-		))
+		sprite.moveTo(
+			Point(
+				x: sprite.position.x.rounded(),
+				y: yAnim.currentValue.rounded()
+			))
 	}
 
 	private func spawnExhaust() {
-		_ = ExhaustParticle(ExhaustParticle.Config(
-			position: position + Point(
-				x: facingLeft ? 8 : -8,
-				y: 0
-			),
-			maxRadius: Float.random(in: 1.5..<3),
-			owner: .cpu,
-			entityStore: entityStore,
-			duration: Float.random(in: 0.4..<0.9),
-			inPercentage: 0.8,
-			velocity: Vector2(
-				x: Float.random(in: 2..<10) * (facingLeft ? 1 : -1),
-				y: -4
-			),
-			zIndex: exhaustZIndex,
-		))
+		_ = ExhaustParticle(
+			ExhaustParticle.Config(
+				position: position
+					+ Point(
+						x: facingLeft ? 8 : -8,
+						y: 0
+					),
+				maxRadius: Float.random(in: 1.5..<3),
+				owner: .cpu,
+				entityStore: entityStore,
+				duration: Float.random(in: 0.4..<0.9),
+				inPercentage: 0.8,
+				velocity: Vector2(
+					x: Float.random(in: 2..<10) * (facingLeft ? 1 : -1),
+					y: -4
+				),
+				zIndex: exhaustZIndex,
+			))
 	}
 }

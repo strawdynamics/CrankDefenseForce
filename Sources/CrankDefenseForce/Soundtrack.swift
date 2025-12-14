@@ -64,7 +64,7 @@ class Soundtrack {
 			currentSong = newSong
 
 			volume = GameSettings.musicVolumePercent
-			
+
 			newSong.player.play(
 				fromStep: newSong.playFromStep,
 				loopStartStep: newSong.loopStartStep,

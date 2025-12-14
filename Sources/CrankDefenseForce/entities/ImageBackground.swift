@@ -7,12 +7,14 @@ enum ImageBackgroundType {
 }
 
 class ImageBackground: BaseEntity {
-	static nonisolated(unsafe) let cityBackgroundBitmap = try! Graphics.Bitmap(path: "entities/ImageBackground/cityBackground")
-	static nonisolated(unsafe) let configCityBitmap = try! Graphics.Bitmap(path: "entities/ImageBackground/configCity")
+	static nonisolated(unsafe) let cityBackgroundBitmap = try! Graphics.Bitmap(
+		path: "entities/ImageBackground/cityBackground")
+	static nonisolated(unsafe) let configCityBitmap = try! Graphics.Bitmap(
+		path: "entities/ImageBackground/configCity")
 	static nonisolated(unsafe) let crtBackgroundBitmap = CrtTransitionDetails.CRT_ZOOM_BITMAP_TABLE[0]
-	
+
 	let sprite: Sprite.Sprite
-	
+
 	init(entityStore: EntityStore, backgroundType: ImageBackgroundType) {
 		let sprite = Sprite.Sprite()
 		sprite.setDrawMode(.copy)
@@ -30,10 +32,10 @@ class ImageBackground: BaseEntity {
 		sprite.updatesEnabled = false
 		sprite.addToDisplayList()
 		self.sprite = sprite
-		
+
 		super.init(entityStore)
 	}
-	
+
 	func setDrawMode(_ drawMode: Graphics.Bitmap.DrawMode) {
 		sprite.setDrawMode(drawMode)
 	}

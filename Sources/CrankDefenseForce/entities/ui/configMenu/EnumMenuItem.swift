@@ -44,11 +44,12 @@ class EnumMenuItem: StepperMenuItem {
 		prevHandler = config.prevHandler
 		nextHandler = config.nextHandler
 
-		super.init(StepperMenuItem.Config(
-			title: "",
-			offsetX: config.offsetX,
-			entityStore: config.entityStore,
-		))
+		super.init(
+			StepperMenuItem.Config(
+				title: "",
+				offsetX: config.offsetX,
+				entityStore: config.entityStore,
+			))
 
 		displaySprite.addToDisplayList()
 	}

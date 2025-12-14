@@ -1,6 +1,6 @@
 class MatchStatsTracker {
 	// MARK: Lifecycle
-	
+
 	init() {
 		_ = Rocket.statsEmitter.on(handleStats)
 		_ = RocketSilo.launchEmitter.on(handleLaunch)
@@ -70,7 +70,7 @@ class MatchStatsTracker {
 		if stopped {
 			return
 		}
-		
+
 		rocketsLaunched += 1
 	}
 }

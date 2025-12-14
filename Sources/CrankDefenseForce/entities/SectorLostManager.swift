@@ -5,21 +5,23 @@ class SectorLostManager: BaseEntity {
 
 	init(_ config: Config) {
 		matchStatsTracker = config.matchStatsTracker
-		sectorLostDisplay = SectorLostDisplay(SectorLostDisplay.Config(
-			matchStatsTracker: config.matchStatsTracker,
-			entityStore: config.entityStore,
-		))
+		sectorLostDisplay = SectorLostDisplay(
+			SectorLostDisplay.Config(
+				matchStatsTracker: config.matchStatsTracker,
+				entityStore: config.entityStore,
+			))
 		vcrEffect = VcrEffect(config.entityStore)
 
 		// Init after VcrEffect so lateUpdate runs after!
 		sectorLostText = SectorLostText(config.entityStore)
 
-		yAnimator = Animator(Animator.Config(
-			duration: 2,
-			startValue: 0,
-			endValue: -Float(sectorLostDisplay.totalHeight),
-			easingFn: EasingFn.basic(Ease.inOutQuad)
-		))
+		yAnimator = Animator(
+			Animator.Config(
+				duration: 2,
+				startValue: 0,
+				endValue: -Float(sectorLostDisplay.totalHeight),
+				easingFn: EasingFn.basic(Ease.inOutQuad)
+			))
 
 		super.init(config.entityStore)
 	}

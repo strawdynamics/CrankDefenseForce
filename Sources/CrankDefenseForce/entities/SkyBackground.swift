@@ -58,12 +58,13 @@ class SkyBackground: BaseEntity {
 	}
 
 	private func updateTimeOfDay(_ newTimeOfDay: TimeOfDay) {
-		timeOfDayAnimator = Animator(Animator.Config(
-			duration: 0.3,
-			startValue: sprite.alpha,
-			endValue: newTimeOfDay == .day ? 0 : 1,
-			easingFn: EasingFn.basic(Ease.inOutQuad),
-		))
+		timeOfDayAnimator = Animator(
+			Animator.Config(
+				duration: 0.3,
+				startValue: sprite.alpha,
+				endValue: newTimeOfDay == .day ? 0 : 1,
+				easingFn: EasingFn.basic(Ease.inOutQuad),
+			))
 
 		lastTimeOfDay = newTimeOfDay
 	}

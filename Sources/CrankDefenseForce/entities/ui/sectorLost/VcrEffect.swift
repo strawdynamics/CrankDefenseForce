@@ -68,11 +68,13 @@ class VcrEffect: BaseEntity {
 		let tmp = Array(UnsafeBufferPointer(start: rowStart, count: rowBytes))
 
 		for dst in 0..<rowBytes {
-			let sourceByteIndex = forward
+			let sourceByteIndex =
+				forward
 				? dst - byteShift
 				: dst + byteShift
 
-			let currentByte: UInt8 = (0..<rowBytes).contains(sourceByteIndex)
+			let currentByte: UInt8 =
+				(0..<rowBytes).contains(sourceByteIndex)
 				? tmp[sourceByteIndex]
 				: 0
 
@@ -81,11 +83,13 @@ class VcrEffect: BaseEntity {
 				continue
 			}
 
-			let neighborIndex = forward
+			let neighborIndex =
+				forward
 				? sourceByteIndex - 1
 				: sourceByteIndex + 1
 
-			let neighbor: UInt8 = (0..<rowBytes).contains(neighborIndex)
+			let neighbor: UInt8 =
+				(0..<rowBytes).contains(neighborIndex)
 				? tmp[neighborIndex]
 				: 0
 
