@@ -114,7 +114,7 @@ class Rocket: BaseEntity, PowerUpDropper, Movable {
 				type: config.exhaustType
 			))
 
-		if alwaysExhaust {
+		if alwaysExhaust || thrust != 0.0 {
 			exhaust?.activate()
 		}
 
