@@ -30,31 +30,36 @@ class GameRunner {
 		playerController = PlayerController(entityStore)
 		matchStatsTracker = MatchStatsTracker()
 
-		city = City(City.Config(
-			groundHeight: 12.0,
-			entityStore: entityStore
-		))
+		city = City(
+			City.Config(
+				groundHeight: 12.0,
+				entityStore: entityStore
+			))
 
-		enemyCoordinator = EnemyCoordinator(EnemyCoordinator.Config(
-			entityStore: entityStore,
-			city: city
-		))
+		enemyCoordinator = EnemyCoordinator(
+			EnemyCoordinator.Config(
+				entityStore: entityStore,
+				city: city
+			))
 
-		_ = PowerUpCollectHandler(PowerUpCollectHandler.Config(
-			entityStore: entityStore,
-			city: city,
-			enemyCoordinator: enemyCoordinator
-		))
+		_ = PowerUpCollectHandler(
+			PowerUpCollectHandler.Config(
+				entityStore: entityStore,
+				city: city,
+				enemyCoordinator: enemyCoordinator
+			))
 
-		siloB = RocketSilo(RocketSilo.Config(
-			siloType: .b,
-			entityStore: entityStore
-		))
+		siloB = RocketSilo(
+			RocketSilo.Config(
+				siloType: .b,
+				entityStore: entityStore
+			))
 
-		siloA = RocketSilo(RocketSilo.Config(
-			siloType: .a,
-			entityStore: entityStore
-		))
+		siloA = RocketSilo(
+			RocketSilo.Config(
+				siloType: .a,
+				entityStore: entityStore
+			))
 
 		let bg = ImageBackground(
 			entityStore: entityStore,
@@ -64,11 +69,12 @@ class GameRunner {
 			bg.setDrawMode(.inverted)
 		}
 
-		let ground = StaticCollider(StaticCollider.Config(
-			bitmap: Self.groundBitmap,
-			entityStore: entityStore,
-			zIndex: 150
-		))
+		let ground = StaticCollider(
+			StaticCollider.Config(
+				bitmap: Self.groundBitmap,
+				entityStore: entityStore,
+				zIndex: 150
+			))
 
 		ground.sprite.center = Point(x: 0.0, y: 1.0)
 		ground.sprite.moveTo(Point(x: 0.0, y: Float(Display.height)))
@@ -107,7 +113,7 @@ class GameRunner {
 	func updateActive() {
 		let pushed = System.buttonState.pushed
 		if city.buildings.allSatisfy({ $0.destroyed }) {
-		// if pushed.contains(.b) {
+			// if pushed.contains(.b) {
 			lose()
 			return
 		}
@@ -119,10 +125,16 @@ class GameRunner {
 		state = .sectorLost
 		matchStatsTracker.stop(finalUptime: uptime)
 
-		_ = SectorLostManager(SectorLostManager.Config(
-			matchStatsTracker: matchStatsTracker,
-			entityStore: entityStore,
-		))
+		let pStats = PersistentStats.instance
+		pStats.update(
+			uptime: matchStatsTracker.finalUptime, matchStatsTracker: matchStatsTracker)
+		pStats.writeToDisk()
+
+		_ = SectorLostManager(
+			SectorLostManager.Config(
+				matchStatsTracker: matchStatsTracker,
+				entityStore: entityStore,
+			))
 	}
 
 	private func updateActiveInputs() {

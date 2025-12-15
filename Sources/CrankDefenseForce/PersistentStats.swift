@@ -10,14 +10,15 @@ class PersistentStats {
 			return
 		}
 
-		let file = try! File.open(path: Self.statsPath, mode: .read)
+		let file = try! File.open(path: Self.statsPath, mode: .readData)
 
 		let fileBuffer = UnsafeMutableRawPointer.allocate(byteCount: Int(stat.size), alignment: 1)
 
 		let bytesRead = try! file.read(buffer: fileBuffer, length: stat.size)
 		try! file.close()
 
-		let uint8Buffer = UnsafeBufferPointer<UInt8>(start: fileBuffer.assumingMemoryBound(to: UInt8.self), count: bytesRead)
+		let uint8Buffer = UnsafeBufferPointer<UInt8>(
+			start: fileBuffer.assumingMemoryBound(to: UInt8.self), count: bytesRead)
 		let jsonString = String(decoding: uint8Buffer, as: Unicode.UTF8.self)
 
 		var decoder = JSON.Decoder()
@@ -134,65 +135,68 @@ class PersistentStats {
 
 	private static let statsPath: String = "persistentStats.json"
 
-	private static nonisolated(unsafe) var decodeError: @convention(c)
-	(UnsafeMutablePointer<json_decoder>?, UnsafePointer<CChar>?, Int32) -> Void
-	= { _, err, line in
-		if let e = err.map({ String(cString: $0) }) {
-			System.error("JSON error at \(line): \(e)")
+	private static nonisolated(unsafe) var decodeError:
+		@convention(c)
+		(UnsafeMutablePointer<json_decoder>?, UnsafePointer<CChar>?, Int32) -> Void = { _, err, line in
+			if let e = err.map({ String(cString: $0) }) {
+				System.error("JSON error at \(line): \(e)")
+			}
 		}
-	}
 
-	private static nonisolated(unsafe) var didDecodeTableValue: @convention(c)
-	(UnsafeMutablePointer<json_decoder>?, UnsafePointer<CChar>?, json_value) -> Void
-	= { ptr, keyC, val in
-		guard
-			let ptr = ptr,
-			let keyC = keyC,
-			let ctxPtr = ptr.pointee.userdata
-		else { return }
+	private static nonisolated(unsafe) var didDecodeTableValue:
+		@convention(c)
+		(UnsafeMutablePointer<json_decoder>?, UnsafePointer<CChar>?, json_value) -> Void = {
+			ptr, keyC, val in
+			guard
+				let ptr = ptr,
+				let keyC = keyC,
+				let ctxPtr = ptr.pointee.userdata
+			else { return }
 
-		let key = String(cString: keyC).utf8
+			let key = String(cString: keyC).utf8
 
-		let stats = Unmanaged<PersistentStats>
-			.fromOpaque(ctxPtr)
-			.takeUnretainedValue()
+			let stats = Unmanaged<PersistentStats>
+				.fromOpaque(ctxPtr)
+				.takeUnretainedValue()
 
-		let type = json_value_type(rawValue: numericCast(val.type))
+			let type = json_value_type(rawValue: numericCast(val.type))
 
-		switch key {
-		case "sectorsLost":
-			stats.sectorsLost = Int(val.data.intval)
-		case "timePlayed":
-			stats.timePlayed = val.data.floatval
-		case "rocketsLaunched":
-			stats.rocketsLaunched = Int(val.data.intval)
-		case "cpuRocketsDestroyed":
-			stats.cpuRocketsDestroyed = Int(val.data.intval)
-		case "cpuFastRocketsDestroyed":
-			stats.cpuFastRocketsDestroyed = Int(val.data.intval)
-		case "cpuSmallUfosDestroyed":
-			stats.cpuSmallUfosDestroyed = Int(val.data.intval)
-		case "cpuBigUfosDestroyed":
-			stats.cpuBigUfosDestroyed = Int(val.data.intval)
-		case "pauseEnemiesPowerUpsCollected":
-			stats.pauseEnemiesPowerUpsCollected = Int(val.data.intval)
-		case "repairBuildingPowerUpsCollected":
-			stats.repairBuildingPowerUpsCollected = Int(val.data.intval)
-		case "destroyEnemiesPowerUpsCollected":
-			stats.destroyEnemiesPowerUpsCollected = Int(val.data.intval)
-		default:
-			break
+			switch key {
+			case "sectorsLost":
+				stats.sectorsLost = Int(val.data.intval)
+			case "timePlayed":
+				stats.timePlayed = val.data.floatval
+			case "rocketsLaunched":
+				stats.rocketsLaunched = Int(val.data.intval)
+			case "cpuRocketsDestroyed":
+				stats.cpuRocketsDestroyed = Int(val.data.intval)
+			case "cpuFastRocketsDestroyed":
+				stats.cpuFastRocketsDestroyed = Int(val.data.intval)
+			case "cpuSmallUfosDestroyed":
+				stats.cpuSmallUfosDestroyed = Int(val.data.intval)
+			case "cpuBigUfosDestroyed":
+				stats.cpuBigUfosDestroyed = Int(val.data.intval)
+			case "pauseEnemiesPowerUpsCollected":
+				stats.pauseEnemiesPowerUpsCollected = Int(val.data.intval)
+			case "repairBuildingPowerUpsCollected":
+				stats.repairBuildingPowerUpsCollected = Int(val.data.intval)
+			case "destroyEnemiesPowerUpsCollected":
+				stats.destroyEnemiesPowerUpsCollected = Int(val.data.intval)
+			default:
+				break
+			}
 		}
-	}
 
-	static nonisolated(unsafe) var writeStringFunc: @convention(c) (UnsafeMutableRawPointer?, UnsafePointer<CChar>?, CInt) -> Void = { ctxPtr, str, len in
-		let file: File.FileHandle = Unmanaged<EncodeContext>
-			.fromOpaque(ctxPtr!)
-			.takeUnretainedValue()
-			.file
+	static nonisolated(unsafe) var writeStringFunc:
+		@convention(c) (UnsafeMutableRawPointer?, UnsafePointer<CChar>?, CInt) -> Void = {
+			ctxPtr, str, len in
+			let file: File.FileHandle = Unmanaged<EncodeContext>
+				.fromOpaque(ctxPtr!)
+				.takeUnretainedValue()
+				.file
 
-		let buffer = UnsafeRawBufferPointer(start: str!, count: Int(len))
+			let buffer = UnsafeRawBufferPointer(start: str!, count: Int(len))
 
-		_ = try! file.write(buffer: buffer)
-	}
+			_ = try! file.write(buffer: buffer)
+		}
 }
