@@ -182,6 +182,14 @@ class SectorLostDisplay {
 			rows.append(powerUpsRow)
 		}
 
+		rows.append([
+			TextCell(
+				TextCell.Config(
+					text: "Ⓑ Done",
+					alignment: .right
+				))
+		])
+
 		return rows
 	}
 

@@ -113,6 +113,12 @@ class SectorLostManager: BaseEntity {
 	}
 
 	private func updateRunning() {
-
+		let pushed = System.buttonState.pushed
+		if pushed.contains(.b) {
+			game.scenePresenter.changeScene(
+				newScene: MainMenuScene(),
+				transition: CrtOutSceneTransition(),
+			)
+		}
 	}
 }

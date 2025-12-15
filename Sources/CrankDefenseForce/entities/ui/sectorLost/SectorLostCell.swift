@@ -104,21 +104,28 @@ class HrCell: SectorLostCell {
 class TextCell: SectorLostCell {
 	struct Config {
 		let text: String
+		var alignment: Graphics.TextAlignment = .left
 	}
 
 	let sprite = Sprite.Sprite()
 
 	init(_ config: Config) {
+		let width = Display.width - SectorLostCellPadding * 2
+		let height = CdfFont.NicoPups16.height
+
 		let bitmap = Graphics.Bitmap(
 			// Assume only cell in row
-			width: Display.width - SectorLostCellPadding * 2,
-			height: CdfFont.NicoPups16.height,
+			width: width,
+			height: height,
 		)
 
 		Graphics.pushContext(bitmap)
 		Graphics.drawMode = .fillWhite
 		Graphics.setFont(CdfFont.NicoPups16)
-		Graphics.drawText(config.text, at: Point.zero)
+		Graphics.drawTextInRect(
+			config.text, in: Rect(origin: Point.zero, width: Float(width), height: Float(height)),
+			wrap: .clip,
+			aligned: config.alignment)
 		Graphics.popContext()
 
 		sprite.image = bitmap
