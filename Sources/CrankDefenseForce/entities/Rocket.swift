@@ -116,6 +116,7 @@ class Rocket: BaseEntity, PowerUpDropper, Movable {
 
 		if alwaysExhaust || thrust != 0.0 {
 			exhaust?.activate()
+			exhaust?.updatePosition()
 		}
 
 		sprite.rocketId = id

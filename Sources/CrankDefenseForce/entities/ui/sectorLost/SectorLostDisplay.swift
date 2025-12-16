@@ -33,12 +33,12 @@ class SectorLostDisplay {
 
 	// MARK: Private
 
-	private let rows: [[SectorLostCell]]
+	private let rows: [[Cell]]
 
 	private let bg = Sprite.Sprite()
 
-	private static func buildRows(_ config: Config) -> [[SectorLostCell]] {
-		var rows: [[SectorLostCell]] = []
+	private static func buildRows(_ config: Config) -> [[Cell]] {
+		var rows: [[Cell]] = []
 		let tracker = config.matchStatsTracker
 
 		// Duration, # fired
@@ -46,14 +46,14 @@ class SectorLostDisplay {
 		let seconds = Int(tracker.finalUptime.truncatingRemainder(dividingBy: 60))
 		let secondsString = seconds < 10 ? "0\(seconds)" : "\(seconds)"
 		rows.append([
-			KeyValueSectorLostCell(
-				KeyValueSectorLostCell.Config(
+			KeyValueCell(
+				KeyValueCell.Config(
 					key: "Duration",
 					value: "\(minutes):\(secondsString)",
 					rowCellCount: 2
 				)),
-			KeyValueSectorLostCell(
-				KeyValueSectorLostCell.Config(
+			KeyValueCell(
+				KeyValueCell.Config(
 					key: "Rockets launched",
 					value: "\(tracker.rocketsLaunched)",
 					rowCellCount: 2
@@ -81,7 +81,7 @@ class SectorLostDisplay {
 			])
 
 			// Destroyed enemy details
-			var detailsRow: [SectorLostCell] = []
+			var detailsRow: [Cell] = []
 
 			if tracker.cpuRocketsDestroyed > 0 {
 				detailsRow.append(
@@ -147,7 +147,7 @@ class SectorLostDisplay {
 			])
 
 			// Collected PowerUp details
-			var powerUpsRow: [SectorLostCell] = []
+			var powerUpsRow: [Cell] = []
 
 			if tracker.pauseEnemiesPowerUpsCollected > 0 {
 				powerUpsRow.append(
@@ -193,7 +193,7 @@ class SectorLostDisplay {
 		return rows
 	}
 
-	private static func positionRows(_ rows: [[SectorLostCell]]) -> Int {
+	private static func positionRows(_ rows: [[Cell]]) -> Int {
 		let offY = Float(Display.height)
 		var positionedRowsHeight = 0
 

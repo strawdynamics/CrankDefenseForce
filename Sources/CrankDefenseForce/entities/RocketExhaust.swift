@@ -68,12 +68,21 @@ class RocketExhaust: BaseEntity {
 	override func update() {
 		super.update()
 
+		updatePosition()
+
+		updateAnimationFrame()
+	}
+
+	func updatePosition() {
 		let rPos = rocket.position
 
 		let dist = type == .normal ? Self.normalDistance : Self.bigDistance
 		let x = rPos.x - (dist * rocket.roundedCos)
 		let y = rPos.y - (dist * rocket.roundedSin)
+		sprite.moveTo(Point(x: x, y: y).rounded)
+	}
 
+	func updateAnimationFrame() {
 		let roundedAngle = Int(rocket.angle.roundToNearest(15.0))
 		let rotFrame = (((roundedAngle % 360) / 15 + 24) % 24) * 4
 
@@ -84,8 +93,6 @@ class RocketExhaust: BaseEntity {
 		sprite.image =
 			type == .normal
 			? Self.normalExhaustBitmapTable[frameIndex] : Self.bigExhaustBitmapTable[frameIndex]
-
-		sprite.moveTo(Point(x: x, y: y).rounded)
 	}
 
 	func activate() {

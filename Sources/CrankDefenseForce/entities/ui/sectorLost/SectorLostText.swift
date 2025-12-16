@@ -46,7 +46,7 @@ class SectorLostText: BaseEntity {
 
 	private static let startY: Float = -12
 
-	private static let endY: Float = Float(Display.height) * 0.82
+	private static let endY: Float = Float(Display.height) * 0.875
 
 	private let bitmap: Graphics.Bitmap
 

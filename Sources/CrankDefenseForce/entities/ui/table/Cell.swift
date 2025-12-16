@@ -2,7 +2,7 @@ import PlaydateKit
 
 let SectorLostCellPadding = 6
 
-protocol SectorLostCell: AnyObject {
+protocol Cell: AnyObject {
 	var height: Int { get }
 
 	var width: Int { get }
@@ -11,7 +11,7 @@ protocol SectorLostCell: AnyObject {
 }
 
 // Duration, # fired
-class KeyValueSectorLostCell: SectorLostCell {
+class KeyValueCell: Cell {
 	struct Config {
 		let key: String
 		let value: String
@@ -65,7 +65,7 @@ class KeyValueSectorLostCell: SectorLostCell {
 }
 
 // Horizontal rule
-class HrCell: SectorLostCell {
+class HrCell: Cell {
 	init() {
 		let bitmap = Graphics.Bitmap(
 			// Assume only cell in row
@@ -101,7 +101,7 @@ class HrCell: SectorLostCell {
 }
 
 //// Headers (# enemies, power-ups)
-class TextCell: SectorLostCell {
+class TextCell: Cell {
 	struct Config {
 		let text: String
 		var alignment: Graphics.TextAlignment = .left
@@ -153,7 +153,7 @@ class TextCell: SectorLostCell {
 }
 //
 //// Everything else
-class EntityCell: SectorLostCell {
+class EntityCell: Cell {
 	enum EntityType {
 		case rocket
 		case fastRocket
