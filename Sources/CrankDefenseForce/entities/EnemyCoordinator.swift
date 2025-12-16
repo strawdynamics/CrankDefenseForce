@@ -20,22 +20,22 @@ class EnemyCoordinator: BaseEntity {
 
 	private static let difficultyLevels: [DifficultyLevel] = [
 		DifficultyLevel(
-//			baseSpawnInterval: 15.0, // slow for testing
-//			baseSpawnInterval: 5.0, // previous easiest
-			baseSpawnInterval: 1.25, // previous hardest
-//			baseSpawnInterval: 0.5, // too many!
-//			baseSpawnInterval: 4, // Test with Charlene 2025/06/06
+			//			baseSpawnInterval: 15.0, // slow for testing
+			//			baseSpawnInterval: 5.0, // previous easiest
+			baseSpawnInterval: 1.25,  // previous hardest
+			//			baseSpawnInterval: 0.5, // too many!
+			//			baseSpawnInterval: 4, // Test with Charlene 2025/06/06
 			spawnWeights: [
-				.rocket: 75,
-//				.fastRocket: 5,
-//				.bigUfo: 10,
-//				.smallUfo: 10,
-//				.rocket: 85,
-//				.bigUfo: 5,
-//				.smallUfo: 5,
-//				.fastRocket: 5,
+				.rocket: 75
+					//				.fastRocket: 5,
+					//				.bigUfo: 10,
+					//				.smallUfo: 10,
+					//				.rocket: 85,
+					//				.bigUfo: 5,
+					//				.smallUfo: 5,
+					//				.fastRocket: 5,
 			]
-		),
+		)
 	]
 
 	let city: City
@@ -179,9 +179,11 @@ class EnemyCoordinator: BaseEntity {
 	private func spawnRocket() {
 		let pos = Point(x: Float.random(in: -40...440), y: -20)
 
-		guard let targetBuilding = city.buildings.filter({
-			return !$0.destroyed
-		}).randomElement() else {
+		guard
+			let targetBuilding = city.buildings.filter({
+				return !$0.destroyed
+			}).randomElement()
+		else {
 			return
 		}
 		let buildingPos = targetBuilding.sprite.position
@@ -190,21 +192,24 @@ class EnemyCoordinator: BaseEntity {
 		let vecToTarget = Vector2(x: buildingPos.x - pos.x, y: buildingPos.y - pos.y).normalized()
 		let angleToTarget = down.angle(with: vecToTarget).toDegrees()
 
-		let rocket = Rocket(Rocket.Config(
-			position: pos,
-			angle: angleToTarget,
-			thrust: 10,
-			entityStore: entityStore,
-			owner: .cpu
-		))
+		let rocket = Rocket(
+			Rocket.Config(
+				position: pos,
+				angle: angleToTarget,
+				thrust: 10,
+				entityStore: entityStore,
+				owner: .cpu
+			))
 
 		rockets.append(rocket)
 	}
 
 	private func spawnFastRocket() {
-		guard let targetBuilding = city.buildings.filter({
-			return !$0.destroyed
-		}).randomElement() else {
+		guard
+			let targetBuilding = city.buildings.filter({
+				return !$0.destroyed
+			}).randomElement()
+		else {
 			return
 		}
 
@@ -218,30 +223,32 @@ class EnemyCoordinator: BaseEntity {
 		let degAngleToTarget = angleToTarget.toDegrees()
 
 		let adjacent: Float = -pos.y + 15
-		let warningDist: Float = adjacent / fabsf(cosf(angleToTarget)) // hypotenuse
+		let warningDist: Float = adjacent / fabsf(cosf(angleToTarget))  // hypotenuse
 		let warningPos = Point(
 			x: pos.x + (warningDist * cosf(angleToTarget - Float.pi * 0.5)),
-//			y: pos.y + (warningDist * sinf(angleToTarget - Float.pi * 0.5)),
+			//			y: pos.y + (warningDist * sinf(angleToTarget - Float.pi * 0.5)),
 			// FIXME: Workaround for some inputs giving different y outputs.
 			y: pos.y + adjacent,
 		)
 
-		let _ = Warning(Warning.Config(
-			position: warningPos,
-			entityStore: entityStore,
-			duration: 2.4,
-			inPercentage: 0.3,
-			outPercentage: 0.3
-		))
+		let _ = Warning(
+			Warning.Config(
+				position: warningPos,
+				entityStore: entityStore,
+				duration: 2.4,
+				inPercentage: 0.3,
+				outPercentage: 0.3
+			))
 
-		let rocket = Rocket(Rocket.Config(
-			position: pos,
-			angle: degAngleToTarget,
-			thrust: 36,
-			entityStore: entityStore,
-			owner: .cpu,
-			exhaustType: .big
-		))
+		let rocket = Rocket(
+			Rocket.Config(
+				position: pos,
+				angle: degAngleToTarget,
+				thrust: 36,
+				entityStore: entityStore,
+				owner: .cpu,
+				exhaustType: .big
+			))
 
 		rockets.append(rocket)
 	}
@@ -257,12 +264,13 @@ class EnemyCoordinator: BaseEntity {
 			y: Float.random(in: 50..<60)
 		)
 
-		bigUfo = BigUfo(BigUfo.Config(
-			city: city,
-			entityStore: entityStore,
-			position: pos,
-			hitPoints: 3
-		))
+		bigUfo = BigUfo(
+			BigUfo.Config(
+				city: city,
+				entityStore: entityStore,
+				position: pos,
+				hitPoints: 3
+			))
 	}
 
 	private func spawnSmallUfo() {
@@ -272,12 +280,13 @@ class EnemyCoordinator: BaseEntity {
 			y: Float.random(in: 30..<150)
 		)
 
-		let smallUfo = SmallUfo(SmallUfo.Config(
-			entityStore: entityStore,
-			position: pos,
-			facingLeft: facingLeft,
-			speed: 20,
-		))
+		let smallUfo = SmallUfo(
+			SmallUfo.Config(
+				entityStore: entityStore,
+				position: pos,
+				facingLeft: facingLeft,
+				speed: 20,
+			))
 		smallUfos.append(smallUfo)
 	}
 }
