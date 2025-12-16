@@ -56,6 +56,8 @@ class PowerUp: BaseEntity, Movable {
 
 	let sprite: PowerUpSprite
 
+	private var collisionInitialized = false
+
 	init(_ config: Config) {
 		type = config.type
 
@@ -85,12 +87,10 @@ class PowerUp: BaseEntity, Movable {
 
 		sprite.onCollect = collect
 
-		let size: Float = 18
-
 		sprite.zIndex = 90
 		sprite.image = bitmapTable[0]!
 		sprite.moveTo(config.position)
-		sprite.collideRect = Rect(x: 0, y: 0, width: size, height: size)
+
 		sprite.addToDisplayList()
 	}
 
@@ -99,6 +99,10 @@ class PowerUp: BaseEntity, Movable {
 	}
 
 	override func update() {
+		if !collisionInitialized {
+			initCollision()
+		}
+
 		frameAnimator.update()
 		let animFrame = Int(frameAnimator.currentValue.rounded().truncatingRemainder(dividingBy: 10))
 		sprite.image = bitmapTable[animFrame]
@@ -117,6 +121,13 @@ class PowerUp: BaseEntity, Movable {
 			))
 
 		entityStore.remove(self)
+	}
+
+	func initCollision() {
+		collisionInitialized = true
+
+		let size: Float = 18
+		sprite.collideRect = Rect(x: 0, y: 0, width: size, height: size)
 	}
 
 	override func beforeRemove() {
