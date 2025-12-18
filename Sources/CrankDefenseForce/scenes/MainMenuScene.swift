@@ -251,7 +251,7 @@ class MainMenuScene: BaseScene {
 		menu = Menu(menuItems: [
 			Menu.MenuItem(key: "LAUNCH!", action: self.handlePlayPressed),
 			Menu.MenuItem(key: "CONFIG", action: self.handleConfigPressed),
-			Menu.MenuItem(key: "MANUAL", action: self.handleAboutPressed),
+			Menu.MenuItem(key: "STATS", action: self.handleStatsPressed),
 			Menu.MenuItem(key: "ABOUT", action: self.handleAboutPressed),
 		])
 
@@ -284,6 +284,18 @@ class MainMenuScene: BaseScene {
 		menu!.fadeOut({
 			game.scenePresenter.changeScene(
 				newScene: ConfigScene(),
+				transition: CrtInSceneTransition()
+			)
+		})
+
+		colonelSprite.animateOut()
+		exiting = true
+	}
+
+	func handleStatsPressed() {
+		menu!.fadeOut({
+			game.scenePresenter.changeScene(
+				newScene: StatsScene(),
 				transition: CrtInSceneTransition()
 			)
 		})

@@ -1,6 +1,6 @@
 import PlaydateKit
 
-let SectorLostCellPadding = 6
+let CellPadding = 6
 
 protocol Cell: AnyObject {
 	var height: Int { get }
@@ -16,6 +16,8 @@ class KeyValueCell: Cell {
 		let key: String
 		let value: String
 		let rowCellCount: Int
+		var keyFont: Graphics.Font = CdfFont.NicoPups16
+		var valueFont: Graphics.Font = CdfFont.NicoClean16
 	}
 
 	let sprite = Sprite.Sprite()
@@ -23,25 +25,25 @@ class KeyValueCell: Cell {
 	init(_ config: Config) {
 		let bitmap = Graphics.Bitmap(
 			width: Display.width / config.rowCellCount,
-			height: CdfFont.NicoPups16.height + CdfFont.NicoClean16.height + SectorLostCellPadding * 3,
+			height: config.keyFont.height + config.valueFont.height + CellPadding * 3,
 		)
 
 		Graphics.pushContext(bitmap)
 		Graphics.drawMode = .fillWhite
-		Graphics.setFont(CdfFont.NicoPups16)
+		Graphics.setFont(config.keyFont)
 		Graphics.drawText(
 			config.key,
 			at: Point(
-				x: SectorLostCellPadding,
-				y: SectorLostCellPadding,
+				x: CellPadding,
+				y: CellPadding,
 			))
 
-		Graphics.setFont(CdfFont.NicoClean16)
+		Graphics.setFont(config.valueFont)
 		Graphics.drawText(
 			config.value,
 			at: Point(
-				x: SectorLostCellPadding,
-				y: CdfFont.NicoClean16.height + SectorLostCellPadding * 2,
+				x: CellPadding,
+				y: config.keyFont.height + CellPadding * 2,
 			))
 		Graphics.popContext()
 
@@ -69,7 +71,7 @@ class HrCell: Cell {
 	init() {
 		let bitmap = Graphics.Bitmap(
 			// Assume only cell in row
-			width: Display.width - SectorLostCellPadding * 2,
+			width: Display.width - CellPadding * 2,
 			height: 1,
 			bgColor: .white,
 		)
@@ -94,7 +96,45 @@ class HrCell: Cell {
 		sprite.moveTo(
 			topLeft
 				+ Point(
-					x: SectorLostCellPadding,
+					x: CellPadding,
+					y: 0,
+				))
+	}
+}
+
+class SpacerCell: Cell {
+	struct Config {
+		let height: Int
+	}
+
+	init(_ config: Config) {
+		height = config.height
+		let bitmap = Graphics.Bitmap(
+			// Assume only cell in row
+			width: Display.width - CellPadding * 2,
+			height: height,
+			bgColor: .clear,
+		)
+
+		sprite.image = bitmap
+		sprite.center = Point.zero
+		sprite.zIndex = 600
+		sprite.addToDisplayList()
+	}
+
+	let sprite = Sprite.Sprite()
+
+	var height: Int
+
+	var width: Int {
+		return Display.width
+	}
+
+	func moveTo(topLeft: Point) {
+		sprite.moveTo(
+			topLeft
+				+ Point(
+					x: CellPadding,
 					y: 0,
 				))
 	}
@@ -109,9 +149,11 @@ class TextCell: Cell {
 
 	let sprite = Sprite.Sprite()
 
+	let text: String
+
 	init(_ config: Config) {
-		let width = Display.width - SectorLostCellPadding * 2
-		let height = CdfFont.NicoPups16.height
+		let width = Display.width - CellPadding * 2
+		text = config.text
 
 		let bitmap = Graphics.Bitmap(
 			// Assume only cell in row
@@ -123,8 +165,8 @@ class TextCell: Cell {
 		Graphics.drawMode = .fillWhite
 		Graphics.setFont(CdfFont.NicoPups16)
 		Graphics.drawTextInRect(
-			config.text, in: Rect(origin: Point.zero, width: Float(width), height: Float(height)),
-			wrap: .clip,
+			text, in: Rect(origin: Point.zero, width: Float(width), height: Float(height)),
+			wrap: .word,
 			aligned: config.alignment)
 		Graphics.popContext()
 
@@ -135,7 +177,15 @@ class TextCell: Cell {
 	}
 
 	var height: Int {
-		return CdfFont.NicoPups16.height + SectorLostCellPadding * 2
+		let textHeight = CdfFont.NicoPups16.getTextHeightForMaxWidth(
+			for: text,
+			maxWidth: width,
+			wrap: .word,
+			tracking: 0,
+			extraLeading: 0
+		)
+
+		return textHeight + CellPadding * 2
 	}
 
 	var width: Int {
@@ -146,11 +196,50 @@ class TextCell: Cell {
 		sprite.moveTo(
 			topLeft
 				+ Point(
-					x: SectorLostCellPadding,
-					y: SectorLostCellPadding,
+					x: CellPadding,
+					y: CellPadding,
 				))
 	}
 }
+
+class ImageCell: Cell {
+	struct Config {
+		let path: String
+		var paddingLeft: Int = 0
+	}
+
+	private let sprite = Sprite.Sprite()
+
+	private let paddingLeft: Int
+
+	init(_ config: Config) {
+		let bitmap = try! Graphics.Bitmap(path: config.path)
+		let (bitmapWidth, bitmapHeight, _) = bitmap.getData(mask: nil, data: nil)
+		width = bitmapWidth
+		height = bitmapHeight
+
+		paddingLeft = config.paddingLeft
+
+		sprite.image = bitmap
+		sprite.center = Point.zero
+		sprite.zIndex = 600
+		sprite.addToDisplayList()
+	}
+
+	var height: Int = 0
+
+	var width: Int = 0
+
+	func moveTo(topLeft: Point) {
+		sprite.moveTo(
+			topLeft
+				+ Point(
+					x: CellPadding + paddingLeft,
+					y: CellPadding,
+				))
+	}
+}
+
 //
 //// Everything else
 class EntityCell: Cell {
@@ -198,11 +287,11 @@ class EntityCell: Cell {
 	}
 
 	var height: Int {
-		return CdfFont.NicoClean16.height + SectorLostCellPadding * 2
+		return CdfFont.NicoClean16.height + CellPadding * 2
 	}
 
 	var width: Int {
-		return entityWidth + textWidth + SectorLostCellPadding * 4
+		return entityWidth + textWidth + CellPadding * 4
 	}
 
 	private var entityWidth: Int {
@@ -226,7 +315,7 @@ class EntityCell: Cell {
 		textSprite.moveTo(
 			topLeft
 				+ Point(
-					x: entityWidth + SectorLostCellPadding,
+					x: entityWidth + CellPadding,
 					y: (height - Int(textSprite.bounds.height)) / 2,
 				))
 
