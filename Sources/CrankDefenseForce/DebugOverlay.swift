@@ -8,7 +8,7 @@ class DebugOverlay {
 
 		var value: String
 
-		init(width: Float, y: Float, label: String, value: String) {
+		init(width: Float, x: Float, y: Float, label: String, value: String) {
 			self.width = width
 			self.label = label
 			self.value = value
@@ -17,7 +17,7 @@ class DebugOverlay {
 			setSize(width: width, height: Float(CdfFont.NicoPups16.height))
 			zIndex = 9999
 			center = Point.zero
-			position = Point(x: 0, y: y)
+			position = Point(x: x, y: y)
 		}
 
 		override func draw(bounds _: Rect, drawRect _: Rect) {
@@ -37,21 +37,26 @@ class DebugOverlay {
 			Graphics.drawMode = GameSettings.timeOfDay == .day ? .fillBlack : .fillWhite
 			Graphics.setFont(CdfFont.NicoPups16)
 			Graphics.drawText(label, at: position + Point(x: 2, y: 0))
-			Graphics.drawTextInRect(value, in: Rect(
-				origin: position,
-				width: width - 2,
-				height: Float(CdfFont.NicoPups16.height)
-			), aligned: .right)
+			Graphics.drawTextInRect(
+				value,
+				in: Rect(
+					origin: position,
+					width: width - 2,
+					height: Float(CdfFont.NicoPups16.height)
+				), aligned: .right)
 		}
 	}
 
 	var debugMode: DebugMode
 
-	let fpsSprite = LineSprite(width: 60, y: 0, label: "FPS:", value: "0")
-	let entitiesSprite = LineSprite(width: 60, y: Float(CdfFont.NicoPups16.height), label: "Ents:", value: "0")
+	let fpsSprite = LineSprite(width: 60, x: 0, y: 0, label: "FPS:", value: "0")
+	let entitiesSprite = LineSprite(
+		width: 60, x: 60, y: 0, label: "Ents:", value: "0")
 
 	init() {
 		debugMode = GameSettings.debugMode
+		fpsSprite.setIgnoresDrawOffset(true)
+		entitiesSprite.setIgnoresDrawOffset(true)
 		updateDisplay()
 	}
 
