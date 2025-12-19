@@ -26,7 +26,11 @@ class KeyValueCell: Cell {
 
 	let sprite = Sprite.Sprite()
 
+	let rowCellCount: Int
+
 	init(_ config: Config) {
+		rowCellCount = config.rowCellCount
+		
 		let bitmap = Graphics.Bitmap(
 			width: Display.width / config.rowCellCount,
 			height: config.keyFont.height + config.valueFont.height + CellPadding * 3,
@@ -62,7 +66,7 @@ class KeyValueCell: Cell {
 	}
 
 	var width: Int {
-		return Display.width / 2
+		return Display.width / rowCellCount
 	}
 
 	func moveTo(topLeft: Point) {

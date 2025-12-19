@@ -42,7 +42,7 @@ class RemoteScoresDisplay {
 		rows.append([
 			SpacerCell(
 				SpacerCell.Config(
-					height: 8
+					height: 50
 				))
 		])
 

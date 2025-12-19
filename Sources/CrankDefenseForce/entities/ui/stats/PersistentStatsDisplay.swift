@@ -39,6 +39,13 @@ class PersistentStatsDisplay {
 	private static func buildRows(_ config: Config) -> [[Cell]] {
 		var rows: [[Cell]] = []
 
+		rows.append([
+			SpacerCell(
+				SpacerCell.Config(
+					height: 50
+				))
+		])
+
 		let pStats = PersistentStats.instance
 
 		// Duration, # fired
@@ -50,13 +57,19 @@ class PersistentStatsDisplay {
 				KeyValueCell.Config(
 					key: "Time played",
 					value: "\(minutes):\(secondsString)",
-					rowCellCount: 2
+					rowCellCount: 3
+				)),
+			KeyValueCell(
+				KeyValueCell.Config(
+					key: "Sectors lost",
+					value: "\(pStats.sectorsLost)",
+					rowCellCount: 3
 				)),
 			KeyValueCell(
 				KeyValueCell.Config(
 					key: "Rockets launched",
 					value: "\(pStats.rocketsLaunched)",
-					rowCellCount: 2
+					rowCellCount: 3
 				)),
 		])
 
@@ -164,14 +177,6 @@ class PersistentStatsDisplay {
 				)))
 
 		rows.append(powerUpsRow)
-
-		rows.append([
-			TextCell(
-				TextCell.Config(
-					text: "Ⓑ Done",
-					alignment: .right
-				))
-		])
 
 		return rows
 	}
