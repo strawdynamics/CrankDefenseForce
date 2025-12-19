@@ -1,6 +1,6 @@
 import PlaydateKit
 
-class BigUfoEyes : BaseEntity, Movable {
+class BigUfoEyes : BaseEntity, Movable, Toggleable {
 	nonisolated(unsafe) static let eyesBitmapTable = try! Graphics.BitmapTable(path: "entities/BigUfoEyes/eyes")
 
 	var sprite = Sprite.Sprite()
@@ -35,5 +35,13 @@ class BigUfoEyes : BaseEntity, Movable {
 
 	func moveTo(position: PlaydateKit.Point) {
 		sprite.moveTo(position)
+	}
+
+	func show() {
+		sprite.addToDisplayList()
+	}
+
+	func hide() {
+		sprite.removeFromDisplayList()
 	}
 }

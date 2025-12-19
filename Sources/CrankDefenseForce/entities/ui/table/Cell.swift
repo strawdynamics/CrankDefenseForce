@@ -8,6 +8,10 @@ protocol Cell: AnyObject {
 	var width: Int { get }
 
 	func moveTo(topLeft: Point)
+
+	func show()
+
+	func hide()
 }
 
 // Duration, # fired
@@ -64,6 +68,14 @@ class KeyValueCell: Cell {
 	func moveTo(topLeft: Point) {
 		sprite.moveTo(topLeft)
 	}
+
+	func show() {
+		sprite.addToDisplayList()
+	}
+
+	func hide() {
+		sprite.removeFromDisplayList()
+	}
 }
 
 // Horizontal rule
@@ -99,6 +111,14 @@ class HrCell: Cell {
 					x: CellPadding,
 					y: 0,
 				))
+	}
+
+	func show() {
+		sprite.addToDisplayList()
+	}
+
+	func hide() {
+		sprite.removeFromDisplayList()
 	}
 }
 
@@ -137,6 +157,14 @@ class SpacerCell: Cell {
 					x: CellPadding,
 					y: 0,
 				))
+	}
+
+	func show() {
+		sprite.addToDisplayList()
+	}
+
+	func hide() {
+		sprite.removeFromDisplayList()
 	}
 }
 
@@ -200,6 +228,14 @@ class TextCell: Cell {
 					y: CellPadding,
 				))
 	}
+
+	func show() {
+		sprite.addToDisplayList()
+	}
+
+	func hide() {
+		sprite.removeFromDisplayList()
+	}
 }
 
 class ImageCell: Cell {
@@ -238,6 +274,14 @@ class ImageCell: Cell {
 					y: CellPadding,
 				))
 	}
+
+	func show() {
+		sprite.addToDisplayList()
+	}
+
+	func hide() {
+		sprite.removeFromDisplayList()
+	}
 }
 
 //
@@ -263,7 +307,7 @@ class EntityCell: Cell {
 
 	let entityType: EntityType
 
-	let entity: Movable
+	let entity: Movable & Toggleable
 
 	init(_ config: Config) {
 		entityType = config.entityType
@@ -355,7 +399,7 @@ class EntityCell: Cell {
 		}
 	}
 
-	static func spawnEntity(_ config: Config) -> Movable {
+	static func spawnEntity(_ config: Config) -> Movable & Toggleable {
 		switch config.entityType {
 		case .rocket, .fastRocket:
 			let rocket = Rocket(
@@ -417,20 +461,30 @@ class EntityCell: Cell {
 			powerUp.sprite.zIndex = 700
 
 			return powerUp
-		default:
-			let rocket = Rocket(
-				Rocket.Config(
-					position: Point.zero,
-					angle: 30,
-					entityStore: config.entityStore,
-					owner: .cpu,
-					alwaysExhaust: true,
-				))
-
-			rocket.sprite.zIndex = 700
-			rocket.exhaust?.sprite.zIndex = 700
-
-			return rocket
+//		default:
+//			let rocket = Rocket(
+//				Rocket.Config(
+//					position: Point.zero,
+//					angle: 30,
+//					entityStore: config.entityStore,
+//					owner: .cpu,
+//					alwaysExhaust: true,
+//				))
+//
+//			rocket.sprite.zIndex = 700
+//			rocket.exhaust?.sprite.zIndex = 700
+//
+//			return rocket
 		}
+	}
+
+	func show() {
+		textSprite.addToDisplayList()
+		entity.show()
+	}
+
+	func hide() {
+		textSprite.removeFromDisplayList()
+		entity.hide()
 	}
 }

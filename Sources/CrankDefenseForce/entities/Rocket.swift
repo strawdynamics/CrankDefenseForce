@@ -1,6 +1,6 @@
 import PlaydateKit
 
-class Rocket: BaseEntity, PowerUpDropper, Movable {
+class Rocket: BaseEntity, PowerUpDropper, Movable, Toggleable {
 	static let powerUpDropTable: [PowerUp.PowerUpType: Float] = [
 		.none: 17,
 		.pauseEnemies: 1,
@@ -375,5 +375,15 @@ class Rocket: BaseEntity, PowerUpDropper, Movable {
 		let roundedRadAngle = (roundedAngle - 90.0).toRadians()
 		roundedCos = cosf(roundedRadAngle)
 		roundedSin = sinf(roundedRadAngle)
+	}
+
+	func show() {
+		sprite.addToDisplayList()
+		exhaust?.sprite.addToDisplayList()
+	}
+
+	func hide() {
+		sprite.removeFromDisplayList()
+		exhaust?.sprite.removeFromDisplayList()
 	}
 }

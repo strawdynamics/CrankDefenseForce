@@ -1,6 +1,6 @@
 import PlaydateKit
 
-class PowerUp: BaseEntity, Movable {
+class PowerUp: BaseEntity, Movable, Toggleable {
 	nonisolated(unsafe) static let noneBitmapTable = try! Graphics.BitmapTable(
 		path: "entities/PowerUp/none")
 	nonisolated(unsafe) static let pauseEnemiesBitmapTable = try! Graphics.BitmapTable(
@@ -133,5 +133,13 @@ class PowerUp: BaseEntity, Movable {
 	override func beforeRemove() {
 		// Free parent after collect (no `weak`!)
 		sprite.onCollect = nil
+	}
+
+	func show() {
+		sprite.addToDisplayList()
+	}
+
+	func hide() {
+		sprite.removeFromDisplayList()
 	}
 }

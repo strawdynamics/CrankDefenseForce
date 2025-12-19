@@ -1,6 +1,6 @@
 import PlaydateKit
 
-class SmallUfo: BaseEntity, PowerUpDropper, Movable {
+class SmallUfo: BaseEntity, PowerUpDropper, Movable, Toggleable {
 	static let powerUpDropTable: [PowerUp.PowerUpType: Float] = [
 		.none: 50,
 		.pauseEnemies: 25,
@@ -50,6 +50,8 @@ class SmallUfo: BaseEntity, PowerUpDropper, Movable {
 	private var nextExhaustTime: Float = 0
 
 	private let exhaustZIndex: Int16
+
+	private var isExhausting = true
 
 	init(_ config: Config) {
 		facingLeft = config.facingLeft
@@ -112,6 +114,10 @@ class SmallUfo: BaseEntity, PowerUpDropper, Movable {
 	}
 
 	private func updateExhaust() {
+		if !isExhausting {
+			return
+		}
+
 		life += Time.deltaTime
 		if life >= nextExhaustTime {
 			spawnExhaust()
@@ -169,5 +175,15 @@ class SmallUfo: BaseEntity, PowerUpDropper, Movable {
 				),
 				zIndex: exhaustZIndex,
 			))
+	}
+
+	func show() {
+		sprite.addToDisplayList()
+		isExhausting = true
+	}
+
+	func hide() {
+		sprite.removeFromDisplayList()
+		isExhausting = false
 	}
 }
