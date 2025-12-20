@@ -10,6 +10,7 @@ enum EnemyType {
 
 class EnemyCoordinator: BaseEntity {
 	struct DifficultyLevel {
+		let duration: Float
 		let baseSpawnInterval: Float
 		let spawnWeights: [EnemyType: Float]
 	}
@@ -19,30 +20,153 @@ class EnemyCoordinator: BaseEntity {
 	}
 
 	private static let difficultyLevels: [DifficultyLevel] = [
+//		DifficultyLevel(
+//			//			baseSpawnInterval: 15.0, // slow for testing
+//			//			baseSpawnInterval: 5.0, // previous easiest
+//			baseSpawnInterval: 1.25,  // previous hardest
+//			//			baseSpawnInterval: 0.5, // too many!
+//			//			baseSpawnInterval: 4, // Test with Charlene 2025/06/06
+//			spawnWeights: [
+//				.rocket: 75
+//					//				.fastRocket: 5,
+//					//				.bigUfo: 10,
+//					//				.smallUfo: 10,
+//			]
+//		)
+
 		DifficultyLevel(
-			//			baseSpawnInterval: 15.0, // slow for testing
-			//			baseSpawnInterval: 5.0, // previous easiest
-			baseSpawnInterval: 1.25,  // previous hardest
-			//			baseSpawnInterval: 0.5, // too many!
-			//			baseSpawnInterval: 4, // Test with Charlene 2025/06/06
+			duration: 15,
+			baseSpawnInterval: 5,
 			spawnWeights: [
-				.rocket: 75
-					//				.fastRocket: 5,
-					//				.bigUfo: 10,
-					//				.smallUfo: 10,
-					//				.rocket: 85,
-					//				.bigUfo: 5,
-					//				.smallUfo: 5,
-					//				.fastRocket: 5,
+				.rocket: 100
 			]
-		)
+		),
+
+		DifficultyLevel(
+			duration: 20,
+			baseSpawnInterval: 4.5,
+			spawnWeights: [
+				.rocket: 97,
+				.fastRocket: 2,
+				.smallUfo: 1,
+			]
+		),
+
+		DifficultyLevel(
+			duration: 25,
+			baseSpawnInterval: 3.8,
+			spawnWeights: [
+				.rocket: 94,
+				.fastRocket: 5,
+				.smallUfo: 2,
+			]
+		),
+
+		// 60s
+
+		DifficultyLevel(
+			duration: 10,
+			baseSpawnInterval: 100,
+			spawnWeights: [
+				.bigUfo: 100
+			]
+		),
+
+		DifficultyLevel(
+			duration: 20,
+			baseSpawnInterval: 3,
+			spawnWeights: [
+				.rocket: 82,
+				.fastRocket: 15,
+				.smallUfo: 3,
+			]
+		),
+
+		DifficultyLevel(
+			duration: 25,
+			baseSpawnInterval: 2.5,
+			spawnWeights: [
+				.rocket: 82,
+				.fastRocket: 15,
+				.smallUfo: 3,
+			]
+		),
+
+		DifficultyLevel(
+			duration: 3,
+			baseSpawnInterval: 100,
+			spawnWeights: [
+				.bigUfo: 100
+			]
+		),
+
+		DifficultyLevel(
+			duration: 1,
+			baseSpawnInterval: 100,
+			spawnWeights: [
+				.fastRocket: 100
+			]
+		),
+
+		DifficultyLevel(
+			duration: 1,
+			baseSpawnInterval: 100,
+			spawnWeights: [
+				.fastRocket: 100
+			]
+		),
+
+		// 120s
+
+		DifficultyLevel(
+			duration: 5,
+			baseSpawnInterval: 100,
+			spawnWeights: [
+				.smallUfo: 1
+			]
+		),
+
+		DifficultyLevel(
+			duration: 25,
+			baseSpawnInterval: 2,
+			spawnWeights: [
+				.rocket: 77,
+				.fastRocket: 20,
+				.smallUfo: 3,
+			]
+		),
+
+		DifficultyLevel(
+			duration: 30,
+			baseSpawnInterval: 1.5,
+			spawnWeights: [
+				.rocket: 80,
+				.fastRocket: 15,
+				.smallUfo: 5,
+			]
+		),
+
+		// 180s
+
+		DifficultyLevel(
+			duration: 0,
+			baseSpawnInterval: 1.25,
+			spawnWeights: [
+				.rocket: 77,
+				.fastRocket: 15,
+				.smallUfo: 3,
+				.bigUfo: 5,
+			]
+		),
 	]
 
 	let city: City
 
 	private var uptime: Float = 0
 
-	private var difficulty: DifficultyLevel
+	private var currentDifficulty: DifficultyLevel
+	private var currentDifficultyIndex = 0
+	private var nextDifficultyTime: Float = 0
 
 	private var started = false
 
@@ -63,7 +187,8 @@ class EnemyCoordinator: BaseEntity {
 
 	init(_ config: Config) {
 		city = config.city
-		difficulty = Self.difficultyLevels[0]
+		currentDifficulty = Self.difficultyLevels[currentDifficultyIndex]
+		nextDifficultyTime = currentDifficulty.duration
 
 		super.init(config.entityStore)
 
@@ -114,7 +239,10 @@ class EnemyCoordinator: BaseEntity {
 				self.pausedUntil = nil
 			}
 		} else {
-			if uptime >= nextSpawnTime {
+			if nextDifficultyTime > 0 && uptime >= nextDifficultyTime {
+				advanceDifficulty()
+				spawnAndSchedule()
+			} else if uptime >= nextSpawnTime {
 				spawnAndSchedule()
 			}
 		}
@@ -139,12 +267,12 @@ class EnemyCoordinator: BaseEntity {
 	private func spawnAndSchedule() {
 		spawnEnemy()
 
-		let spawnDelay = difficulty.baseSpawnInterval * Float.random(in: 0.8..<1.2)
+		let spawnDelay = currentDifficulty.baseSpawnInterval * Float.random(in: 0.8..<1.2)
 		nextSpawnTime = uptime + spawnDelay
 	}
 
 	private func pickEnemy() -> EnemyType {
-		let weights = difficulty.spawnWeights
+		let weights = currentDifficulty.spawnWeights
 		let total = weights.values.reduce(0, +)
 		let selectedWeight = Float.random(in: 0..<total)
 		var accumulatedWeight: Float = 0
@@ -288,5 +416,12 @@ class EnemyCoordinator: BaseEntity {
 				speed: 20,
 			))
 		smallUfos.append(smallUfo)
+	}
+
+	private func advanceDifficulty() {
+		currentDifficultyIndex += 1
+		currentDifficulty = Self.difficultyLevels[currentDifficultyIndex]
+
+		nextDifficultyTime = currentDifficulty.duration == 0 ? 0 : uptime + currentDifficulty.duration
 	}
 }

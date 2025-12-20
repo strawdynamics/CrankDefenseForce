@@ -2,9 +2,9 @@ import PlaydateKit
 
 class BigUfo: BaseEntity, PowerUpDropper {
 	static let powerUpDropTable: [PowerUp.PowerUpType: Float] = [
-		.none: 50,
-		.pauseEnemies: 25,
-		.repairBuilding: 10,
+		.none: 60,
+		.pauseEnemies: 20,
+		.repairBuilding: 5,
 		.destroyEnemies: 15,
 	]
 

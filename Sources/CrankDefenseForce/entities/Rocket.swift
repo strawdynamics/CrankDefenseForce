@@ -2,10 +2,10 @@ import PlaydateKit
 
 class Rocket: BaseEntity, PowerUpDropper, Movable, Toggleable {
 	static let powerUpDropTable: [PowerUp.PowerUpType: Float] = [
-		.none: 17,
-		.pauseEnemies: 1,
+		.none: 492,
+		.pauseEnemies: 5,
 		.repairBuilding: 1,
-		.destroyEnemies: 1,
+		.destroyEnemies: 2,
 	]
 
 	nonisolated(unsafe) static let rocketBitmapTable = try! Graphics.BitmapTable(
