@@ -25,6 +25,7 @@ class ExhaustParticle: Explosion {
 			duration: config.duration,
 			inPercentage: config.inPercentage,
 			collides: false,
+			silent: true,
 		))
 
 		sprite.zIndex = config.zIndex

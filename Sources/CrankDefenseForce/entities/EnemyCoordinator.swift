@@ -307,8 +307,6 @@ class EnemyCoordinator: BaseEntity {
 		})
 
 		if remainingBuildings.count == 1 {
-			print("Advancing to final difficulty!")
-
 			currentDifficultyIndex = Self.difficultyLevels.count - 1
 			currentDifficulty = Self.difficultyLevels[currentDifficultyIndex]
 			nextDifficultyTime = 0

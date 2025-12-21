@@ -11,6 +11,7 @@ class Explosion: BaseEntity {
 		var duration: Float = 1.8
 		var inPercentage: Float = 0.35
 		var collides: Bool = true
+		var silent: Bool = false
 	}
 
 	class ExplosionSprite: Sprite.Sprite {
@@ -99,6 +100,10 @@ class Explosion: BaseEntity {
 			sprite.collideRect = Rect(x: 0, y: 0, width: size, height: size)
 		}
 		sprite.addToDisplayList()
+
+		if !config.silent {
+			Sfx.instance.play(.explosion, offset: MIDINote.random(in: -2...2))
+		}
 	}
 
 	override func update() {
