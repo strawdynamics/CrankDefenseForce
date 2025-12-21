@@ -37,7 +37,7 @@ class Menu {
 	func next() {
 		selectedItemIndex = (selectedItemIndex + 1) % menuItems.count
 		GameSettings.lastMainMenuSelectedItemIndex = selectedItemIndex
-		Sfx.instance.play(.menuNavigate)
+		Sfx.instance.play(.menuNavigate, offset: -2)
 		draw()
 	}
 
@@ -47,7 +47,7 @@ class Menu {
 			selectedItemIndex = menuItems.count - 1
 		}
 		GameSettings.lastMainMenuSelectedItemIndex = selectedItemIndex
-		Sfx.instance.play(.menuNavigate, offset: -2)
+		Sfx.instance.play(.menuNavigate)
 		draw()
 	}
 
