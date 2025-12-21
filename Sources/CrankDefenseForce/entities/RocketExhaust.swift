@@ -32,6 +32,8 @@ class RocketExhaust: BaseEntity {
 
 	let type: ExhaustType
 
+	var sfxEnabled = true
+
 	struct Config {
 		var rocket: Rocket
 		var entityStore: EntityStore
@@ -101,7 +103,10 @@ class RocketExhaust: BaseEntity {
 		}
 		active = true
 
-		Self.engineSfx.incActiveRockets()
+
+		if sfxEnabled {
+			Self.engineSfx.incActiveRockets()
+		}
 
 		sprite.isVisible = true
 	}
@@ -112,7 +117,9 @@ class RocketExhaust: BaseEntity {
 		}
 		active = false
 
-		Self.engineSfx.decActiveRockets()
+		if sfxEnabled {
+			Self.engineSfx.decActiveRockets()
+		}
 
 		sprite.isVisible = false
 	}

@@ -114,6 +114,10 @@ class Rocket: BaseEntity, PowerUpDropper, Movable, Toggleable {
 				type: config.exhaustType
 			))
 
+		if alwaysExhaust {
+			exhaust?.sfxEnabled = false
+		}
+
 		if alwaysExhaust || thrust != 0.0 {
 			exhaust?.activate()
 			exhaust?.updatePosition()
