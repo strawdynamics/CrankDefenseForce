@@ -17,8 +17,6 @@ class GameplayScene: BaseScene {
 				newScene: MainMenuScene(),
 				transition: CrtOutSceneTransition(),
 			)
-
-			System.removeAllMenuItems()
 		}
 
 		gameRunner?.start()
@@ -26,6 +24,7 @@ class GameplayScene: BaseScene {
 
 	override func exit() {
 		gameRunner?.exit()
+		System.removeAllMenuItems()
 	}
 
 	override func finish() {
