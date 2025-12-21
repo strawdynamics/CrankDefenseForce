@@ -196,6 +196,7 @@ class EnemyCoordinator: BaseEntity {
 
 		_ = Rocket.removeEmitter.on(handleRocketRemove)
 		_ = SmallUfo.removeEmitter.on(handleSmallUfoRemove)
+		_ = Building.destroyedEmitter.on(handleBuildingDestroyed)
 	}
 
 	func start() {
@@ -296,6 +297,21 @@ class EnemyCoordinator: BaseEntity {
 			let shouldRemove = smallUfo.id == payload.smallUfo.id
 
 			return shouldRemove
+		}
+	}
+
+	/// When the penultimate building is destroyed, automatically advance to the final difficulty
+	private func handleBuildingDestroyed(payload: Building.DestroyedEventPayload) {
+		let remainingBuildings = city.buildings.filter({
+			return !$0.destroyed
+		})
+
+		if remainingBuildings.count == 1 {
+			print("Advancing to final difficulty!")
+
+			currentDifficultyIndex = Self.difficultyLevels.count - 1
+			currentDifficulty = Self.difficultyLevels[currentDifficultyIndex]
+			nextDifficultyTime = 0
 		}
 	}
 

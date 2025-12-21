@@ -49,6 +49,14 @@ class Building: BaseEntity {
 		return sprite.position
 	}
 
+	struct DestroyedEventPayload {
+		var building: Building
+	}
+	struct DestroyedEvent: EventProtocol {
+		typealias Payload = DestroyedEventPayload
+	}
+	nonisolated(unsafe) static let destroyedEmitter = EventEmitter<DestroyedEvent>()
+
 	init(_ config: Config) {
 		buildingType = config.buildingType
 
@@ -112,6 +120,11 @@ class Building: BaseEntity {
 
 		destroyed = true
 		destroyAnimation.play()
+
+		Self.destroyedEmitter.emit(
+			DestroyedEventPayload(
+				building: self,
+			))
 
 		return true
 	}
