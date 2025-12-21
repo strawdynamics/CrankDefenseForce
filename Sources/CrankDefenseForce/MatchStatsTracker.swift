@@ -3,6 +3,7 @@ class MatchStatsTracker {
 
 	init() {
 		_ = Rocket.statsEmitter.on(handleStats)
+		_ = EnemyCoordinator.statsEmitter.on(handleStats)
 		_ = RocketSilo.launchEmitter.on(handleLaunch)
 		_ = PowerUp.collectEmitter.on(handlePowerUpCollect)
 	}
@@ -43,13 +44,13 @@ class MatchStatsTracker {
 
 		switch payload.eventType {
 		case .cpuRocketDestroyed:
-			cpuRocketsDestroyed += 1
+			cpuRocketsDestroyed += payload.count
 		case .cpuFastRocketDestroyed:
-			cpuFastRocketsDestroyed += 1
+			cpuFastRocketsDestroyed += payload.count
 		case .cpuSmallUfoDestroyed:
-			cpuSmallUfosDestroyed += 1
+			cpuSmallUfosDestroyed += payload.count
 		case .cpuBigUfoDestroyed:
-			cpuBigUfosDestroyed += 1
+			cpuBigUfosDestroyed += payload.count
 		}
 	}
 

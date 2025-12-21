@@ -7,6 +7,7 @@ enum StatsEventType {
 
 struct StatsEventPayload {
 	var eventType: StatsEventType
+	var count: Int = 1
 }
 
 struct StatsEvent: EventProtocol {

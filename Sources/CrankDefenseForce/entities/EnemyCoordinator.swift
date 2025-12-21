@@ -9,6 +9,8 @@ enum EnemyType {
 }
 
 class EnemyCoordinator: BaseEntity {
+	nonisolated(unsafe) static let statsEmitter = EventEmitter<StatsEvent>()
+
 	struct DifficultyLevel {
 		let duration: Float
 		let baseSpawnInterval: Float
@@ -208,15 +210,48 @@ class EnemyCoordinator: BaseEntity {
 
 	/// Player owns all explosions here, because this is triggered by a PowerUp
 	func destroyAll() {
+		var rocketCount = 0
+		var fastRocketCount = 0
 		for rocket in rockets {
+			if rocket.isFast {
+				fastRocketCount += 1
+			} else {
+				rocketCount += 1
+			}
 			rocket.explode(explosionOwner: .player)
 		}
 
+		if rocketCount > 0 {
+			Self.statsEmitter.emit(
+				StatsEventPayload(
+					eventType: .cpuRocketDestroyed,
+					count: rocketCount
+				))
+		}
+		if fastRocketCount > 0 {
+			Self.statsEmitter.emit(
+				StatsEventPayload(
+					eventType: .cpuFastRocketDestroyed,
+					count: fastRocketCount
+				))
+		}
+
+		if smallUfos.count > 0 {
+			Self.statsEmitter.emit(
+				StatsEventPayload(
+					eventType: .cpuSmallUfoDestroyed,
+					count: smallUfos.count
+				))
+		}
 		for smallUfo in smallUfos {
 			smallUfo.explode()
 		}
 
 		if let bigUfo {
+			Self.statsEmitter.emit(
+				StatsEventPayload(
+					eventType: .cpuBigUfoDestroyed,
+				))
 			bigUfo.explode()
 		}
 	}
