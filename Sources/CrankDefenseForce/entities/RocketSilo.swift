@@ -68,8 +68,8 @@ class RocketSilo: BaseEntity {
 			sprite.moveTo(Point(x: 0, y: Display.height - 11))
 
 			iconSprite.image =
-				GameSettings.controlScheme == .standard
-				? Self.siloIconsBitmapTable[0] : Self.siloIconsBitmapTable[2]
+				GameSettings.controlScheme == .leftyLauncher
+				? Self.siloIconsBitmapTable[2] : Self.siloIconsBitmapTable[0]
 			iconSprite.moveTo(Point(x: 14, y: Display.height))
 		case .a:
 			sprite.image = GameSettings.timeOfDay == .day ? Self.siloABitmap : Self.siloANightBitmap
@@ -77,8 +77,8 @@ class RocketSilo: BaseEntity {
 			sprite.moveTo(Point(x: Display.width, y: Display.height - 11))
 
 			iconSprite.image =
-				GameSettings.controlScheme == .standard
-				? Self.siloIconsBitmapTable[1] : Self.siloIconsBitmapTable[3]
+				GameSettings.controlScheme == .leftyLauncher
+				? Self.siloIconsBitmapTable[3] : Self.siloIconsBitmapTable[1]
 			iconSprite.moveTo(Point(x: Display.width - 14, y: Display.height))
 		}
 

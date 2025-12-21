@@ -107,6 +107,8 @@ class PlayerController: BaseEntity {
 			updateStandardInputs()
 		case .leftyLauncher:
 			updateLeftyLauncherInputs()
+		case .lrSwitch:
+			updateLrSwitchInputs()
 		}
 	}
 
@@ -167,6 +169,28 @@ class PlayerController: BaseEntity {
 			inputs.append(.turnRocket(Time.deltaTime * -Self.DPAD_TURN_DEGREES_PER_SECOND))
 		} else if current.contains(.a) {
 			inputs.append(.turnRocket(Time.deltaTime * Self.DPAD_TURN_DEGREES_PER_SECOND))
+		}
+
+		updateCrankInput()
+	}
+
+	private func updateLrSwitchInputs() {
+		let pushed = System.buttonState.pushed
+
+		// Launch
+		if pushed.contains(.b) {
+			inputs.append(.launchSiloB)
+		}
+
+		if pushed.contains(.a) {
+			inputs.append(.launchSiloA)
+		}
+
+		// Switch
+		if pushed.contains(.left) {
+			inputs.append(.selectPreviousRocket)
+		} else if pushed.contains(.right) {
+			inputs.append(.selectNextRocket)
 		}
 
 		updateCrankInput()

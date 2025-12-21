@@ -3,11 +3,13 @@ import UTF8ViewExtensions
 enum ControlScheme {
 	case standard
 	case leftyLauncher
+	case lrSwitch
 
 	static func fromString(_ input: String) -> ControlScheme? {
 		switch input.utf8 {
 		case "standard": return .standard
 		case "leftylauncher": return .leftyLauncher
+		case "lrSwitch": return .lrSwitch
 		default: return nil
 		}
 	}
@@ -16,6 +18,7 @@ enum ControlScheme {
 		switch self {
 		case .standard: return "Standard controls"
 		case .leftyLauncher: return "Lefty launcher"
+		case .lrSwitch: return "L/R switch"
 		}
 	}
 
@@ -25,6 +28,8 @@ enum ControlScheme {
 			return "standard"
 		case .leftyLauncher:
 			return "leftyLauncher"
+		case .lrSwitch:
+			return "lrSwitch"
 		}
 	}
 
@@ -42,20 +47,28 @@ enum ControlScheme {
 				Launch: ⬅️ ➡️
 				Switch: ⬆️ ⬇️
 				"""
+		case .lrSwitch:
+			return """
+				Turn: 🎣
+				Launch: Ⓑ Ⓐ
+				Switch: ⬅️ ➡️
+				"""
 		}
 	}
 
 	var next: ControlScheme {
 		switch self {
 		case .standard: return .leftyLauncher
-		case .leftyLauncher: return .standard
+		case .leftyLauncher: return .lrSwitch
+		case .lrSwitch: return .standard
 		}
 	}
 
 	var prev: ControlScheme {
 		switch self {
-		case .standard: return .leftyLauncher
+		case .lrSwitch: return .leftyLauncher
 		case .leftyLauncher: return .standard
+		case .standard: return .lrSwitch
 		}
 	}
 }
