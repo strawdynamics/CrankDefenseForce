@@ -13,6 +13,7 @@ class Sfx {
 
 		// Gameplay
 		case explosion
+		case fastRocketWarning
 	}
 
 	class Effect {
@@ -64,6 +65,7 @@ class Sfx {
 
 		// Gameplay
 		.explosion: Effect(.explosion, path: "sfx/explosion", polyphony: 3),
+		.fastRocketWarning: Effect(.fastRocketWarning, path: "sfx/fastRocketWarning"),
 	])
 
 	let effects: [EffectName: Effect]

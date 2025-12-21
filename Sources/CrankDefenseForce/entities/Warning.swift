@@ -47,6 +47,8 @@ class Warning: BaseEntity {
 		sprite.image = bitmap
 		sprite.moveTo(position + Point(x: 0, y: -20))
 		sprite.addToDisplayList()
+
+		Sfx.instance.play(.fastRocketWarning)
 	}
 
 	override func update() {
