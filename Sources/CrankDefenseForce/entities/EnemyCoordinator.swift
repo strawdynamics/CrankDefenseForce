@@ -31,8 +31,8 @@ class EnemyCoordinator: BaseEntity {
 			//			baseSpawnInterval: 0.5, // too many!
 			//			baseSpawnInterval: 4, // Test with Charlene 2025/06/06
 			spawnWeights: [
-//				.rocket: 75
-					//				.fastRocket: 5,
+//				.rocket: 80,
+//									.fastRocket: 20,
 									.bigUfo: 10,
 					//				.smallUfo: 10,
 			]

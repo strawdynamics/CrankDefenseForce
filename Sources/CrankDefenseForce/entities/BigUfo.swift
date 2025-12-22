@@ -346,7 +346,7 @@ class BigUfo: BaseEntity, PowerUpDropper {
 		let _ = BigUfoBeam(BigUfoBeam.Config(
 			entityStore: entityStore,
 			position: sprite.position + Point(x: 0, y: laserYOffset + 20),
-			duration: 0.25,
+			duration: 0.3,
 		))
 	}
 
