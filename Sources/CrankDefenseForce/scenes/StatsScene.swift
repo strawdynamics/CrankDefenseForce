@@ -62,10 +62,14 @@ class StatsScene: BaseScene {
 				currentDisplayMode = .remoteScores
 				persistentStatsDisplay?.hide()
 				remoteScoresDisplay?.show()
+
+				Sfx.instance.play(.stepperNext)
 			} else {
 				currentDisplayMode = .localStats
 				remoteScoresDisplay?.hide()
 				persistentStatsDisplay?.show()
+
+				Sfx.instance.play(.stepperPrev)
 			}
 
 			indicatorAnimator = Animator(Animator.Config(
