@@ -22,144 +22,146 @@ class EnemyCoordinator: BaseEntity {
 	}
 
 	private static let difficultyLevels: [DifficultyLevel] = [
-//		DifficultyLevel(
-//			//			baseSpawnInterval: 15.0, // slow for testing
-//			//			baseSpawnInterval: 5.0, // previous easiest
-//			baseSpawnInterval: 1.25,  // previous hardest
-//			//			baseSpawnInterval: 0.5, // too many!
-//			//			baseSpawnInterval: 4, // Test with Charlene 2025/06/06
-//			spawnWeights: [
-//				.rocket: 75
-//					//				.fastRocket: 5,
-//					//				.bigUfo: 10,
-//					//				.smallUfo: 10,
-//			]
-//		)
-
-		DifficultyLevel(
-			duration: 15,
-			baseSpawnInterval: 5,
-			spawnWeights: [
-				.rocket: 100
-			]
-		),
-
-		DifficultyLevel(
-			duration: 20,
-			baseSpawnInterval: 4.5,
-			spawnWeights: [
-				.rocket: 97,
-				.fastRocket: 2,
-				.smallUfo: 1,
-			]
-		),
-
-		DifficultyLevel(
-			duration: 25,
-			baseSpawnInterval: 3.8,
-			spawnWeights: [
-				.rocket: 94,
-				.fastRocket: 5,
-				.smallUfo: 2,
-			]
-		),
-
-		// 60s
-
-		DifficultyLevel(
-			duration: 10,
-			baseSpawnInterval: 100,
-			spawnWeights: [
-				.bigUfo: 100
-			]
-		),
-
-		DifficultyLevel(
-			duration: 20,
-			baseSpawnInterval: 3,
-			spawnWeights: [
-				.rocket: 82,
-				.fastRocket: 15,
-				.smallUfo: 3,
-			]
-		),
-
-		DifficultyLevel(
-			duration: 25,
-			baseSpawnInterval: 2.5,
-			spawnWeights: [
-				.rocket: 82,
-				.fastRocket: 15,
-				.smallUfo: 3,
-			]
-		),
-
-		DifficultyLevel(
-			duration: 3,
-			baseSpawnInterval: 100,
-			spawnWeights: [
-				.bigUfo: 100
-			]
-		),
-
-		DifficultyLevel(
-			duration: 1,
-			baseSpawnInterval: 100,
-			spawnWeights: [
-				.fastRocket: 100
-			]
-		),
-
-		DifficultyLevel(
-			duration: 1,
-			baseSpawnInterval: 100,
-			spawnWeights: [
-				.fastRocket: 100
-			]
-		),
-
-		// 120s
-
-		DifficultyLevel(
-			duration: 5,
-			baseSpawnInterval: 100,
-			spawnWeights: [
-				.smallUfo: 1
-			]
-		),
-
-		DifficultyLevel(
-			duration: 25,
-			baseSpawnInterval: 2,
-			spawnWeights: [
-				.rocket: 77,
-				.fastRocket: 20,
-				.smallUfo: 3,
-			]
-		),
-
-		DifficultyLevel(
-			duration: 30,
-			baseSpawnInterval: 1.5,
-			spawnWeights: [
-				.rocket: 80,
-				.fastRocket: 15,
-				.smallUfo: 5,
-			]
-		),
-
-		// 180s
-
 		DifficultyLevel(
 			duration: 0,
-			baseSpawnInterval: 1.25,
+			baseSpawnInterval: 3,
+			//			baseSpawnInterval: 15.0, // slow for testing
+			//			baseSpawnInterval: 5.0, // previous easiest
+			//			baseSpawnInterval: 1.25,  // previous hardest
+			//			baseSpawnInterval: 0.5, // too many!
+			//			baseSpawnInterval: 4, // Test with Charlene 2025/06/06
 			spawnWeights: [
-				.rocket: 77,
-				.fastRocket: 15,
-				.smallUfo: 3,
-				.bigUfo: 5,
+//				.rocket: 75
+					//				.fastRocket: 5,
+									.bigUfo: 10,
+					//				.smallUfo: 10,
 			]
-		),
+		)
+
+//		DifficultyLevel(
+//			duration: 15,
+//			baseSpawnInterval: 5,
+//			spawnWeights: [
+//				.rocket: 100
+//			]
+//		),
+//
+//		DifficultyLevel(
+//			duration: 20,
+//			baseSpawnInterval: 4.5,
+//			spawnWeights: [
+//				.rocket: 97,
+//				.fastRocket: 2,
+//				.smallUfo: 1,
+//			]
+//		),
+//
+//		DifficultyLevel(
+//			duration: 25,
+//			baseSpawnInterval: 3.8,
+//			spawnWeights: [
+//				.rocket: 94,
+//				.fastRocket: 5,
+//				.smallUfo: 2,
+//			]
+//		),
+//
+//		// 60s
+//
+//		DifficultyLevel(
+//			duration: 10,
+//			baseSpawnInterval: 100,
+//			spawnWeights: [
+//				.bigUfo: 100
+//			]
+//		),
+//
+//		DifficultyLevel(
+//			duration: 20,
+//			baseSpawnInterval: 3,
+//			spawnWeights: [
+//				.rocket: 82,
+//				.fastRocket: 15,
+//				.smallUfo: 3,
+//			]
+//		),
+//
+//		DifficultyLevel(
+//			duration: 25,
+//			baseSpawnInterval: 2.5,
+//			spawnWeights: [
+//				.rocket: 82,
+//				.fastRocket: 15,
+//				.smallUfo: 3,
+//			]
+//		),
+//
+//		DifficultyLevel(
+//			duration: 3,
+//			baseSpawnInterval: 100,
+//			spawnWeights: [
+//				.bigUfo: 100
+//			]
+//		),
+//
+//		DifficultyLevel(
+//			duration: 1,
+//			baseSpawnInterval: 100,
+//			spawnWeights: [
+//				.fastRocket: 100
+//			]
+//		),
+//
+//		DifficultyLevel(
+//			duration: 1,
+//			baseSpawnInterval: 100,
+//			spawnWeights: [
+//				.fastRocket: 100
+//			]
+//		),
+//
+//		// 120s
+//
+//		DifficultyLevel(
+//			duration: 5,
+//			baseSpawnInterval: 100,
+//			spawnWeights: [
+//				.smallUfo: 1
+//			]
+//		),
+//
+//		DifficultyLevel(
+//			duration: 25,
+//			baseSpawnInterval: 2,
+//			spawnWeights: [
+//				.rocket: 77,
+//				.fastRocket: 20,
+//				.smallUfo: 3,
+//			]
+//		),
+//
+//		DifficultyLevel(
+//			duration: 30,
+//			baseSpawnInterval: 1.5,
+//			spawnWeights: [
+//				.rocket: 80,
+//				.fastRocket: 15,
+//				.smallUfo: 5,
+//			]
+//		),
+//
+//		// 180s
+//
+//		DifficultyLevel(
+//			duration: 0,
+//			baseSpawnInterval: 1.25,
+//			spawnWeights: [
+//				.rocket: 77,
+//				.fastRocket: 15,
+//				.smallUfo: 3,
+//				.bigUfo: 5,
+//			]
+//		),
 	]
 
 	let city: City

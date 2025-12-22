@@ -14,6 +14,8 @@ class Sfx {
 		// Gameplay
 		case explosion
 		case fastRocketWarning
+		case bigUfoChargeLaser
+		case bigUfoFireLaser
 	}
 
 	class Effect {
@@ -52,6 +54,18 @@ class Sfx {
 			fx.play(note: fx.note + offset, volume: GameSettings.sfxVolumePercent * fx.volume)
 			nextInstanceIndex = (nextInstanceIndex + 1) % instances.count
 		}
+
+		/// Assumes monophonic
+		func start() {
+			let fx = instances[0]
+			fx.start(note: fx.note, volume: GameSettings.sfxVolumePercent * fx.volume)
+		}
+
+		/// Assumes monophonic
+		func stop() {
+			let fx = instances[0]
+			fx.stop()
+		}
 	}
 
 	static nonisolated(unsafe) let instance = Sfx(effects: [
@@ -66,6 +80,8 @@ class Sfx {
 		// Gameplay
 		.explosion: Effect(.explosion, path: "sfx/explosion", polyphony: 3),
 		.fastRocketWarning: Effect(.fastRocketWarning, path: "sfx/fastRocketWarning"),
+		.bigUfoChargeLaser: Effect(.bigUfoChargeLaser, path: "sfx/bigUfoChargeLaser"),
+		.bigUfoFireLaser: Effect(.bigUfoFireLaser, path: "sfx/bigUfoFireLaser"),
 	])
 
 	let effects: [EffectName: Effect]
@@ -88,5 +104,21 @@ class Sfx {
 
 	public func playWithRandomOffset(_ effectName: EffectName) {
 		play(effectName, offset: MIDINote.random(in: -3...3))
+	}
+
+	public func start(_ effectName: EffectName) {
+		if let effect = effects[effectName] {
+			effect.start()
+		} else {
+			print("Tried to start unknown effect \(effectName)")
+		}
+	}
+
+	public func stop(_ effectName: EffectName) {
+		if let effect = effects[effectName] {
+			effect.stop()
+		} else {
+			print("Tried to stop unknown effect \(effectName)")
+		}
 	}
 }

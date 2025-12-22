@@ -65,7 +65,7 @@ class BigUfo: BaseEntity, PowerUpDropper {
 	private var laserYOffset: Float = 0
 
 	private var laserYOffsetAnimator: Animator<Float>?
-	private var laserChargeAnimator: Animator<Float>?
+	private var chargeLaserAnimator: Animator<Float>?
 
 	private var destroyedLeavingZigZagCount: Int = 0
 	private var destroyedLeavingPosAnimator: Animator<Point>?
@@ -83,6 +83,10 @@ class BigUfo: BaseEntity, PowerUpDropper {
 		}
 
 		set(newActivity) {
+			if _currentActivity == .chargeLaser {
+				exitChargeLaser()
+			}
+
 			if newActivity == .moveToBuilding {
 				enterMoveToBuilding()
 			} else if newActivity == .chargeLaser {
@@ -249,13 +253,13 @@ class BigUfo: BaseEntity, PowerUpDropper {
 			}
 		}
 
-		if let laserChargeAnim = laserChargeAnimator {
+		if let laserChargeAnim = chargeLaserAnimator {
 			laserChargeAnim.update()
 
 			sprite.image = Self.bigUfoBitmapTable[Int(laserChargeAnim.currentValue)]
 
 			if laserChargeAnim.ended {
-				laserChargeAnimator = nil
+				chargeLaserAnimator = nil
 
 				currentActivity = .fireLaser
 			}
@@ -315,6 +319,8 @@ class BigUfo: BaseEntity, PowerUpDropper {
 	}
 
 	private func enterChargeLaser() {
+		Sfx.instance.start(.bigUfoChargeLaser)
+
 		laserYOffsetAnimator = Animator(Animator.Config(
 			duration: 2.0,
 			startValue: laserYOffset,
@@ -322,7 +328,7 @@ class BigUfo: BaseEntity, PowerUpDropper {
 			easingFn: EasingFn.basic(Ease.outQuad),
 		))
 
-		laserChargeAnimator = Animator(Animator.Config(
+		chargeLaserAnimator = Animator(Animator.Config(
 			duration: 5.0,
 			startValue: Float(Self.chargeLaserFrames.lowerBound),
 			endValue: Float(Self.chargeLaserFrames.upperBound) + 0.999,
@@ -330,7 +336,13 @@ class BigUfo: BaseEntity, PowerUpDropper {
 		))
 	}
 
+	private func exitChargeLaser() {
+		Sfx.instance.stop(.bigUfoChargeLaser)
+	}
+
 	private func enterFireLaser() {
+		Sfx.instance.play(.bigUfoFireLaser)
+		
 		let _ = BigUfoBeam(BigUfoBeam.Config(
 			entityStore: entityStore,
 			position: sprite.position + Point(x: 0, y: laserYOffset + 20),
