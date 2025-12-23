@@ -123,6 +123,8 @@ class PowerUp: BaseEntity, Movable, Toggleable {
 		switch type {
 		case .pauseEnemies:
 			Sfx.instance.play(.pauseEnemies)
+		case .repairBuilding:
+			Sfx.instance.play(.repairBuilding)
 		default:
 			()
 		}

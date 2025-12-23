@@ -17,6 +17,7 @@ class Sfx {
 		case bigUfoChargeLaser
 		case bigUfoFireLaser
 		case pauseEnemies
+		case repairBuilding
 	}
 
 	class Effect {
@@ -84,6 +85,7 @@ class Sfx {
 		.bigUfoChargeLaser: Effect(.bigUfoChargeLaser, path: "sfx/bigUfoChargeLaser"),
 		.bigUfoFireLaser: Effect(.bigUfoFireLaser, path: "sfx/bigUfoFireLaser"),
 		.pauseEnemies: Effect(.pauseEnemies, path: "sfx/pauseEnemies"),
+		.repairBuilding: Effect(.repairBuilding, path: "sfx/repairBuilding"),
 	])
 
 	let effects: [EffectName: Effect]
