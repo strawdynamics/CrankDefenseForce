@@ -120,6 +120,13 @@ class PowerUp: BaseEntity, Movable, Toggleable {
 				position: sprite.position
 			))
 
+		switch type {
+		case .pauseEnemies:
+			Sfx.instance.play(.pauseEnemies)
+		default:
+			()
+		}
+
 		entityStore.remove(self)
 	}
 

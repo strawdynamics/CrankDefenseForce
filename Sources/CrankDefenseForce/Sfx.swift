@@ -16,6 +16,7 @@ class Sfx {
 		case fastRocketWarning
 		case bigUfoChargeLaser
 		case bigUfoFireLaser
+		case pauseEnemies
 	}
 
 	class Effect {
@@ -82,6 +83,7 @@ class Sfx {
 		.fastRocketWarning: Effect(.fastRocketWarning, path: "sfx/fastRocketWarning"),
 		.bigUfoChargeLaser: Effect(.bigUfoChargeLaser, path: "sfx/bigUfoChargeLaser"),
 		.bigUfoFireLaser: Effect(.bigUfoFireLaser, path: "sfx/bigUfoFireLaser"),
+		.pauseEnemies: Effect(.pauseEnemies, path: "sfx/pauseEnemies"),
 	])
 
 	let effects: [EffectName: Effect]
