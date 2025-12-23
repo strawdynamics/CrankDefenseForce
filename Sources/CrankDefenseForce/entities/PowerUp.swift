@@ -125,6 +125,8 @@ class PowerUp: BaseEntity, Movable, Toggleable {
 			Sfx.instance.play(.pauseEnemies)
 		case .repairBuilding:
 			Sfx.instance.play(.repairBuilding)
+		case .destroyEnemies:
+			Sfx.instance.play(.bigUfoFireLaser)
 		default:
 			()
 		}
