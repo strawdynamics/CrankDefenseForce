@@ -19,6 +19,7 @@ class Sfx {
 		case pauseEnemies
 		case repairBuilding
 		case siloPrep
+		case siloReady
 	}
 
 	class Effect {
@@ -88,6 +89,7 @@ class Sfx {
 		.pauseEnemies: Effect(.pauseEnemies, path: "sfx/pauseEnemies"),
 		.repairBuilding: Effect(.repairBuilding, path: "sfx/repairBuilding"),
 		.siloPrep: Effect(.siloPrep, path: "sfx/siloPrep"),
+		.siloReady: Effect(.siloReady, path: "sfx/siloReady"),
 	])
 
 	let effects: [EffectName: Effect]

@@ -115,6 +115,7 @@ class RocketSilo: BaseEntity {
 			if animator.ended {
 				rocketPrepAnimator = nil
 				readyForLaunch = true
+				Sfx.instance.play(.siloReady)
 			}
 		}
 	}
@@ -162,7 +163,7 @@ class RocketSilo: BaseEntity {
 
 		prepSfxAnimator = Animator(
 			Animator.Config(
-				duration: RocketSilo.BASE_ROCKET_PREP_DURATION - 0.55,
+				duration: RocketSilo.BASE_ROCKET_PREP_DURATION - 0.9,
 				startValue: 0,
 				endValue: 1,
 				easingFn: EasingFn.basic(Ease.linear)
@@ -173,7 +174,7 @@ class RocketSilo: BaseEntity {
 				duration: RocketSilo.BASE_ROCKET_PREP_DURATION,
 				startValue: RocketSilo.SILO_SPAWN_Y,
 				endValue: RocketSilo.SILO_SPAWN_Y - RocketSilo.SILO_SPAWN_MOVEMENT,
-				easingFn: EasingFn.overshoot(Ease.inBack)
+				easingFn: EasingFn.basic(Ease.inCubic)
 			))
 	}
 
