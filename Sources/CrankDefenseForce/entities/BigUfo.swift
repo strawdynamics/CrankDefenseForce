@@ -157,6 +157,8 @@ class BigUfo: BaseEntity, PowerUpDropper {
 		sprite.bigUfoId = id
 		laserSprite.bigUfoId = id
 
+		startMoveSfx()
+
 		pickTargetBuilding()
 	}
 
@@ -353,6 +355,8 @@ class BigUfo: BaseEntity, PowerUpDropper {
 	private func enterDestroyed() {
 		destroyed = true
 
+		stopMoveSfx()
+
 		sprite.collisionsEnabled = false
 		laserSprite.collisionsEnabled = false
 
@@ -535,5 +539,13 @@ class BigUfo: BaseEntity, PowerUpDropper {
 		} else {
 			currentActivity = .moveToBuilding
 		}
+	}
+
+	private func startMoveSfx() {
+		Sfx.instance.start(.bigUfoMove)
+	}
+
+	private func stopMoveSfx() {
+		Sfx.instance.stop(.bigUfoMove)
 	}
 }

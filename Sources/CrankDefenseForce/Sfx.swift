@@ -16,6 +16,7 @@ class Sfx {
 		case fastRocketWarning
 		case bigUfoChargeLaser
 		case bigUfoFireLaser
+		case bigUfoMove
 		case pauseEnemies
 		case repairBuilding
 		case siloPrep
@@ -87,6 +88,7 @@ class Sfx {
 		.fastRocketWarning: Effect(.fastRocketWarning, path: "sfx/fastRocketWarning"),
 		.bigUfoChargeLaser: Effect(.bigUfoChargeLaser, path: "sfx/bigUfoChargeLaser"),
 		.bigUfoFireLaser: Effect(.bigUfoFireLaser, path: "sfx/bigUfoFireLaser"),
+		.bigUfoMove: Effect(.bigUfoMove, path: "sfx/bigUfoMove"),
 		.pauseEnemies: Effect(.pauseEnemies, path: "sfx/pauseEnemies"),
 		.repairBuilding: Effect(.repairBuilding, path: "sfx/repairBuilding"),
 		.siloPrep: Effect(.siloPrep, path: "sfx/siloPrep", polyphony: 2),
