@@ -54,6 +54,8 @@ class RocketSilo: BaseEntity {
 
 	var rocketPrepAnimator: Animator<Float>?
 
+	var prepSfxAnimator: Animator<Float>?
+
 	init(_ config: Config) {
 		siloType = config.siloType
 
@@ -92,6 +94,15 @@ class RocketSilo: BaseEntity {
 	}
 
 	override func update() {
+		if let animator = prepSfxAnimator {
+			animator.update()
+
+			if animator.ended {
+				prepSfxAnimator = nil
+				Sfx.instance.play(.siloPrep)
+			}
+		}
+
 		if let animator = rocketPrepAnimator {
 			animator.update()
 
@@ -148,6 +159,14 @@ class RocketSilo: BaseEntity {
 
 	private func prepareNextRocket() {
 		spawnRocket(at: Point(x: spawnX, y: RocketSilo.SILO_SPAWN_Y))
+
+		prepSfxAnimator = Animator(
+			Animator.Config(
+				duration: RocketSilo.BASE_ROCKET_PREP_DURATION - 0.55,
+				startValue: 0,
+				endValue: 1,
+				easingFn: EasingFn.basic(Ease.linear)
+			))
 
 		rocketPrepAnimator = Animator(
 			Animator.Config(
