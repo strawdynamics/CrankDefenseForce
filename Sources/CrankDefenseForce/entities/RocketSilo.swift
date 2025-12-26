@@ -143,7 +143,7 @@ class RocketSilo: BaseEntity {
 	}
 
 	private func abortLaunch() {
-		// TODO: Anim/sfx
+		Sfx.instance.play(.siloAbort)
 	}
 
 	private var spawnX: Float {
