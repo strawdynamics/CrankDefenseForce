@@ -23,6 +23,8 @@ class SmallUfo: BaseEntity, PowerUpDropper, Movable, Toggleable {
 	nonisolated(unsafe) static let smallUfoBitmapTable = try! Graphics.BitmapTable(
 		path: "entities/SmallUfo/smallUfo")
 
+	nonisolated(unsafe) static let sfx = SmallUfoSfx()
+
 	class SmallUfoSprite: Sprite.Sprite {
 		var smallUfoId: Int = -1
 	}
@@ -33,6 +35,7 @@ class SmallUfo: BaseEntity, PowerUpDropper, Movable, Toggleable {
 		var facingLeft: Bool
 		var speed: Float
 		var exhaustZIndex: Int16 = 50
+		var silent: Bool = false
 	}
 
 	var sprite = SmallUfoSprite()
@@ -53,10 +56,13 @@ class SmallUfo: BaseEntity, PowerUpDropper, Movable, Toggleable {
 
 	private var isExhausting = true
 
+	private var silent: Bool
+
 	init(_ config: Config) {
 		facingLeft = config.facingLeft
 		speed = config.speed
 		exhaustZIndex = config.exhaustZIndex
+		silent = config.silent
 
 		let bitmap = Self.smallUfoBitmapTable[facingLeft ? 0 : 1]!
 		let (bitmapWidth, bitmapHeight, _) = bitmap.getData(mask: nil, data: nil)
@@ -83,6 +89,10 @@ class SmallUfo: BaseEntity, PowerUpDropper, Movable, Toggleable {
 			))
 
 		super.init(config.entityStore)
+
+		if !silent {
+			Self.sfx.incActiveUfos()
+		}
 
 		scheduleExhaust()
 
@@ -139,6 +149,10 @@ class SmallUfo: BaseEntity, PowerUpDropper, Movable, Toggleable {
 	}
 
 	func remove() {
+		if !silent {
+			Self.sfx.decActiveUfos()
+		}
+
 		Self.removeEmitter.emit(
 			RemoveEventPayload(
 				smallUfo: self,

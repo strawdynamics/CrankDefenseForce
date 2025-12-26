@@ -35,9 +35,7 @@ class RocketEngineSfx {
 	}
 
 	private func updateNoise() {
-		// TODO: Check settings SFX vol
-		let volume =
-			RocketEngineSfx.maxVolume
+		let volume = GameSettings.sfxVolumePercent * RocketEngineSfx.maxVolume
 			* fminf(1, Float(activeRocketsCount) / Float(RocketEngineSfx.maxRockets))
 
 		if volume > 0 {
