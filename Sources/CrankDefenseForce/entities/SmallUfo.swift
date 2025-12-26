@@ -112,6 +112,12 @@ class SmallUfo: BaseEntity, PowerUpDropper, Movable, Toggleable {
 		updateBob()
 	}
 
+	override func beforeRemove() {
+		if !silent {
+			Self.sfx.decActiveUfos()
+		}
+	}
+
 	func updateOob() {
 		let pos = position
 		if pos.x < -40 || pos.x > 440 {
@@ -149,10 +155,6 @@ class SmallUfo: BaseEntity, PowerUpDropper, Movable, Toggleable {
 	}
 
 	func remove() {
-		if !silent {
-			Self.sfx.decActiveUfos()
-		}
-
 		Self.removeEmitter.emit(
 			RemoveEventPayload(
 				smallUfo: self,
