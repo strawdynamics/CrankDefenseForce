@@ -37,6 +37,7 @@ class PlayerController: BaseEntity {
 		currentRocket = payload.rocket
 		currentRocketIndex = rockets.count
 		rockets.append(payload.rocket)
+		Sfx.instance.play(.menuNavigate)
 	}
 
 	func handleRocketRemove(payload: Rocket.RemoveEventPayload) {
@@ -54,6 +55,7 @@ class PlayerController: BaseEntity {
 		if removedCurrentRocket && rockets.count > 0 {
 			currentRocketIndex = rockets.count - 1
 			currentRocket = rockets[currentRocketIndex]
+			Sfx.instance.play(.menuNavigate, offset: -2)
 		}
 	}
 
@@ -66,6 +68,12 @@ class PlayerController: BaseEntity {
 			currentRocketIndex = -1
 			return
 		}
+
+		if rockets.count == 1 {
+			return
+		}
+
+		Sfx.instance.play(.menuNavigate)
 
 		if currentRocketIndex >= self.rockets.count - 1 {
 			currentRocketIndex = 0
@@ -81,6 +89,12 @@ class PlayerController: BaseEntity {
 			currentRocketIndex = -1
 			return
 		}
+
+		if rockets.count == 1 {
+			return
+		}
+
+		Sfx.instance.play(.menuNavigate, offset: -2)
 
 		if currentRocketIndex <= 0 {
 			currentRocketIndex = rockets.count - 1
