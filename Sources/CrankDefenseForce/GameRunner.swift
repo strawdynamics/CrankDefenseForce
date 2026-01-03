@@ -82,6 +82,8 @@ class GameRunner {
 
 	func start() {
 		enemyCoordinator.start()
+
+		Soundtrack.instance.play(song: .dangerDangerDanger)
 	}
 
 	func update() {
@@ -105,6 +107,8 @@ class GameRunner {
 		PowerUp.collectEmitter.reset()
 		Rocket.statsEmitter.reset()
 		Building.destroyedEmitter.reset()
+
+		Soundtrack.instance.fadeOut(duration: 0.2)
 	}
 
 	func finish() {

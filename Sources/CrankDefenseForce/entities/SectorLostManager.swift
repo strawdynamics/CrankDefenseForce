@@ -23,6 +23,8 @@ class SectorLostManager: BaseEntity {
 				easingFn: EasingFn.basic(Ease.inOutQuad)
 			))
 
+		Soundtrack.instance.fadeOut(duration: Self.musicFadeDuration)
+
 		super.init(config.entityStore)
 	}
 
@@ -46,6 +48,11 @@ class SectorLostManager: BaseEntity {
 
 		vcrEffect.offY = offY
 
+		if !musicStarted && uptime >= Self.musicStartDelay {
+			musicStarted = true
+			Soundtrack.instance.play(song: .sectorLost)
+		}
+
 		switch state {
 		case .textEntering:
 			updateTextEntering()
@@ -65,6 +72,10 @@ class SectorLostManager: BaseEntity {
 
 	// MARK: Private
 
+	private static let musicFadeDuration: Float = 0.5
+
+	private static let musicStartDelay: Float = 3
+
 	private static let textEnteringDuration: Float = 1
 
 	private enum State {
@@ -80,6 +91,8 @@ class SectorLostManager: BaseEntity {
 	private var uptime: Float = 0
 
 	private let yAnimator: Animator<Float>
+
+	private var musicStarted = false
 
 	private func updateInput() {
 		let current = System.buttonState.current

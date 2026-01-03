@@ -3,6 +3,8 @@ import PDKMasterPlayer
 class Soundtrack {
 	public enum SongName {
 		case sendHelp
+		case dangerDangerDanger
+		case sectorLost
 	}
 
 	private struct SongDef {
@@ -22,7 +24,21 @@ class Soundtrack {
 			playFromStep: 0,
 			loopStartStep: 470,
 			loopEndStep: -175,
-		)
+		),
+		.dangerDangerDanger: SongDef(
+			name: .dangerDangerDanger,
+			player: MasterPlayer(songPath: "songs/dangerDangerDanger.mid"),
+			playFromStep: 0,
+			loopStartStep: 0,
+			loopEndStep: nil,
+		),
+		.sectorLost: SongDef(
+			name: .sectorLost,
+			player: MasterPlayer(songPath: "songs/sectorLost.mid"),
+			playFromStep: 0,
+			loopStartStep: 5325,
+			loopEndStep: -450,
+		),
 	]
 
 	public var volume: Float? {

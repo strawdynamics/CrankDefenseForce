@@ -12,6 +12,7 @@ nonisolated(unsafe) var game: Game!
 		Playdate.initialize(with: pointer)
 
 		DrumsPd.register()
+		DrumsElectric.register()
 
 		GameSettings.initialize()
 		game = Game()
