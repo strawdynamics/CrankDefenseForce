@@ -427,7 +427,8 @@ class EntityCell: Cell {
 					position: Point.zero,
 					facingLeft: true,
 					speed: 0,
-					exhaustZIndex: 650
+					exhaustZIndex: 650,
+					silent: true,
 				))
 
 			ufo.sprite.zIndex = 700
