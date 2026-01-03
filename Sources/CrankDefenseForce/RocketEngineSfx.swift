@@ -1,7 +1,7 @@
 import PlaydateKit
 
 class RocketEngineSfx {
-	static let maxVolume: Float = 0.08
+	static let maxVolume: Float = 0.06
 	static let maxRockets = 10
 
 	let engineNoise1 = Sound.Synth()
