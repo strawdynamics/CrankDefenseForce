@@ -40,7 +40,7 @@ class EnemyCoordinator: BaseEntity {
 
 		DifficultyLevel(
 			duration: 15,
-			baseSpawnInterval: 5,
+			baseSpawnInterval: 4.8,
 			spawnWeights: [
 				.rocket: 100
 			]
@@ -69,7 +69,7 @@ class EnemyCoordinator: BaseEntity {
 		// 60s
 
 		DifficultyLevel(
-			duration: 10,
+			duration: 12,
 			baseSpawnInterval: 100,
 			spawnWeights: [
 				.bigUfo: 100
@@ -87,7 +87,7 @@ class EnemyCoordinator: BaseEntity {
 		),
 
 		DifficultyLevel(
-			duration: 25,
+			duration: 35,
 			baseSpawnInterval: 2.5,
 			spawnWeights: [
 				.rocket: 82,
@@ -97,20 +97,22 @@ class EnemyCoordinator: BaseEntity {
 		),
 
 		DifficultyLevel(
-			duration: 3,
+			duration: 5,
+			baseSpawnInterval: 100,
+			spawnWeights: [
+				.rocket: 100
+			]
+		),
+
+		DifficultyLevel(
+			duration: 8,
 			baseSpawnInterval: 100,
 			spawnWeights: [
 				.bigUfo: 100
 			]
 		),
 
-		DifficultyLevel(
-			duration: 1,
-			baseSpawnInterval: 100,
-			spawnWeights: [
-				.fastRocket: 100
-			]
-		),
+		// 2:20
 
 		DifficultyLevel(
 			duration: 1,
@@ -120,7 +122,13 @@ class EnemyCoordinator: BaseEntity {
 			]
 		),
 
-		// 120s
+		DifficultyLevel(
+			duration: 4,
+			baseSpawnInterval: 100,
+			spawnWeights: [
+				.fastRocket: 100
+			]
+		),
 
 		DifficultyLevel(
 			duration: 5,
@@ -130,27 +138,29 @@ class EnemyCoordinator: BaseEntity {
 			]
 		),
 
+		// 2:30
+
 		DifficultyLevel(
-			duration: 25,
+			duration: 35,
 			baseSpawnInterval: 2,
 			spawnWeights: [
-				.rocket: 77,
-				.fastRocket: 20,
+				.rocket: 82,
+				.fastRocket: 15,
 				.smallUfo: 3,
 			]
 		),
 
 		DifficultyLevel(
-			duration: 30,
+			duration: 35,
 			baseSpawnInterval: 1.5,
 			spawnWeights: [
-				.rocket: 80,
-				.fastRocket: 15,
+				.rocket: 75,
+				.fastRocket: 20,
 				.smallUfo: 5,
 			]
 		),
 
-		// 180s
+		// 3:40
 
 		DifficultyLevel(
 			duration: 0,
