@@ -72,6 +72,9 @@ class StatsScene: BaseScene {
 				Sfx.instance.play(.stepperPrev)
 			}
 
+			offY = 0
+			Graphics.setDrawOffset(dx: 0, dy: 0)
+
 			indicatorAnimator = Animator(Animator.Config(
 				duration: 0.4,
 				startValue: displayModeIndicator.position.x,
@@ -80,20 +83,23 @@ class StatsScene: BaseScene {
 			))
 		}
 
-		// TODO: Scrolling for remote scores
-//		let current = System.buttonState.current
-//
-//		if current.contains(.up) {
-//			offY += 4
-//		} else if current.contains(.down) {
-//			offY -= 4
-//		}
-//
-//		offY = max(
-//			min(offY - Int(System.crankChange), 0),
-//			-(persistentStatsDisplay?.totalHeight ?? 0) + Display.height)
-//
-//		Graphics.setDrawOffset(dx: 0, dy: offY)
+		let current = System.buttonState.current
+
+		if current.contains(.up) {
+			offY += 4
+		} else if current.contains(.down) {
+			offY -= 4
+		}
+
+		let activeHeight = currentDisplayMode == .localStats
+			? (persistentStatsDisplay?.totalHeight ?? 0)
+			: (remoteScoresDisplay?.totalHeight ?? 0)
+
+		offY = max(
+			min(offY - Int(System.crankChange), 0),
+			-activeHeight + Display.height)
+
+		Graphics.setDrawOffset(dx: 0, dy: offY)
 	}
 
 	override func enter() {
@@ -101,6 +107,7 @@ class StatsScene: BaseScene {
 		displayModeIndicator.center = Point.zero
 		displayModeIndicator.moveTo(Point(x: Self.localStatsIndicatorX, y: Self.indicatorY))
 		displayModeIndicator.setIgnoresDrawOffset(true)
+		displayModeIndicator.zIndex = 800
 		displayModeIndicator.addToDisplayList()
 
 		let textHeight = CdfFont.NicoClean16.height
@@ -116,6 +123,7 @@ class StatsScene: BaseScene {
 		localStatsText.image = localStatsBmp
 		localStatsText.moveTo(Point(x: Self.localStatsIndicatorX + 108, y: textY))
 		localStatsText.setIgnoresDrawOffset(true)
+		localStatsText.zIndex = 810
 		localStatsText.addToDisplayList()
 
 		let remoteScoresBmp = Graphics.Bitmap(width: 150, height: textHeight)
@@ -127,6 +135,7 @@ class StatsScene: BaseScene {
 		remoteScoresText.image = remoteScoresBmp
 		remoteScoresText.moveTo(Point(x: Self.remoteScoresIndicatorX + 108, y: textY))
 		remoteScoresText.setIgnoresDrawOffset(true)
+		remoteScoresText.zIndex = 810
 		remoteScoresText.addToDisplayList()
 
 		let _ = BasicBackground(

@@ -177,14 +177,18 @@ class TextCell: Cell {
 	struct Config {
 		let text: String
 		var alignment: Graphics.TextAlignment = .left
+		var font: Graphics.Font = CdfFont.NicoPups16
 	}
 
 	let sprite = Sprite.Sprite()
 
 	let text: String
 
+	let font: Graphics.Font
+
 	init(_ config: Config) {
 		let width = Display.width - CellPadding * 2
+		font = config.font
 		text = config.text
 
 		let bitmap = Graphics.Bitmap(
@@ -195,7 +199,7 @@ class TextCell: Cell {
 
 		Graphics.pushContext(bitmap)
 		Graphics.drawMode = .fillWhite
-		Graphics.setFont(CdfFont.NicoPups16)
+		Graphics.setFont(font)
 		Graphics.drawTextInRect(
 			text, in: Rect(origin: Point.zero, width: Float(width), height: Float(height)),
 			wrap: .word,
@@ -209,7 +213,7 @@ class TextCell: Cell {
 	}
 
 	var height: Int {
-		let textHeight = CdfFont.NicoPups16.getTextHeightForMaxWidth(
+		let textHeight = font.getTextHeightForMaxWidth(
 			for: text,
 			maxWidth: width,
 			wrap: .word,

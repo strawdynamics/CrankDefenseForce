@@ -37,6 +37,8 @@ class PersistentStatsDisplay {
 	private let rows: [[Cell]]
 
 	private static func buildRows(_ config: Config) -> [[Cell]] {
+		let pStats = PersistentStats.instance
+
 		var rows: [[Cell]] = []
 
 		rows.append([
@@ -46,7 +48,148 @@ class PersistentStatsDisplay {
 				))
 		])
 
-		let pStats = PersistentStats.instance
+		// Records
+		rows.append([
+			TextCell(
+				TextCell.Config(
+					text: "Records",
+					font: CdfFont.NicoClean16,
+				))
+		])
+
+		// Duration, # fired
+		let rMinutes = Int(pStats.recordTimePlayed / 60)
+		let rSeconds = Int(pStats.recordTimePlayed.truncatingRemainder(dividingBy: 60))
+		let rSecondsString = rSeconds < 10 ? "0\(rSeconds)" : "\(rSeconds)"
+		rows.append([
+			KeyValueCell(
+				KeyValueCell.Config(
+					key: "Longest match",
+					value: "\(rMinutes):\(rSecondsString)",
+					rowCellCount: 2
+				)),
+			KeyValueCell(
+				KeyValueCell.Config(
+					key: "Most rockets launched",
+					value: "\(pStats.recordRocketsLaunched)",
+					rowCellCount: 2
+				)),
+		])
+
+		rows.append([
+			TextCell(
+				TextCell.Config(
+					text: "Enemies destroyed",
+				))
+		])
+
+		// Destroyed enemy details
+		var recordDestroyedEnemiesRow: [Cell] = []
+
+		recordDestroyedEnemiesRow.append(
+			EntityCell(
+				EntityCell.Config(
+					text: "\(pStats.recordCpuRocketsDestroyed)",
+					secondaryText: nil,
+					entityType: .rocket,
+					entityStore: config.entityStore,
+				)))
+
+		recordDestroyedEnemiesRow.append(
+			EntityCell(
+				EntityCell.Config(
+					text: "\(pStats.recordCpuFastRocketsDestroyed)",
+					secondaryText: nil,
+					entityType: .fastRocket,
+					entityStore: config.entityStore,
+				)))
+
+		recordDestroyedEnemiesRow.append(
+			EntityCell(
+				EntityCell.Config(
+					text: "\(pStats.recordCpuSmallUfosDestroyed)",
+					secondaryText: nil,
+					entityType: .smallUfo,
+					entityStore: config.entityStore,
+				)))
+
+		recordDestroyedEnemiesRow.append(
+			EntityCell(
+				EntityCell.Config(
+					text: "\(pStats.recordCpuBigUfosDestroyed)",
+					secondaryText: nil,
+					entityType: .bigUfo,
+					entityStore: config.entityStore,
+				)))
+
+		rows.append(recordDestroyedEnemiesRow)
+
+		// PowerUps collected
+		// Header
+		rows.append([
+			TextCell(
+				TextCell.Config(
+					text: "Power-ups collected",
+				))
+		])
+
+		// Collected PowerUp details
+		var recordPowerUpsRow: [Cell] = []
+
+		recordPowerUpsRow.append(
+			EntityCell(
+				EntityCell.Config(
+					text: "\(pStats.recordPauseEnemiesPowerUpsCollected)",
+					secondaryText: nil,
+					entityType: .pauseEnemies,
+					entityStore: config.entityStore,
+				)))
+
+		recordPowerUpsRow.append(
+			EntityCell(
+				EntityCell.Config(
+					text: "\(pStats.recordRepairBuildingPowerUpsCollected)",
+					secondaryText: nil,
+					entityType: .repairBuilding,
+					entityStore: config.entityStore,
+				)))
+
+		recordPowerUpsRow.append(
+			EntityCell(
+				EntityCell.Config(
+					text: "\(pStats.recordDestroyEnemiesPowerUpsCollected)",
+					secondaryText: nil,
+					entityType: .destroyEnemies,
+					entityStore: config.entityStore,
+				)))
+
+		rows.append(recordPowerUpsRow)
+
+
+		// Totals
+		rows.append([
+			SpacerCell(
+				SpacerCell.Config(
+					height: 20
+				))
+		])
+		rows.append([
+			HrCell()
+		])
+		rows.append([
+			SpacerCell(
+				SpacerCell.Config(
+					height: 20
+				))
+		])
+
+		rows.append([
+			TextCell(
+				TextCell.Config(
+					text: "Totals",
+					font: CdfFont.NicoClean16,
+				))
+		])
 
 		// Duration, # fired
 		let minutes = Int(pStats.timePlayed / 60)
@@ -78,11 +221,6 @@ class PersistentStatsDisplay {
 			pStats.cpuRocketsDestroyed + pStats.cpuFastRocketsDestroyed + pStats.cpuSmallUfosDestroyed
 			+ pStats.cpuBigUfosDestroyed
 
-		// HR
-		rows.append([
-			HrCell()
-		])
-
 		// Header
 		let pluralizedEnemies = totalEnemiesDestroyed == 1 ? "enemy" : "enemies"
 
@@ -94,9 +232,9 @@ class PersistentStatsDisplay {
 		])
 
 		// Destroyed enemy details
-		var detailsRow: [Cell] = []
+		var destroyedEnemiesRow: [Cell] = []
 
-		detailsRow.append(
+		destroyedEnemiesRow.append(
 			EntityCell(
 				EntityCell.Config(
 					text: "\(pStats.cpuRocketsDestroyed)",
@@ -105,7 +243,7 @@ class PersistentStatsDisplay {
 					entityStore: config.entityStore,
 				)))
 
-		detailsRow.append(
+		destroyedEnemiesRow.append(
 			EntityCell(
 				EntityCell.Config(
 					text: "\(pStats.cpuFastRocketsDestroyed)",
@@ -114,7 +252,7 @@ class PersistentStatsDisplay {
 					entityStore: config.entityStore,
 				)))
 
-		detailsRow.append(
+		destroyedEnemiesRow.append(
 			EntityCell(
 				EntityCell.Config(
 					text: "\(pStats.cpuSmallUfosDestroyed)",
@@ -123,7 +261,7 @@ class PersistentStatsDisplay {
 					entityStore: config.entityStore,
 				)))
 
-		detailsRow.append(
+		destroyedEnemiesRow.append(
 			EntityCell(
 				EntityCell.Config(
 					text: "\(pStats.cpuBigUfosDestroyed)",
@@ -132,16 +270,12 @@ class PersistentStatsDisplay {
 					entityStore: config.entityStore,
 				)))
 
-		rows.append(detailsRow)
+		rows.append(destroyedEnemiesRow)
 
 		// PowerUps collected
 		let totalPowerUpsCollected =
 			pStats.pauseEnemiesPowerUpsCollected + pStats.repairBuildingPowerUpsCollected
 			+ pStats.destroyEnemiesPowerUpsCollected
-		// HR
-		rows.append([
-			HrCell()
-		])
 
 		// Header
 		let pluralizedPowerUps = totalPowerUpsCollected == 1 ? "power-up" : "power-ups"
