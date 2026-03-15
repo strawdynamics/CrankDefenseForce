@@ -246,6 +246,64 @@ class TextCell: Cell {
 	}
 }
 
+class ScoreEntryCell: Cell {
+	struct Config {
+		let entry: RemoteScoresDisplay.ScoreEntry
+	}
+
+	let sprite = Sprite.Sprite()
+
+	init(_ config: Config) {
+		let entry = config.entry
+		let font = CdfFont.NicoPups16
+		let timeFont = CdfFont.NicoClean16
+
+		let cellHeight = font.height + CellPadding * 2
+		let cellWidth = Display.width
+
+		let rankText = "#\(entry.rank)"
+		let playerText = entry.player
+		let m = entry.value / 60
+		let s = entry.value % 60
+		let timeText = "\(m):\(s < 10 ? "0\(s)" : "\(s)")"
+
+		let timeWidth = timeFont.getTextWidth(for: timeText, tracking: 0)
+		let rankWidth = font.getTextWidth(for: rankText, tracking: 0)
+
+		let bitmap = Graphics.Bitmap(width: cellWidth, height: cellHeight)
+		Graphics.pushContext(bitmap)
+		Graphics.drawMode = .fillWhite
+
+		Graphics.setFont(font)
+		Graphics.drawText(rankText, at: Point(x: CellPadding, y: CellPadding / 2))
+
+		let lineX = CellPadding + rankWidth + CellPadding * 2
+		Graphics.drawLine(Line(
+			start: Point(x: lineX, y: CellPadding / 2),
+			end: Point(x: lineX, y: cellHeight - (CellPadding + CellPadding / 2)),
+		), lineWidth: 1, color: Graphics.Color.white)
+
+		Graphics.drawText(playerText, at: Point(x: lineX + CellPadding * 2, y: CellPadding / 2))
+
+		Graphics.setFont(timeFont)
+		Graphics.drawText(timeText, at: Point(x: cellWidth - timeWidth - CellPadding, y: CellPadding))
+
+		Graphics.popContext()
+
+		sprite.image = bitmap
+		sprite.center = Point.zero
+		sprite.zIndex = 600
+		sprite.addToDisplayList()
+	}
+
+	var height: Int { CdfFont.NicoClean16.height + CellPadding * 2 }
+	var width: Int { Display.width }
+
+	func moveTo(topLeft: Point) { sprite.moveTo(topLeft) }
+	func show() { sprite.addToDisplayList() }
+	func hide() { sprite.removeFromDisplayList() }
+}
+
 class ImageCell: Cell {
 	struct Config {
 		let path: String

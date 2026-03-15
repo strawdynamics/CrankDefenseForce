@@ -192,6 +192,14 @@ class PersistentStats {
 		if uptime > recordTimePlayed {
 			recordTimePlayed = uptime
 			newRecordTimePlayed = true
+
+			let _ = Scoreboards.addScore(boardID: CdfScoreboard.toptimes.rawValue, value: CUnsignedInt(uptime)) { score, errorMessage in
+
+				if let errorMessage {
+					print("addScore error: \(String(cString: errorMessage))")
+					return
+				}
+			}
 		} else {
 			newRecordTimePlayed = false
 		}

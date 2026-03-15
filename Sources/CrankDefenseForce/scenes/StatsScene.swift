@@ -32,6 +32,7 @@ class StatsScene: BaseScene {
 
 	override func update() {
 		self.entityStore.update()
+		remoteScoresDisplay?.update()
 
 		if let indicatorAnimator = indicatorAnimator {
 			indicatorAnimator.update()

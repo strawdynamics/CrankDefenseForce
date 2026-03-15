@@ -6,6 +6,28 @@ class RemoteScoresDisplay {
 	init(_ config: Config) {
 		self.rows = Self.buildRows(config)
 		totalHeight = Self.positionRows(self.rows)
+
+		let _ = Scoreboards.getScores(boardID: CdfScoreboard.toptimes.rawValue) { scoresList, errorMessage in
+			if let errorMessage {
+				print("getScores error: \(String(cString: errorMessage))")
+				return
+			}
+			guard let scoresList else { return }
+			let list = scoresList.pointee
+			var entries: [ScoreEntry] = []
+			if let scores = list.scores {
+				for i in 0..<Int(list.count) {
+					let score = scores[i]
+					entries.append(ScoreEntry(
+						rank: score.rank,
+						player: String(cString: score.player),
+						value: score.value
+					))
+				}
+			}
+			RemoteScoresDisplay.pendingScores = entries
+			Scoreboards.freeScoresList(scoresList)
+		}
 	}
 
 	// MARK: Internal
@@ -14,27 +36,43 @@ class RemoteScoresDisplay {
 		let entityStore: EntityStore
 	}
 
-	let totalHeight: Int
+	struct ScoreEntry {
+		let rank: UInt32
+		let player: String
+		let value: UInt32
+	}
+
+	var totalHeight: Int
 
 	func hide() {
-		for row in rows {
-			for cell in row {
-				cell.hide()
-			}
-		}
+		isVisible = false
+		for row in rows { for cell in row { cell.hide() } }
 	}
 
 	func show() {
-		for row in rows {
-			for cell in row {
-				cell.show()
-			}
+		isVisible = true
+		for row in rows { for cell in row { cell.show() } }
+	}
+
+	func update() {
+		guard let scores = Self.pendingScores else { return }
+		Self.pendingScores = nil
+		rows = Self.buildScoreRows(scores)
+		totalHeight = Self.positionRows(rows)
+		if isVisible {
+			show()
+		} else {
+			hide()
 		}
 	}
 
 	// MARK: Private
 
-	private let rows: [[Cell]]
+	private static nonisolated(unsafe) var pendingScores: [ScoreEntry]? = nil
+
+	private var rows: [[Cell]]
+
+	private var isVisible = false
 
 	private static func buildRows(_ config: Config) -> [[Cell]] {
 		var rows: [[Cell]] = []
@@ -49,8 +87,61 @@ class RemoteScoresDisplay {
 		rows.append([
 			TextCell(
 				TextCell.Config(
-					text: "Coming soon!",
+					text: "Loading…",
 					alignment: .center,
+				))
+		])
+
+		rows.append([
+			SpacerCell(
+				SpacerCell.Config(
+					height: 150
+				))
+		])
+
+		return rows
+	}
+
+	private static func buildScoreRows(_ scores: [ScoreEntry]) -> [[Cell]] {
+		var rows: [[Cell]] = []
+
+		rows.append([
+			SpacerCell(
+				SpacerCell.Config(
+					height: 50
+				))
+		])
+
+		rows.append([
+			TextCell(
+				TextCell.Config(
+					text: "Top Times",
+					font: CdfFont.NicoClean16,
+				))
+		])
+
+		rows.append([HrCell()])
+
+		rows.append([
+			SpacerCell(
+				SpacerCell.Config(
+					height: 8
+				))
+		])
+
+		for entry in scores {
+			rows.append([
+				ScoreEntryCell(
+					ScoreEntryCell.Config(
+						entry: entry
+					)),
+			])
+		}
+
+		rows.append([
+			SpacerCell(
+				SpacerCell.Config(
+					height: 16
 				))
 		])
 
