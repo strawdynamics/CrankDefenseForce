@@ -18,8 +18,10 @@ let package = Package(
 		.package(url: "https://github.com/finnvoor/PlaydateKit.git", branch: "main"),
 		.package(url: "https://github.com/strawdynamics/UTF8ViewExtensions.git", branch: "main"),
 //		.package(path: "../PlaydateKit"),
-		.package(url: "https://github.com/strawdynamics/PDKMasterPlayer.git", branch: "main"),
-		.package(url: "https://github.com/strawdynamics/PDKPdfxr.git", branch: "main"),
+//		.package(url: "https://github.com/strawdynamics/PDKMasterPlayer.git", branch: "main"),
+//		.package(url: "https://github.com/strawdynamics/PDKPdfxr.git", branch: "main"),
+		.package(path: "../PDKMasterPlayer"),
+		.package(path: "../PDKPdfxr"),
 	],
 	targets: [
 		.target(

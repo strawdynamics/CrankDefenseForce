@@ -1,4 +1,5 @@
 import PlaydateKit
+import UTF8ViewExtensions
 
 class PdxinfoReader {
 	enum PdxinfoReaderError: Swift.Error {
