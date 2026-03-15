@@ -11,7 +11,6 @@ nonisolated(unsafe) var game: Game!
 	case .initialize:
 		Playdate.initialize(with: pointer)
 
-		DrumsPd.register()
 		DrumsElectric.register()
 
 		// Prevent lag when first SFX is played
