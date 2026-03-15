@@ -3,13 +3,13 @@ import PlaydateKit
 final class Game: PlaydateGame {
 	let scenePresenter: ScenePresenter
 
-	let debugOverlay: DebugOverlay
+//	let debugOverlay: DebugOverlay
 
 	init() {
 		Display.refreshRate = 40.0
 		Sprite.setAlwaysRedraw(true)
 		self.scenePresenter = ScenePresenter(firstScene: MainMenuScene())
-		self.debugOverlay = DebugOverlay()
+//		self.debugOverlay = DebugOverlay()
 	}
 
 	func update() -> Bool {
@@ -21,7 +21,7 @@ final class Game: PlaydateGame {
 
 		self.scenePresenter.update()
 
-		debugOverlay.update()
+//		debugOverlay.update()
 
 		return true
 	}

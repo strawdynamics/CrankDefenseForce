@@ -53,20 +53,20 @@ class ConfigMenu: BaseEntity {
 					volumeType: VolumeMenuItem.VolumeType.sfx,
 					entityStore: config.entityStore
 				)),
-			EnumMenuItem(
-				EnumMenuItem.Config(
-					offsetX: offsetX,
-					entityStore: config.entityStore,
-					getValue: {
-						return GameSettings.debugMode.title
-					},
-					prevHandler: {
-						GameSettings.debugMode = GameSettings.debugMode.prev
-					},
-					nextHandler: {
-						GameSettings.debugMode = GameSettings.debugMode.next
-					}
-				)),
+//			EnumMenuItem(
+//				EnumMenuItem.Config(
+//					offsetX: offsetX,
+//					entityStore: config.entityStore,
+//					getValue: {
+//						return GameSettings.debugMode.title
+//					},
+//					prevHandler: {
+//						GameSettings.debugMode = GameSettings.debugMode.prev
+//					},
+//					nextHandler: {
+//						GameSettings.debugMode = GameSettings.debugMode.next
+//					}
+//				)),
 		]
 
 		super.init(config.entityStore)
