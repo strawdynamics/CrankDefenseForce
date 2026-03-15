@@ -24,12 +24,15 @@ class City: BaseEntity {
 			.five,
 		]
 
-		for (i, buildingType) in buildingTypes.enumerated() {
+		var consumedWidth: Float = 45
+		for (i, buildingType) in buildingTypes.shuffled().enumerated() {
+			consumedWidth += buildingType.beforeWidth
 			buildings.append(Building(Building.Config(
 				buildingType: buildingType,
 				entityStore: config.entityStore,
-				position: Point(x: 80.0 + (60.0 * Float(i)), y: buildingY)
+				position: Point(x: consumedWidth, y: buildingY)
 			)))
+			consumedWidth += buildingType.afterWidth
 		}
 	}
 

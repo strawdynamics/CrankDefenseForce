@@ -22,6 +22,26 @@ class Building: BaseEntity {
 		case three
 		case four
 		case five
+
+		var beforeWidth: Float {
+			switch self {
+			case .one: return 29
+			case .two: return 30
+			case .three: return 40
+			case .four: return 40
+			case .five: return 25
+			}
+		}
+
+		var afterWidth: Float {
+			switch self {
+			case .one: return 25
+			case .two: return 28
+			case .three: return 30
+			case .four: return 40
+			case .five: return 25
+			}
+		}
 	}
 
 	struct Config {
