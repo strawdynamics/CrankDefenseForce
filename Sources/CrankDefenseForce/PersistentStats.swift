@@ -38,6 +38,7 @@ class PersistentStats {
 
 	static nonisolated(unsafe) let instance = PersistentStats()
 
+	// Cumulative stats
 	private(set) var sectorsLost: Int = 0
 
 	private(set) var timePlayed: Float = 0
@@ -58,20 +59,37 @@ class PersistentStats {
 
 	private(set) var destroyEnemiesPowerUpsCollected: Int = 0
 
+	// Record stats
+	private(set) var recordTimePlayed: Float = 0
+	private(set) var newRecordTimePlayed = false
+
+	private(set) var recordRocketsLaunched: Int = 0
+	private(set) var newRecordRocketsLaunched = false
+
+	private(set) var recordCpuRocketsDestroyed: Int = 0
+	private(set) var newRecordCpuRocketsDestroyed = false
+
+	private(set) var recordCpuFastRocketsDestroyed: Int = 0
+	private(set) var newRecordCpuFastRocketsDestroyed = false
+
+	private(set) var recordCpuSmallUfosDestroyed: Int = 0
+	private(set) var newRecordCpuSmallUfosDestroyed = false
+
+	private(set) var recordCpuBigUfosDestroyed: Int = 0
+	private(set) var newRecordCpuBigUfosDestroyed = false
+
+	private(set) var recordPauseEnemiesPowerUpsCollected: Int = 0
+	private(set) var newRecordPauseEnemiesPowerUpsCollected = false
+
+	private(set) var recordRepairBuildingPowerUpsCollected: Int = 0
+	private(set) var newRecordRepairBuildingPowerUpsCollected = false
+
+	private(set) var recordDestroyEnemiesPowerUpsCollected: Int = 0
+	private(set) var newRecordDestroyEnemiesPowerUpsCollected = false
+
 	func update(uptime: Float, matchStatsTracker: MatchStatsTracker) {
-		sectorsLost += 1
-		timePlayed += uptime
-
-		rocketsLaunched += matchStatsTracker.rocketsLaunched
-
-		cpuRocketsDestroyed += matchStatsTracker.cpuRocketsDestroyed
-		cpuFastRocketsDestroyed += matchStatsTracker.cpuFastRocketsDestroyed
-		cpuSmallUfosDestroyed += matchStatsTracker.cpuSmallUfosDestroyed
-		cpuBigUfosDestroyed += matchStatsTracker.cpuBigUfosDestroyed
-
-		pauseEnemiesPowerUpsCollected += matchStatsTracker.pauseEnemiesPowerUpsCollected
-		repairBuildingPowerUpsCollected += matchStatsTracker.repairBuildingPowerUpsCollected
-		destroyEnemiesPowerUpsCollected += matchStatsTracker.destroyEnemiesPowerUpsCollected
+		updateCumulativeStats(uptime, matchStatsTracker)
+		updateRecordStats(uptime, matchStatsTracker)
 	}
 
 	func writeToDisk() {
@@ -88,6 +106,7 @@ class PersistentStats {
 
 		encoder.startTable(&encoder)
 
+		// Cumulative
 		encoder.addTableMember(&encoder, "sectorsLost", 11)
 		encoder.writeInt(&encoder, Int32(sectorsLost))
 
@@ -118,12 +137,121 @@ class PersistentStats {
 		encoder.addTableMember(&encoder, "destroyEnemiesPowerUpsCollected", 31)
 		encoder.writeInt(&encoder, Int32(destroyEnemiesPowerUpsCollected))
 
+		// Records
+		encoder.addTableMember(&encoder, "recordTimePlayed", 16)
+		encoder.writeDouble(&encoder, Double(recordTimePlayed))
+
+		encoder.addTableMember(&encoder, "recordRocketsLaunched", 21)
+		encoder.writeInt(&encoder, Int32(recordRocketsLaunched))
+
+		encoder.addTableMember(&encoder, "recordCpuRocketsDestroyed", 25)
+		encoder.writeInt(&encoder, Int32(recordCpuRocketsDestroyed))
+
+		encoder.addTableMember(&encoder, "recordCpuFastRocketsDestroyed", 29)
+		encoder.writeInt(&encoder, Int32(recordCpuFastRocketsDestroyed))
+
+		encoder.addTableMember(&encoder, "recordCpuSmallUfosDestroyed", 27)
+		encoder.writeInt(&encoder, Int32(recordCpuSmallUfosDestroyed))
+
+		encoder.addTableMember(&encoder, "recordCpuBigUfosDestroyed", 25)
+		encoder.writeInt(&encoder, Int32(recordCpuBigUfosDestroyed))
+
+		encoder.addTableMember(&encoder, "recordPauseEnemiesPowerUpsCollected", 35)
+		encoder.writeInt(&encoder, Int32(recordPauseEnemiesPowerUpsCollected))
+
+		encoder.addTableMember(&encoder, "recordRepairBuildingPowerUpsCollected", 37)
+		encoder.writeInt(&encoder, Int32(recordRepairBuildingPowerUpsCollected))
+
+		encoder.addTableMember(&encoder, "recordDestroyEnemiesPowerUpsCollected", 37)
+		encoder.writeInt(&encoder, Int32(recordDestroyEnemiesPowerUpsCollected))
+
 		encoder.endTable(&encoder)
 
 		try! file.close()
 	}
 
 	// MARK: Private
+
+	private func updateCumulativeStats(_ uptime: Float, _ matchStatsTracker: MatchStatsTracker) {
+		sectorsLost += 1
+		timePlayed += uptime
+
+		rocketsLaunched += matchStatsTracker.rocketsLaunched
+
+		cpuRocketsDestroyed += matchStatsTracker.cpuRocketsDestroyed
+		cpuFastRocketsDestroyed += matchStatsTracker.cpuFastRocketsDestroyed
+		cpuSmallUfosDestroyed += matchStatsTracker.cpuSmallUfosDestroyed
+		cpuBigUfosDestroyed += matchStatsTracker.cpuBigUfosDestroyed
+
+		pauseEnemiesPowerUpsCollected += matchStatsTracker.pauseEnemiesPowerUpsCollected
+		repairBuildingPowerUpsCollected += matchStatsTracker.repairBuildingPowerUpsCollected
+		destroyEnemiesPowerUpsCollected += matchStatsTracker.destroyEnemiesPowerUpsCollected
+	}
+
+	private func updateRecordStats(_ uptime: Float, _ matchStatsTracker: MatchStatsTracker) {
+		if uptime > recordTimePlayed {
+			recordTimePlayed = uptime
+			newRecordTimePlayed = true
+		} else {
+			newRecordTimePlayed = false
+		}
+
+		if matchStatsTracker.rocketsLaunched > recordRocketsLaunched {
+			recordRocketsLaunched = matchStatsTracker.rocketsLaunched
+			newRecordRocketsLaunched = true
+		} else {
+			newRecordRocketsLaunched = false
+		}
+
+		if matchStatsTracker.cpuRocketsDestroyed > recordCpuRocketsDestroyed {
+			recordCpuRocketsDestroyed = matchStatsTracker.cpuRocketsDestroyed
+			newRecordCpuRocketsDestroyed = true
+		} else {
+			newRecordCpuRocketsDestroyed = false
+		}
+
+		if matchStatsTracker.cpuFastRocketsDestroyed > recordCpuFastRocketsDestroyed {
+			recordCpuFastRocketsDestroyed = matchStatsTracker.cpuFastRocketsDestroyed
+			newRecordCpuFastRocketsDestroyed = true
+		} else {
+			newRecordCpuFastRocketsDestroyed = false
+		}
+
+		if matchStatsTracker.cpuSmallUfosDestroyed > recordCpuSmallUfosDestroyed {
+			recordCpuSmallUfosDestroyed = matchStatsTracker.cpuSmallUfosDestroyed
+			newRecordCpuSmallUfosDestroyed = true
+		} else {
+			newRecordCpuSmallUfosDestroyed = false
+		}
+
+		if matchStatsTracker.cpuBigUfosDestroyed > recordCpuBigUfosDestroyed {
+			recordCpuBigUfosDestroyed = matchStatsTracker.cpuBigUfosDestroyed
+			newRecordCpuBigUfosDestroyed = true
+		} else {
+			newRecordCpuBigUfosDestroyed = false
+		}
+
+		if matchStatsTracker.pauseEnemiesPowerUpsCollected > recordPauseEnemiesPowerUpsCollected {
+			recordPauseEnemiesPowerUpsCollected = matchStatsTracker.pauseEnemiesPowerUpsCollected
+			newRecordPauseEnemiesPowerUpsCollected = true
+		} else {
+			newRecordPauseEnemiesPowerUpsCollected = false
+		}
+
+		if matchStatsTracker.repairBuildingPowerUpsCollected > recordRepairBuildingPowerUpsCollected {
+			recordRepairBuildingPowerUpsCollected = matchStatsTracker.repairBuildingPowerUpsCollected
+			newRecordRepairBuildingPowerUpsCollected = true
+		} else {
+			newRecordRepairBuildingPowerUpsCollected = false
+		}
+
+		if matchStatsTracker.destroyEnemiesPowerUpsCollected > recordDestroyEnemiesPowerUpsCollected {
+			recordDestroyEnemiesPowerUpsCollected = matchStatsTracker.destroyEnemiesPowerUpsCollected
+			newRecordDestroyEnemiesPowerUpsCollected = true
+		} else {
+			newRecordDestroyEnemiesPowerUpsCollected = false
+		}
+	}
 
 	private class EncodeContext {
 		let file: File.FileHandle
@@ -162,6 +290,7 @@ class PersistentStats {
 			let type = json_value_type(rawValue: numericCast(val.type))
 
 			switch key {
+			// Cumulative
 			case "sectorsLost":
 				stats.sectorsLost = Int(val.data.intval)
 			case "timePlayed":
@@ -182,6 +311,25 @@ class PersistentStats {
 				stats.repairBuildingPowerUpsCollected = Int(val.data.intval)
 			case "destroyEnemiesPowerUpsCollected":
 				stats.destroyEnemiesPowerUpsCollected = Int(val.data.intval)
+			// Records
+			case "recordTimePlayed":
+				stats.recordTimePlayed = val.data.floatval
+			case "recordRocketsLaunched":
+				stats.recordRocketsLaunched = Int(val.data.intval)
+			case "recordCpuRocketsDestroyed":
+				stats.recordCpuRocketsDestroyed = Int(val.data.intval)
+			case "recordCpuFastRocketsDestroyed":
+				stats.recordCpuFastRocketsDestroyed = Int(val.data.intval)
+			case "recordCpuSmallUfosDestroyed":
+				stats.recordCpuSmallUfosDestroyed = Int(val.data.intval)
+			case "recordCpuBigUfosDestroyed":
+				stats.recordCpuBigUfosDestroyed = Int(val.data.intval)
+			case "recordPauseEnemiesPowerUpsCollected":
+				stats.recordPauseEnemiesPowerUpsCollected = Int(val.data.intval)
+			case "recordRepairBuildingPowerUpsCollected":
+				stats.recordRepairBuildingPowerUpsCollected = Int(val.data.intval)
+			case "recordDestroyEnemiesPowerUpsCollected":
+				stats.recordDestroyEnemiesPowerUpsCollected = Int(val.data.intval)
 			default:
 				break
 			}

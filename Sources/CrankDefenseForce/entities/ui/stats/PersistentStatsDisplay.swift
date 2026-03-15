@@ -100,6 +100,7 @@ class PersistentStatsDisplay {
 			EntityCell(
 				EntityCell.Config(
 					text: "\(pStats.cpuRocketsDestroyed)",
+					secondaryText: nil,
 					entityType: .rocket,
 					entityStore: config.entityStore,
 				)))
@@ -108,6 +109,7 @@ class PersistentStatsDisplay {
 			EntityCell(
 				EntityCell.Config(
 					text: "\(pStats.cpuFastRocketsDestroyed)",
+					secondaryText: nil,
 					entityType: .fastRocket,
 					entityStore: config.entityStore,
 				)))
@@ -116,6 +118,7 @@ class PersistentStatsDisplay {
 			EntityCell(
 				EntityCell.Config(
 					text: "\(pStats.cpuSmallUfosDestroyed)",
+					secondaryText: nil,
 					entityType: .smallUfo,
 					entityStore: config.entityStore,
 				)))
@@ -124,6 +127,7 @@ class PersistentStatsDisplay {
 			EntityCell(
 				EntityCell.Config(
 					text: "\(pStats.cpuBigUfosDestroyed)",
+					secondaryText: nil,
 					entityType: .bigUfo,
 					entityStore: config.entityStore,
 				)))
@@ -156,6 +160,7 @@ class PersistentStatsDisplay {
 			EntityCell(
 				EntityCell.Config(
 					text: "\(pStats.pauseEnemiesPowerUpsCollected)",
+					secondaryText: nil,
 					entityType: .pauseEnemies,
 					entityStore: config.entityStore,
 				)))
@@ -164,6 +169,7 @@ class PersistentStatsDisplay {
 			EntityCell(
 				EntityCell.Config(
 					text: "\(pStats.repairBuildingPowerUpsCollected)",
+					secondaryText: nil,
 					entityType: .repairBuilding,
 					entityStore: config.entityStore,
 				)))
@@ -172,6 +178,7 @@ class PersistentStatsDisplay {
 			EntityCell(
 				EntityCell.Config(
 					text: "\(pStats.destroyEnemiesPowerUpsCollected)",
+					secondaryText: nil,
 					entityType: .destroyEnemies,
 					entityStore: config.entityStore,
 				)))

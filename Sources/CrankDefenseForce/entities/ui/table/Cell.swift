@@ -303,11 +303,13 @@ class EntityCell: Cell {
 
 	struct Config {
 		let text: String
+		let secondaryText: String?
 		let entityType: EntityType
 		let entityStore: EntityStore
 	}
 
 	let textSprite = Sprite.Sprite()
+	let secondaryTextSprite = Sprite.Sprite()
 
 	let entityType: EntityType
 
@@ -332,6 +334,23 @@ class EntityCell: Cell {
 		textSprite.center = Point.zero
 		textSprite.zIndex = 600
 		textSprite.addToDisplayList()
+
+		if let secondaryText = config.secondaryText {
+			let secondaryBitmap = Graphics.Bitmap(
+				width: CdfFont.NicoPups16.getTextWidth(for: secondaryText, tracking: 0),
+				height: CdfFont.NicoPups16.height,
+			)
+			Graphics.pushContext(secondaryBitmap)
+			Graphics.drawMode = .fillWhite
+			Graphics.setFont(CdfFont.NicoPups16)
+			Graphics.drawText(secondaryText, at: Point.zero)
+			Graphics.popContext()
+
+			secondaryTextSprite.image = secondaryBitmap
+			secondaryTextSprite.center = Point.zero
+			secondaryTextSprite.zIndex = 600
+			secondaryTextSprite.addToDisplayList()
+		}
 	}
 
 	var height: Int {
@@ -339,7 +358,10 @@ class EntityCell: Cell {
 	}
 
 	var width: Int {
-		return entityWidth + textWidth + CellPadding * 4
+		let secondaryWidth = secondaryTextSprite.bounds.width > 0
+			? Int(secondaryTextSprite.bounds.width) + CellPadding
+			: 0
+		return entityWidth + textWidth + CellPadding * 4 + secondaryWidth
 	}
 
 	private var entityWidth: Int {
@@ -365,6 +387,13 @@ class EntityCell: Cell {
 				+ Point(
 					x: entityWidth + CellPadding,
 					y: (height - Int(textSprite.bounds.height)) / 2,
+				))
+
+		secondaryTextSprite.moveTo(
+			topLeft
+				+ Point(
+					x: entityWidth + CellPadding + textWidth + CellPadding,
+					y: (height - Int(secondaryTextSprite.bounds.height)) / 2,
 				))
 
 		moveEntity(topLeft: topLeft)
@@ -485,11 +514,13 @@ class EntityCell: Cell {
 
 	func show() {
 		textSprite.addToDisplayList()
+		if secondaryTextSprite.image != nil { secondaryTextSprite.addToDisplayList() }
 		entity.show()
 	}
 
 	func hide() {
 		textSprite.removeFromDisplayList()
+		secondaryTextSprite.removeFromDisplayList()
 		entity.hide()
 	}
 }

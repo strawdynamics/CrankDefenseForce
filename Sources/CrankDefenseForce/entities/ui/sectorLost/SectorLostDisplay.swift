@@ -45,16 +45,17 @@ class SectorLostDisplay {
 		let minutes = Int(tracker.finalUptime / 60)
 		let seconds = Int(tracker.finalUptime.truncatingRemainder(dividingBy: 60))
 		let secondsString = seconds < 10 ? "0\(seconds)" : "\(seconds)"
+		let ps = PersistentStats.instance
 		rows.append([
 			KeyValueCell(
 				KeyValueCell.Config(
-					key: "Duration",
+					key: "Duration\(ps.newRecordTimePlayed ? " [PB!]" : "")",
 					value: "\(minutes):\(secondsString)",
 					rowCellCount: 2
 				)),
 			KeyValueCell(
 				KeyValueCell.Config(
-					key: "Rockets launched",
+					key: "Rockets launched\(ps.newRecordRocketsLaunched ? " [PB!]" : "")",
 					value: "\(tracker.rocketsLaunched)",
 					rowCellCount: 2
 				)),
@@ -88,6 +89,7 @@ class SectorLostDisplay {
 					EntityCell(
 						EntityCell.Config(
 							text: "\(tracker.cpuRocketsDestroyed)",
+							secondaryText: ps.newRecordCpuRocketsDestroyed ? "[PB!]" : nil,
 							entityType: .rocket,
 							entityStore: config.entityStore,
 						)))
@@ -98,6 +100,7 @@ class SectorLostDisplay {
 					EntityCell(
 						EntityCell.Config(
 							text: "\(tracker.cpuFastRocketsDestroyed)",
+							secondaryText: ps.newRecordCpuFastRocketsDestroyed ? "[PB!]" : nil,
 							entityType: .fastRocket,
 							entityStore: config.entityStore,
 						)))
@@ -108,6 +111,7 @@ class SectorLostDisplay {
 					EntityCell(
 						EntityCell.Config(
 							text: "\(tracker.cpuSmallUfosDestroyed)",
+							secondaryText: ps.newRecordCpuSmallUfosDestroyed ? "[PB!]" : nil,
 							entityType: .smallUfo,
 							entityStore: config.entityStore,
 						)))
@@ -118,6 +122,7 @@ class SectorLostDisplay {
 					EntityCell(
 						EntityCell.Config(
 							text: "\(tracker.cpuBigUfosDestroyed)",
+							secondaryText: ps.newRecordCpuBigUfosDestroyed ? "[PB!]" : nil,
 							entityType: .bigUfo,
 							entityStore: config.entityStore,
 						)))
@@ -154,6 +159,7 @@ class SectorLostDisplay {
 					EntityCell(
 						EntityCell.Config(
 							text: "\(tracker.pauseEnemiesPowerUpsCollected)",
+							secondaryText: ps.newRecordPauseEnemiesPowerUpsCollected ? "[PB!]" : nil,
 							entityType: .pauseEnemies,
 							entityStore: config.entityStore,
 						)))
@@ -164,6 +170,7 @@ class SectorLostDisplay {
 					EntityCell(
 						EntityCell.Config(
 							text: "\(tracker.repairBuildingPowerUpsCollected)",
+							secondaryText: ps.newRecordRepairBuildingPowerUpsCollected ? "[PB!]" : nil,
 							entityType: .repairBuilding,
 							entityStore: config.entityStore,
 						)))
@@ -174,6 +181,7 @@ class SectorLostDisplay {
 					EntityCell(
 						EntityCell.Config(
 							text: "\(tracker.destroyEnemiesPowerUpsCollected)",
+							secondaryText: ps.newRecordDestroyEnemiesPowerUpsCollected ? "[PB!]" : nil,
 							entityType: .destroyEnemies,
 							entityStore: config.entityStore,
 						)))
