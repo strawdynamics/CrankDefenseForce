@@ -1,4 +1,5 @@
 import PlaydateKit
+import UTF8ViewExtensions
 
 class ConfigScene: BaseScene {
 	class VersionSprite: Sprite.Sprite {
