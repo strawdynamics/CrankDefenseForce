@@ -193,7 +193,8 @@ class Rocket: BaseEntity, PowerUpDropper, Movable, Toggleable {
 
 			// Check for explosions first (nil image on overlappingSprite in this case)
 			if let overlappingExplosionSprite = overlappingSprite as? Explosion.ExplosionSprite {
-				let dist = pos.distance(to: overlappingExplosionSprite.position)
+				// Reduce distance slightly to make explosions hit farther
+				let dist = pos.distance(to: overlappingExplosionSprite.position) - 4
 
 				if dist <= overlappingExplosionSprite.radius {
 					explode(explosionOwner: overlappingExplosionSprite.owner)
