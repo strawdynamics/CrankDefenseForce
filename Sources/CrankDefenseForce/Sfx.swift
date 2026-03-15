@@ -110,7 +110,7 @@ class Sfx {
 		if let effect = effects[effectName] {
 			effect.play(offset: offset)
 		} else {
-			print("Tried to play unknown effect \(effectName)")
+			System.log("Tried to play unknown effect \(effectName)")
 		}
 	}
 
@@ -122,7 +122,7 @@ class Sfx {
 		if let effect = effects[effectName] {
 			effect.start()
 		} else {
-			print("Tried to start unknown effect \(effectName)")
+			System.log("Tried to start unknown effect \(effectName)")
 		}
 	}
 
@@ -130,7 +130,7 @@ class Sfx {
 		if let effect = effects[effectName] {
 			effect.stop()
 		} else {
-			print("Tried to stop unknown effect \(effectName)")
+			System.log("Tried to stop unknown effect \(effectName)")
 		}
 	}
 }

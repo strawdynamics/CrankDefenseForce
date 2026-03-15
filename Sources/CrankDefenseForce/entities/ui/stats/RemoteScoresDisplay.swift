@@ -9,7 +9,7 @@ class RemoteScoresDisplay {
 
 		let _ = Scoreboards.getScores(boardID: CdfScoreboard.toptimes.rawValue) { scoresList, errorMessage in
 			if let errorMessage {
-				print("getScores error: \(String(cString: errorMessage))")
+				System.log("getScores error: \(String(cString: errorMessage))")
 				return
 			}
 			guard let scoresList else { return }

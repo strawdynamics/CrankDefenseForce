@@ -35,9 +35,9 @@ struct GameSettingsReader {
 			decoder, error, lineNumber in
 			if let error = error {
 				let message = String(cString: error)
-				print("Decode error at line \(lineNumber): \(message)")
+				System.log("Decode error at line \(lineNumber): \(message)")
 			} else {
-				print("Unknown decode error at line \(lineNumber)")
+				System.log("Unknown decode error at line \(lineNumber)")
 			}
 		}
 
@@ -64,7 +64,7 @@ struct GameSettingsReader {
 							TimeOfDay.fromString(String(cString: value.data.stringval)) ?? .night
 					}
 				} else {
-					print("Unexpected nil key in GameSettingsDecoder!")
+					System.log("Unexpected nil key in GameSettingsDecoder!")
 				}
 			}
 }

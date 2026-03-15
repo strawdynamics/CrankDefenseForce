@@ -27,6 +27,6 @@ final class Game: PlaydateGame {
 	}
 
 	func gameWillPause() {
-		print("Paused!")
+//		System.log("Paused!")
 	}
 }

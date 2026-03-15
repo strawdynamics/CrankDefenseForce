@@ -6,7 +6,7 @@ class PersistentStats {
 
 	private init() {
 		guard let stat = try? File.stat(path: Self.statsPath) else {
-			print("[PersistentStats] missing file \(Self.statsPath), using defaults")
+			System.log("[PersistentStats] missing file \(Self.statsPath), using defaults")
 			return
 		}
 
@@ -196,7 +196,7 @@ class PersistentStats {
 			let _ = Scoreboards.addScore(boardID: CdfScoreboard.toptimes.rawValue, value: CUnsignedInt(uptime)) { score, errorMessage in
 
 				if let errorMessage {
-					print("addScore error: \(String(cString: errorMessage))")
+					System.log("addScore error: \(String(cString: errorMessage))")
 					return
 				}
 			}
