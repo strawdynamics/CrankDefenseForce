@@ -355,7 +355,7 @@ class Rocket: BaseEntity, PowerUpDropper, Movable, Toggleable {
 				maxRadius: 32,
 				owner: explosionOwner,
 				entityStore: entityStore,
-				duration: 2,
+				duration: 2.2,
 			))
 
 		remove()
