@@ -98,6 +98,15 @@ class CreditsDisplay {
 			TextCell(
 				TextCell.Config(
 					text:
+						"Playtesters: 2DArray, BrittOmnRex, BT (Playtesting Poobah), David Rusak, Marquis Kurt, Ophelia Bee, PresentFox, rae, SpilaSkopa, Xmenekai",
+					alignment: .left,
+				))
+		])
+
+		rows.append([
+			TextCell(
+				TextCell.Config(
+					text:
 						"Special thanks to Finn Voorhees for creating PlaydateKit; easy to use Swift bindings for the Playdate C API.",
 					alignment: .left,
 				))
