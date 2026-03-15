@@ -14,6 +14,9 @@ nonisolated(unsafe) var game: Game!
 		DrumsPd.register()
 		DrumsElectric.register()
 
+		// Prevent lag when first SFX is played
+		let _ = Sfx.instance
+
 		GameSettings.initialize()
 		game = Game()
 		System.updateCallback = game.update
